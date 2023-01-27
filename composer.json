@@ -1,0 +1,33 @@
+{
+    "name": "markwalet/nova-modal-response",
+    "description": "A Laravel Nova asset for Modal responses on an action.",
+    "keywords": [
+        "laravel",
+        "nova",
+        "modal",
+        "action"
+    ],
+    "license": "MIT",
+    "require": {
+        "php": "^8.0",
+        "laravel/framework": "^9",
+        "laravel/nova": "^4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Markwalet\\NovaModalResponse\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Markwalet\\NovaModalResponse\\AssetServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
