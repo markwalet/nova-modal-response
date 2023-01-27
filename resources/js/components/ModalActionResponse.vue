@@ -12,7 +12,7 @@
             <ModalContent>
                 <p v-if="data.html" v-html="data.html" />
                 <div v-if="data.body" v-text="data.body" />
-                <pre v-if="data.code" class="block whitespace-pre overflow-x-scroll bg-slate-800 text-slate-50 rounded-lg p-5 shadow-md">
+                <pre v-if="data.code">
                     <code v-text="data.code"></code>
                 </pre>
             </ModalContent>
@@ -52,4 +52,13 @@ export default {
 </script>
 
 <style scoped>
+pre {
+    color: #f8fafc;
+    background-color: #1e293b;
+    overflow-x: auto;
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 10%), 0 2px 4px -2px rgb(0 0 0 / 10%);
+    display: flex;
+}
 </style>
