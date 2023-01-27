@@ -12,7 +12,9 @@
             <ModalContent>
                 <p v-if="data.html" v-html="data.html" />
                 <div v-if="data.body" v-text="data.body" />
-                <pre v-if="data.code" v-text="data.code" />
+                <pre v-if="data.code" class="block whitespace-pre overflow-x-scroll bg-slate-800 text-slate-50 rounded-lg p-5 shadow-md">
+                    <code v-text="data.code"></code>
+                </pre>
             </ModalContent>
             <ModalFooter>
                 <div class="flex items-center ml-auto">
