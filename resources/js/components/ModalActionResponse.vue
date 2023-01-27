@@ -10,8 +10,9 @@
         >
             <ModalHeader v-text="data.title"/>
             <ModalContent>
-                <code v-if="data.html" v-html="data.html" />
-                <code v-if="data.body" v-text="data.body" />
+                <p v-if="data.html" v-html="data.html" />
+                <div v-if="data.body" v-text="data.body" />
+                <pre v-if="data.code" v-text="data.code" />
             </ModalContent>
             <ModalFooter>
                 <div class="flex items-center ml-auto">
