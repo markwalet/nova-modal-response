@@ -13,7 +13,7 @@ composer require --dev markwalet/nova-modal-response
 ## Usage
 
 ```php
-return Action::modal('code-modal', [
+return Action::modal('modal-response', [
     'title' => 'Preview Navision Payload',
     'body' => 'Lorem ipsum dolor sit amed',
 ]);

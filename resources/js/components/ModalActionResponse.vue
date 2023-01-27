@@ -10,7 +10,7 @@
         >
             <ModalHeader v-text="data.title"/>
             <ModalContent>
-                <code>{{ data.result }}</code>
+                <code>{{ data.body }}</code>
             </ModalContent>
             <ModalFooter>
                 <div class="flex items-center ml-auto">
