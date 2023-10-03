@@ -2,6 +2,9 @@
 
 ## [Unreleased](https://github.com/markwalet/nova-modal-response/compare/v0.2.0...master)
 
+### Changed
+- Make nova version requirement more precise
+
 ## [v0.2.0 (2023-03-02)](https://github.com/markwalet/nova-modal-response/compare/v0.1.4...v0.2.0)
 
 ### Added
