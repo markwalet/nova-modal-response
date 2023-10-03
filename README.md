@@ -7,7 +7,7 @@ More info for this specific feature can be found in the [Nova Documentation](htt
 ## Installation
 
 ```shell
-composer require --dev markwalet/nova-modal-response
+composer require markwalet/nova-modal-response
 ```
 
 ## Usage
