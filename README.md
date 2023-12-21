@@ -4,6 +4,8 @@ This package aims to make it easier to respond with a custom modal when executin
 
 More info for this specific feature can be found in the [Nova Documentation](https://nova.laravel.com/docs/4.0/actions/defining-actions.html#custom-modal-responses).
 
+This is a fork of https://github.com/markwalet/nova-modal-response. The initial purpose of the fork was to add the ability to specify the size of the modal.
+
 ## Installation
 
 ```shell
@@ -35,4 +37,9 @@ return Action::modal('modal-response', [
     'title' => 'The JSON response we got back from the external API',
     'code' => json_encode($response->json(), JSON_PRETTY_PRINT),
 ]);
+```
+
+Specify the size of the modal using
+```php
+'size' => "7xl" //or whatever size you need
 ```
