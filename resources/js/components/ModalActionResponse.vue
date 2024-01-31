@@ -2,7 +2,7 @@
     <Modal @modal-close="handleClose"
            tabindex="-1"
            role="dialog"
-           size="2xl">
+           :size="data.size ?? '2xl'">
         <div
             @submit.prevent="handleConfirm"
             slot-scope="props"

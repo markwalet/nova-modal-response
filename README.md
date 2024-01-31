@@ -36,3 +36,11 @@ return Action::modal('modal-response', [
     'code' => json_encode($response->json(), JSON_PRETTY_PRINT),
 ]);
 ```
+You can also specify the size using the `size` option:
+```php
+return Action::modal('modal-response', [
+    'title' => 'Test',
+    'body' => 'Lorem ipsum',
+    'size' => '7xl',
+]);
+```
