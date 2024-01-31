@@ -1,6 +1,11 @@
 # Release Notes
 
-## [Unreleased](https://github.com/markwalet/nova-modal-response/compare/v0.2.0...master)
+## [Unreleased](https://github.com/markwalet/nova-modal-response/compare/v0.2.1...master)
+
+## [v0.2.1 (2024-01-31)](https://github.com/markwalet/nova-modal-response/compare/v0.2.0...v0.2.1)
+
+### Added
+- Make size configurable for modal
 
 ### Changed
 - Make nova version requirement more precise
