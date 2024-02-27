@@ -1,6 +1,11 @@
 # Release Notes
 
-## [Unreleased](https://github.com/markwalet/nova-modal-response/compare/v0.2.1...master)
+## [Unreleased](https://github.com/markwalet/nova-modal-response/compare/v0.2.2...master)
+
+## [v0.2.2 (2024-02-27)](https://github.com/markwalet/nova-modal-response/compare/v0.2.1...v0.2.2)
+
+### Fixed
+- Recompile assets to fix typo
 
 ## [v0.2.1 (2024-01-31)](https://github.com/markwalet/nova-modal-response/compare/v0.2.0...v0.2.1)
 
