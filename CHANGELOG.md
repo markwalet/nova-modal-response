@@ -1,6 +1,11 @@
 # Release Notes
 
-## [Unreleased](https://github.com/markwalet/nova-modal-response/compare/v0.2.2...master)
+## [Unreleased](https://github.com/markwalet/nova-modal-response/compare/v0.3.0...master)
+
+## [v0.3.0 (2024-03-13)](https://github.com/markwalet/nova-modal-response/compare/v0.2.2...v0.3.0)
+
+### Added
+- Added Laravel 11 support
 
 ## [v0.2.2 (2024-02-27)](https://github.com/markwalet/nova-modal-response/compare/v0.2.1...v0.2.2)
 
