@@ -2,6 +2,14 @@
 
 ## [Unreleased](https://github.com/markwalet/nova-modal-response/compare/v0.3.0...master)
 
+## [v0.3.1 (2024-12-16)](https://github.com/markwalet/nova-modal-response/compare/v0.3.0...v0.3.1)
+
+### Added
+- Added support for `laravel/nova:^5.0`.
+
+### Removed 
+- Removed support for Laravel 8 & 9
+
 ## [v0.3.0 (2024-03-13)](https://github.com/markwalet/nova-modal-response/compare/v0.2.2...v0.3.0)
 
 ### Added
