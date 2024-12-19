@@ -1,5 +1,8 @@
 # Nova Modal Response
 
+[![MIT Licensed](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
+[![Latest Stable Version](https://poser.pugx.org/markwalet/nova-modal-response/v/stable)](https://packagist.org/packages/markwalet/nova-modal-response)
+
 Enabling custom modals for action responses in [Laravel Nova](https://nova.laravel.com).
 
 ![Example screenshot](readme-heading.png)
