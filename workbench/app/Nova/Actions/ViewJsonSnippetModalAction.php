@@ -10,7 +10,7 @@ use JsonException;
 use Laravel\Nova\Actions\Action;
 use Laravel\Nova\Actions\ActionResponse;
 use Laravel\Nova\Fields\ActionFields;
-use Markwalet\NovaModalResponse\ActionModal;
+use Markwalet\NovaModalResponse\ModalResponse;
 
 class ViewJsonSnippetModalAction extends Action
 {
@@ -28,7 +28,7 @@ class ViewJsonSnippetModalAction extends Action
             ],
         ];
 
-        return ActionModal::json($data)
+        return ModalResponse::json($data)
             ->title('JSON Snippet')
             ->withoutSyntaxHighlighting()
             ->closeButton('I\'ve seen enough!');

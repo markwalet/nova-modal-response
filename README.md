@@ -15,9 +15,9 @@ composer require markwalet/nova-modal-response
 ## Usage
 
 ```php
-use Markwalet\NovaModalResponse\ActionModal;
+use Markwalet\NovaModalResponse\ModalResponse;
 
-ActionModal::text('This is way better than that small notification in the bottom right!')
+ModalResponse::text('This is way better than that small notification in the bottom right!')
     ->title('Result in a modal');
 
 // Modals can also be manually created in Nova
@@ -32,21 +32,21 @@ return Action::modal('modal-response', [
 When you want to render raw html, you can use the `html` parameter instead:
 
 ```php
-ActionModal::html('<ul><li>Show this package to your friends</li><li>Contribute</li><li>???</li><li>Profit!</li></ul>');
+ModalResponse::html('<ul><li>Show this package to your friends</li><li>Contribute</li><li>???</li><li>Profit!</li></ul>');
 ```
 
 There is also a special mode for rendering code snippets. This will surround the body with a `<pre>` and `<code>` tag but still leave escaping enabled. 
 
 
 ```php
-ActionModal::code(file_get_contents(__FILE__))->title('Look at me!');
+ModalResponse::code(file_get_contents(__FILE__))->title('Look at me!');
 ```
 Syntax highlighting is enabled by default for code and json blocks. It is using [highlight.js](https://highlightjs.org/) under the hood. You can disable this by calling `->withoutSyntaxHighlighting()`.
 
 If you want to show some serializable data to the client, you can do that as well:
 
 ```php
-ActionModal::json([
+ModalResponse::json([
     'lorem' => 'ipsum',
     'dolor' => [
         'sit',
@@ -57,5 +57,5 @@ ActionModal::json([
 
 You can also specify the size using the `size` option:
 ```php
-ActionModal::text('Hello world')->size('7xl');
+ModalResponse::text('Hello world')->size('7xl');
 ```

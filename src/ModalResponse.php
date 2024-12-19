@@ -5,7 +5,7 @@ namespace Markwalet\NovaModalResponse;
 use Illuminate\Support\Stringable;
 use Laravel\Nova\Actions\ActionResponse;
 
-class ActionModal extends ActionResponse
+class ModalResponse extends ActionResponse
 {
     private bool $highlight = true;
     private string $title = '';
