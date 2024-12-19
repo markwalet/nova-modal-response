@@ -8,10 +8,8 @@
                 <ModalHeader v-text="data.title" />
 
                 <template v-if="data.code">
-                    <highlightjs v-if="data.highlight" autodetect :code="data.code" />
-                    <pre class="manual-code-block" v-else>
-                        <code v-text="data.code"></code>
-                    </pre>
+                    <pre v-if="data.highlight === false"><code v-text="data.code" class="language-plaintext" ref="plaintextCode"></code></pre>
+                    <highlightjs v-else autodetect :code="data.code" />
                 </template>
                 <div v-else class="py-3 px-8">
                     <div v-if="data.html" v-html="data.html"/>
@@ -37,7 +35,7 @@
 </template>
 
 <script>
-import 'highlight.js/lib/common';
+import hljs from 'highlight.js/lib/common';
 import hljsVuePlugin from "@highlightjs/vue-plugin";
 import { Button } from 'laravel-nova-ui'
 
@@ -49,9 +47,15 @@ export default {
 
     emits: ['confirm', 'close'],
 
+    mounted() {
+        if (this.data.code && this.data.highlight === false) {
+            hljs.highlightElement(this.$refs.plaintextCode);
+        }
+    },
+
     props: {
         show: { type: Boolean, default: false },
-        data: { type: Object, required: true }
+        data: { type: Object, required: true },
     },
 
     methods: {
@@ -61,14 +65,3 @@ export default {
     },
 }
 </script>
-
-<style scoped>
-pre.manual-code-block {
-    color: #f8fafc;
-    background-color: #1e293b;
-    overflow-x: auto;
-    padding: 1.25rem;
-    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 10%), 0 2px 4px -2px rgb(0 0 0 / 10%);
-    display: flex;
-}
-</style>

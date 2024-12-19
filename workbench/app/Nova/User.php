@@ -9,6 +9,7 @@ use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Workbench\App\Nova\Actions\ViewCodeSnippetAction;
 use Workbench\App\Nova\Actions\ViewJsonSnippetModalAction;
+use Workbench\App\Nova\Actions\ViewRawHtmlAction;
 
 class User extends Resource
 {
@@ -104,6 +105,7 @@ class User extends Resource
         return [
             new ViewJsonSnippetModalAction(),
             new ViewCodeSnippetAction(),
+            new ViewRawHtmlAction(),
         ];
     }
 }

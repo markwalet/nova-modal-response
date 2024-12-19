@@ -45,6 +45,7 @@ class ViewJsonSnippetModalAction extends Action
         return Action::modal('modal-response', [
             'title' => 'JSON Snippet',
             'closeButtonText' => 'I\'ve seen enough!',
+            'highlight' => false,
             'code' => json_encode([
                 'lorem' => 'ipsum',
                 'dolor' => [

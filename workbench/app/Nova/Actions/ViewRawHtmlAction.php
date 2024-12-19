@@ -10,14 +10,14 @@ use Laravel\Nova\Actions\Action;
 use Laravel\Nova\Actions\ActionResponse;
 use Laravel\Nova\Fields\ActionFields;
 
-class ViewCodeSnippetAction extends Action
+class ViewRawHtmlAction extends Action
 {
     /**
      * The displayable name of the action.
      *
      * @var string
      */
-    public $name = 'View PHP snippet';
+    public $name = 'Show Rendered HTML';
 
     /**
      * Determine where the action redirection should be without confirmation.
@@ -42,11 +42,12 @@ class ViewCodeSnippetAction extends Action
      */
     public function handle(ActionFields $fields, Collection $models): Action|ActionResponse
     {
-        $content = file_get_contents(__FILE__);
-
         return Action::modal('modal-response', [
-            'title' => 'Looking at myself',
-            'code' => $content,
+            'title' => 'HTML',
+            'html' => <<<HTML
+<p class="py-3 text-lg"><b>Lorem ipsum dolor sit amet,</b> consectetur adipisicing elit. Amet autem debitis illum nostrum repellendus suscipit, vitae. Deleniti error, esse eum illum nisi numquam pariatur perspiciatis, ratione recusandae repellat, vel voluptates.</p>
+<p>Lorem ipsum dolor sit amet, <b>consectetur</b> adipisicing elit. Autem consectetur cupiditate delectus ducimus eligendi enim esse fuga hic laudantium, nisi quae qui quis quod ratione repellat. Consequuntur provident suscipit voluptatibus!</p>
+HTML,
         ]);
     }
 }
