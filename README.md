@@ -13,6 +13,14 @@ composer require markwalet/nova-modal-response
 ## Usage
 
 ```php
+use Markwalet\NovaModalResponse\ActionModal;
+
+ActionModal::text('This is way better than that small notification in the bottom right!')
+    ->title('Result in a modal');
+
+// Modals can also be manually created in Nova
+use Laravel\Nova\Actions\Action;
+
 return Action::modal('modal-response', [
     'title' => 'Result in a model',
     'body' => 'This is way better than that small notification in the bottom right!',
@@ -22,25 +30,30 @@ return Action::modal('modal-response', [
 When you want to render raw html, you can use the `html` parameter instead:
 
 ```php
-return Action::modal('modal-response', [
-    'title' => 'Next steps',
-    'html' => '<ul><li>Show this package to your friends</li><li>Contribute</li><li>???</li><li>Profit!</li></ul>',
-]);
+ActionModal::html('<ul><li>Show this package to your friends</li><li>Contribute</li><li>???</li><li>Profit!</li></ul>');
 ```
 
-There is also a special mode for rendering code snippets. This will surround the body with a `<pre>` and `<code>` tag but still leave escaping enabled:
+There is also a special mode for rendering code snippets. This will surround the body with a `<pre>` and `<code>` tag but still leave escaping enabled. 
+
 
 ```php
-return Action::modal('modal-response', [
-    'title' => 'The JSON response we got back from the external API',
-    'code' => json_encode($response->json(), JSON_PRETTY_PRINT),
+ActionModal::code(file_get_contents(__FILE__))->title('Look at me!');
+```
+Syntax highlighting is enabled by default for code and json blocks. It is using [highlight.js](https://highlightjs.org/) under the hood. You can disable this by calling `->withoutSyntaxHighlighting()`.
+
+If you want to show some serializable data to the client, you can do that as well:
+
+```php
+ActionModal::json([
+    'lorem' => 'ipsum',
+    'dolor' => [
+        'sit',
+        'amet',
+    ],
 ]);
 ```
+
 You can also specify the size using the `size` option:
 ```php
-return Action::modal('modal-response', [
-    'title' => 'Test',
-    'body' => 'Lorem ipsum',
-    'size' => '7xl',
-]);
+ActionModal::text('Hello world')->size('7xl');
 ```

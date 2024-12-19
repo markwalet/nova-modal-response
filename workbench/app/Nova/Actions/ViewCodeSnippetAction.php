@@ -9,6 +9,7 @@ use Illuminate\Support\Collection;
 use Laravel\Nova\Actions\Action;
 use Laravel\Nova\Actions\ActionResponse;
 use Laravel\Nova\Fields\ActionFields;
+use Markwalet\NovaModalResponse\ActionModal;
 
 class ViewCodeSnippetAction extends Action
 {
@@ -42,11 +43,8 @@ class ViewCodeSnippetAction extends Action
      */
     public function handle(ActionFields $fields, Collection $models): Action|ActionResponse
     {
-        $content = file_get_contents(__FILE__);
-
-        return Action::modal('modal-response', [
-            'title' => 'Looking at myself',
-            'code' => $content,
-        ]);
+        return ActionModal::code(file_get_contents(__FILE__))
+            ->title('Look at me!')
+            ->closeButton('I\'ve seen enough');
     }
 }

@@ -9,6 +9,7 @@ use Illuminate\Support\Collection;
 use Laravel\Nova\Actions\Action;
 use Laravel\Nova\Actions\ActionResponse;
 use Laravel\Nova\Fields\ActionFields;
+use Markwalet\NovaModalResponse\ActionModal;
 
 class ViewRawHtmlAction extends Action
 {
@@ -42,12 +43,9 @@ class ViewRawHtmlAction extends Action
      */
     public function handle(ActionFields $fields, Collection $models): Action|ActionResponse
     {
-        return Action::modal('modal-response', [
-            'title' => 'HTML',
-            'html' => <<<HTML
+        return ActionModal::html(<<<HTML
 <p class="py-3 text-lg"><b>Lorem ipsum dolor sit amet,</b> consectetur adipisicing elit. Amet autem debitis illum nostrum repellendus suscipit, vitae. Deleniti error, esse eum illum nisi numquam pariatur perspiciatis, ratione recusandae repellat, vel voluptates.</p>
 <p>Lorem ipsum dolor sit amet, <b>consectetur</b> adipisicing elit. Autem consectetur cupiditate delectus ducimus eligendi enim esse fuga hic laudantium, nisi quae qui quis quod ratione repellat. Consequuntur provident suscipit voluptatibus!</p>
-HTML,
-        ]);
+HTML)->title('HTML');
     }
 }

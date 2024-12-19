@@ -8,6 +8,7 @@
 - Added optional syntax highlighting for code (enabled by default)
 - Added dark mode support
 - Installed Nova devtools
+- Added an input helper with sensible defaults (`ActionModal`)
 
 ### Changed
 - Moved to new webpack mix configuration
