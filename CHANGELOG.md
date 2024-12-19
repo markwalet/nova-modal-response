@@ -4,10 +4,15 @@
 
 ### Added
 - Installed Nova devtools
+- Close modal on escape
+- Added option to configure close button text
+- Added optional syntax highlighting for code
+- Added dark mode support
 
 ### Changed
 - Moved to new webpack mix configuration
 - Made code block the full width of a modal
+- Changed default close button text to `Close` instead of `Cancel`
 
 ## [v0.3.1 (2024-12-16)](https://github.com/markwalet/nova-modal-response/compare/v0.3.0...v0.3.1)
 

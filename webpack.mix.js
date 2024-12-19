@@ -7,6 +7,9 @@ mix.extend('nova', new NovaExtension())
 mix
   .setPublicPath('dist')
   .js('resources/js/asset.js', 'js')
+  .postCss('resources/css/asset.css', 'css', [
+      require('postcss-partial-import')
+  ])
   .vue({ version: 3 })
   .alias({
     '@': path.join(__dirname, 'resources/js/'),

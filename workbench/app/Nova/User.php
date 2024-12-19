@@ -7,6 +7,7 @@ use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Workbench\App\Nova\Actions\ViewCodeSnippetAction;
 use Workbench\App\Nova\Actions\ViewJsonSnippetModalAction;
 
 class User extends Resource
@@ -102,6 +103,7 @@ class User extends Resource
     {
         return [
             new ViewJsonSnippetModalAction(),
+            new ViewCodeSnippetAction(),
         ];
     }
 }

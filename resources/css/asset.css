@@ -1,0 +1,7 @@
+html.dark {
+    @import url('highlight.js/styles/github-dark.css');
+}
+
+html {
+    @import url('highlight.js/styles/github.css');
+}

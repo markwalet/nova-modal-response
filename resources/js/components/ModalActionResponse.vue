@@ -6,9 +6,13 @@
         <div class="mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
             <slot>
                 <ModalHeader v-text="data.title" />
-                <pre v-if="data.code">
-                    <code v-text="data.code"></code>
-                </pre>
+
+                <template v-if="data.code">
+                    <highlightjs v-if="data.highlight" autodetect :code="data.code" />
+                    <pre class="manual-code-block" v-else>
+                        <code v-text="data.code"></code>
+                    </pre>
+                </template>
                 <div v-else class="py-3 px-8">
                     <div v-if="data.html" v-html="data.html"/>
                     <p v-if="data.body" v-text="data.body"/>
@@ -33,11 +37,14 @@
 </template>
 
 <script>
+import 'highlight.js/lib/common';
+import hljsVuePlugin from "@highlightjs/vue-plugin";
 import { Button } from 'laravel-nova-ui'
 
 export default {
     components: {
         Button,
+        highlightjs: hljsVuePlugin.component
     },
 
     emits: ['confirm', 'close'],
@@ -56,7 +63,7 @@ export default {
 </script>
 
 <style scoped>
-pre {
+pre.manual-code-block {
     color: #f8fafc;
     background-color: #1e293b;
     overflow-x: auto;

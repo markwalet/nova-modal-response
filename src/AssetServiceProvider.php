@@ -17,6 +17,7 @@ class AssetServiceProvider extends ServiceProvider
     {
         Nova::serving(function (ServingNova $event) {
             Nova::script('nova-modal-response', __DIR__.'/../dist/js/asset.js');
+            Nova::style('nova-modal-response', __DIR__.'/../dist/css/asset.css');
         });
     }
 
