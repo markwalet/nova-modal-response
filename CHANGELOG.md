@@ -2,6 +2,13 @@
 
 ## [Unreleased](https://github.com/markwalet/nova-modal-response/compare/v0.3.0...master)
 
+### Added
+- Installed Nova devtools
+
+### Changed
+- Moved to new webpack mix configuration
+- Made code block the full width of a modal
+
 ## [v0.3.1 (2024-12-16)](https://github.com/markwalet/nova-modal-response/compare/v0.3.0...v0.3.1)
 
 ### Added
