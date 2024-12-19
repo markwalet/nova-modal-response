@@ -1,6 +1,8 @@
 # Nova Modal Response
 
-This package aims to make it easier to respond with a custom modal when executing an action in [Laravel Nova](https://nova.laravel.com).
+Enabling custom modals for action responses in [Laravel Nova](https://nova.laravel.com).
+
+![Example screenshot](readme-heading.png)
 
 More info for this specific feature can be found in the [Nova Documentation](https://nova.laravel.com/docs/4.0/actions/defining-actions.html#custom-modal-responses).
 
