@@ -2,7 +2,12 @@
 
 ## [Unreleased](https://github.com/markwalet/nova-modal-response/compare/v0.3.0...master)
 
-## [v1.0.0 (2024-12-20)](https://github.com/markwalet/nova-modal-response/compare/v0.3.0...v1.0.1)
+## [v1.0.0 (2024-12-20)](https://github.com/markwalet/nova-modal-response/compare/v1.0.0...v1.0.1)
+
+### Added
+- Added Laravel 12 support
+
+## [v1.0.0 (2024-12-20)](https://github.com/markwalet/nova-modal-response/compare/v0.3.0...v1.0.0)
 
 ### Added
 - Close modal on escape
