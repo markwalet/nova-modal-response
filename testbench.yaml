@@ -24,6 +24,9 @@ workbench:
     - nova-assets
   sync: []
 
+env:
+  - NOVA_LICENSE_KEY="848SWZ44OJblfwxnd59crEUN78tdnR8pZXtOphD6zMz68Wf836"
+
 purge:
   directories:
     - lang/*
