@@ -45,6 +45,7 @@ class ViewCodeSnippetAction extends Action
     {
         return ModalResponse::code(file_get_contents(__FILE__))
             ->title('Look at me!')
+            ->size('4xl')
             ->closeButton('I\'ve seen enough');
     }
 }

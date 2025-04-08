@@ -4,14 +4,10 @@ namespace Markwalet\NovaModalResponse;
 
 use Illuminate\Support\Stringable;
 use Laravel\Nova\Actions\ActionResponse;
+use Laravel\Nova\Actions\Responses\Modal;
 
 class ModalResponse extends ActionResponse
 {
-    private bool $highlight = true;
-    private string $title = '';
-    private string $size = '2xl';
-    private string $closeButtonText = 'Close';
-
     /**
      * Create a modal with a code snippet.
      *
@@ -35,7 +31,7 @@ class ModalResponse extends ActionResponse
     public static function json(array $data): self
     {
         return self::modal('modal-response', [
-            'code' => json_encode($data, JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR)
+            'code' => json_encode($data, JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR),
         ]);
     }
 
@@ -73,9 +69,7 @@ class ModalResponse extends ActionResponse
      */
     public function title(string $title): self
     {
-        $this->title = $title;
-
-        return $this;
+        return $this->setPayload('title', $title);
     }
 
     /**
@@ -86,9 +80,7 @@ class ModalResponse extends ActionResponse
      */
     public function size(string $size): self
     {
-        $this->size = $size;
-
-        return $this;
+        return $this->setPayload('size', $size);
     }
 
     /**
@@ -98,9 +90,7 @@ class ModalResponse extends ActionResponse
      */
     public function withoutSyntaxHighlighting(): self
     {
-        $this->highlight = false;
-
-        return $this;
+        return $this->setPayload('highlight', false);
     }
 
     /**
@@ -111,19 +101,16 @@ class ModalResponse extends ActionResponse
      */
     public function closeButton(string $label): self
     {
-        $this->closeButtonText = $label;
-
-        return $this;
+        return $this->setPayload('closeButtonText', $label);
     }
 
-    public function jsonSerialize(): array
+    private function setPayload(string $key, mixed $value): self
     {
-        return array_merge([
-            'modal' => 'modal-response',
-            'title' => $this->title,
-            'size' => $this->size,
-            'highlight' => $this->highlight,
-            'closeButtonText' => $this->closeButtonText,
-        ], parent::jsonSerialize());
+        $payload = $this->jsonSerialize();
+        /** @var Modal $modal */
+        $modal = $payload['modal'];
+        $modal->payload[$key] = $value;
+
+        return $this;
     }
 }
