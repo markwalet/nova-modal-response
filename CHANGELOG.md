@@ -2,7 +2,12 @@
 
 ## [Unreleased](https://github.com/markwalet/nova-modal-response/compare/v0.3.0...master)
 
-## [v1.0.0 (2024-12-20)](https://github.com/markwalet/nova-modal-response/compare/v1.0.0...v1.0.1)
+## [v1.0.2 (2025-04-08)](https://github.com/markwalet/nova-modal-response/compare/v1.0.1...v1.0.2)
+
+### Fixed
+- Make sure the input helper passes through all configuration options (https://github.com/markwalet/nova-modal-response/issues/13)
+
+## [v1.0.1 (2024-12-20)](https://github.com/markwalet/nova-modal-response/compare/v1.0.0...v1.0.1)
 
 ### Added
 - Added Laravel 12 support
