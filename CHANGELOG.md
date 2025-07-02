@@ -2,6 +2,9 @@
 
 ## [Unreleased](https://github.com/markwalet/nova-modal-response/compare/v0.3.0...master)
 
+### Removed
+- Revoked and removed leaked api token for `laravel/nova` dependency
+
 ## [v1.0.2 (2025-04-08)](https://github.com/markwalet/nova-modal-response/compare/v1.0.1...v1.0.2)
 
 ### Fixed
