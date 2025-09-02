@@ -51,6 +51,8 @@ export default {
         if (this.data.code && this.data.highlight === false) {
             hljs.highlightElement(this.$refs.plaintextCode);
         }
+
+        Nova.$emit('action-executed');
     },
 
     props: {
