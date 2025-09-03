@@ -52,7 +52,9 @@ export default {
             hljs.highlightElement(this.$refs.plaintextCode);
         }
 
-        Nova.$emit('action-executed');
+        if (true === Nova.config('nova_modal_response')?.emit_action_executed_on_modal_mounted) {
+            Nova.$emit('action-executed');
+        }
     },
 
     props: {
@@ -63,6 +65,10 @@ export default {
     methods: {
         handleClose() {
             this.$emit('close')
+
+            if (true === Nova.config('nova_modal_response')?.emit_action_executed_on_modal_close) {
+                Nova.$emit('action-executed');
+            }
         },
     },
 }
