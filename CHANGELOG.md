@@ -2,6 +2,9 @@
 
 ## [Unreleased](https://github.com/markwalet/nova-modal-response/compare/v0.3.0...master)
 
+### Added
+- Added example to Workbench that simulates refreshing cards (https://github.com/markwalet/nova-modal-response/issues/15)
+
 ### Removed
 - Revoked and removed leaked api token for `laravel/nova` dependency
 

@@ -7,9 +7,11 @@ use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Workbench\App\Nova\Actions\ExecuteUpdateAction;
 use Workbench\App\Nova\Actions\ViewCodeSnippetAction;
 use Workbench\App\Nova\Actions\ViewJsonSnippetModalAction;
 use Workbench\App\Nova\Actions\ViewRawHtmlAction;
+use Workbench\App\Nova\Metrics\RandomMetric;
 
 class User extends Resource
 {
@@ -72,7 +74,9 @@ class User extends Resource
      */
     public function cards(NovaRequest $request): array
     {
-        return [];
+        return [
+            new RandomMetric(),
+        ];
     }
 
     /**
@@ -106,6 +110,7 @@ class User extends Resource
             new ViewJsonSnippetModalAction(),
             new ViewCodeSnippetAction(),
             new ViewRawHtmlAction(),
+            new ExecuteUpdateAction(),
         ];
     }
 }
