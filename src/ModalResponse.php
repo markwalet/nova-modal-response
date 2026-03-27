@@ -3,6 +3,7 @@
 namespace Markwalet\NovaModalResponse;
 
 use Illuminate\Support\Stringable;
+use JsonException;
 use Laravel\Nova\Actions\ActionResponse;
 use Laravel\Nova\Actions\Responses\Modal;
 
@@ -24,9 +25,9 @@ class ModalResponse extends ActionResponse
     /**
      * Create a modal with a json payload.
      *
-     * @param array $data
+     * @param array<mixed> $data
      * @return self
-     * @throws \JsonException
+     * @throws JsonException
      */
     public static function json(array $data): self
     {
@@ -65,7 +66,7 @@ class ModalResponse extends ActionResponse
      * Set the title for the modal.
      *
      * @param string $title
-     * @return $this
+     * @return self
      */
     public function title(string $title): self
     {
@@ -76,7 +77,7 @@ class ModalResponse extends ActionResponse
      * Adjust the width of the modal.
      *
      * @param string $size
-     * @return $this
+     * @return self
      */
     public function size(string $size): self
     {
@@ -86,7 +87,7 @@ class ModalResponse extends ActionResponse
     /**
      * Disable syntax highlighting for json or code blocks.
      *
-     * @return $this
+     * @return self
      */
     public function withoutSyntaxHighlighting(): self
     {
@@ -97,7 +98,7 @@ class ModalResponse extends ActionResponse
      * Adjust the text of the close button.
      *
      * @param string $label
-     * @return $this
+     * @return self
      */
     public function closeButton(string $label): self
     {

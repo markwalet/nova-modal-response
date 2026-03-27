@@ -14,7 +14,9 @@
         "laravel/nova": "^5.0"
     },
     "require-dev": {
-        "laravel/nova-devtool": "^1.1"
+        "larastan/larastan": "^3.9",
+        "laravel/nova-devtool": "^1.1",
+        "laravel/pint": "^1.29"
     },
     "repositories": [
         {
