@@ -2,6 +2,10 @@
 
 ## [Unreleased](https://github.com/markwalet/nova-modal-response/compare/v0.3.0...master)
 
+### Added
+- Included Pint & PHPStan static analysis
+- Create Github actions for static analysis
+
 ## [v1.0.3 (2026-03-05)](https://github.com/markwalet/nova-modal-response/compare/v1.0.2...v1.0.3)
 
 ### Added
