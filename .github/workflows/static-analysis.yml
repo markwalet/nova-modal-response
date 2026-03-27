@@ -47,6 +47,9 @@ jobs:
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, gd
           coverage: none
 
+      - name: Add Nova credentials loaded from env
+        run: composer config http-basic.nova.laravel.com "${{ secrets.NOVA_USERNAME }}" "${{ secrets.NOVA_LICENSE_KEY }}"
+
       - name: Install dependencies
         run: composer install --prefer-dist --no-interaction --no-progress
 
