@@ -8,13 +8,15 @@ Enabling custom modals for action responses in [Laravel Nova](https://nova.larav
 
 ![Example screenshot](readme-heading.png)
 
-More info for this specific feature can be found in the [Nova Documentation](https://nova.laravel.com/docs/4.0/actions/defining-actions.html#custom-modal-responses).
+More info for this specific feature can be found in the [Nova Documentation](https://nova.laravel.com/docs/v5/actions/defining-actions#custom-modal-responses).
 
 ## Installation
 
 ```shell
 composer require markwalet/nova-modal-response
 ```
+
+This package requires PHP 8.2+ and Laravel 12+.
 
 ## Usage
 

@@ -7,6 +7,10 @@
 - Create Github actions for static analysis
 - Update dependabot configuration
 
+### Changed
+- Raised the minimum supported PHP version to 8.2
+- Raised the minimum supported Laravel version to 12
+
 ## [v1.0.3 (2026-03-05)](https://github.com/markwalet/nova-modal-response/compare/v1.0.2...v1.0.3)
 
 ### Added
