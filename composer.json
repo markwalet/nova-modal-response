@@ -16,7 +16,9 @@
     "require-dev": {
         "larastan/larastan": "^3.9",
         "laravel/nova-devtool": "^1.1",
-        "laravel/pint": "^1.29"
+        "laravel/pint": "^1.29",
+        "orchestra/testbench": "^10.8|^11.0",
+        "phpunit/phpunit": "^11.5"
     },
     "repositories": [
         {
@@ -43,6 +45,7 @@
     "prefer-stable": true,
     "autoload-dev": {
         "psr-4": {
+            "Markwalet\\NovaModalResponse\\Tests\\": "tests/",
             "Workbench\\App\\": "workbench/app/",
             "Workbench\\Database\\Factories\\": "workbench/database/factories/",
             "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
@@ -56,6 +59,7 @@
         "clear": "@php vendor/bin/testbench package:purge-skeleton --ansi",
         "prepare": "@php vendor/bin/testbench package:discover --ansi",
         "build": "@php vendor/bin/testbench workbench:build --ansi",
+        "test": "@php vendor/bin/phpunit",
         "serve": [
             "Composer\\Config::disableProcessTimeout",
             "@build",
