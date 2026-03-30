@@ -5,6 +5,7 @@
 ### Added
 - Included Pint & PHPStan static analysis
 - Create Github actions for static analysis
+- Update dependabot configuration
 
 ## [v1.0.3 (2026-03-05)](https://github.com/markwalet/nova-modal-response/compare/v1.0.2...v1.0.3)
 
