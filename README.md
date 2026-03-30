@@ -1,5 +1,6 @@
 # Nova Modal Response
 
+[![Build Status](https://github.com/markwalet/nova-modal-response/workflows/tests/badge.svg)](https://github.com/markwalet/nova-modal-response/actions)
 [![Total Downloads](https://img.shields.io/packagist/dt/markwalet/nova-modal-response)](https://packagist.org/packages/markwalet/nova-modal-response)
 [![Latest Stable Version](https://img.shields.io/packagist/v/markwalet/nova-modal-response)](https://packagist.org/packages/markwalet/nova-modal-response)
 [![License](https://img.shields.io/packagist/l/markwalet/nova-modal-response)](https://packagist.org/packages/markwalet/nova-modal-response)
