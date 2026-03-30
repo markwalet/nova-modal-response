@@ -6,6 +6,8 @@
 - Included Pint & PHPStan static analysis
 - Create Github actions for static analysis
 - Update dependabot configuration
+- Added a PHPUnit and Testbench-based package test suite
+- Added a GitHub Actions test matrix for supported PHP 8.2+ and Laravel 12/13 versions
 
 ### Changed
 - Raised the minimum supported PHP version to 8.2
