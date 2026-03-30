@@ -10,10 +10,8 @@ class AssetServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap any application services.
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         Nova::serving(function (ServingNova $event) {
             Nova::script('nova-modal-response', __DIR__.'/../dist/js/asset.js');
@@ -23,10 +21,8 @@ class AssetServiceProvider extends ServiceProvider
 
     /**
      * Register any application services.
-     *
-     * @return void
      */
-    public function register()
+    public function register(): void
     {
         //
     }
