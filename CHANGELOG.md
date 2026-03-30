@@ -1,6 +1,8 @@
 # Release Notes
 
-## [Unreleased](https://github.com/markwalet/nova-modal-response/compare/v1.0.3...main)
+## [Unreleased](https://github.com/markwalet/nova-modal-response/compare/v1.1.0...main)
+
+## [v1.1.0 (2026-03-30)](https://github.com/markwalet/nova-modal-response/compare/v1.0.3...v1.1.0)
 
 ### Added
 - Included Pint & PHPStan static analysis
