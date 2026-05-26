@@ -16,6 +16,7 @@ use Laravel\Nova\Lenses\Lens;
 use Laravel\Nova\Panel;
 use Laravel\Nova\ResourceTool;
 use Workbench\App\Nova\Actions\ViewTextStackAction;
+use Workbench\App\Nova\Actions\ViewWithoutHighlightingAction;
 
 class User extends Resource
 {
@@ -110,6 +111,7 @@ class User extends Resource
     {
         return [
             new ViewTextStackAction,
+            new ViewWithoutHighlightingAction,
         ];
     }
 }
