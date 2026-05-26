@@ -8,11 +8,12 @@ use Illuminate\Support\Collection;
 use Laravel\Nova\Actions\Action;
 use Laravel\Nova\Actions\ActionResponse;
 use Laravel\Nova\Fields\ActionFields;
+use Markwalet\NovaModalResponse\Blocks\Block;
 use Markwalet\NovaModalResponse\ModalResponse;
 
-class ViewJsonSnippetModalAction extends Action
+class ViewTextStackAction extends Action
 {
-    public $name = 'Show JSON snippet';
+    public $name = 'View text stack';
 
     public $withoutConfirmation = true;
 
@@ -20,17 +21,8 @@ class ViewJsonSnippetModalAction extends Action
 
     public function handle(ActionFields $fields, Collection $models): Action|ActionResponse
     {
-        $data = [
-            'lorem' => 'ipsum',
-            'dolor' => [
-                'sit',
-                'amet',
-            ],
-        ];
-
-        return ModalResponse::json($data)
-            ->title('JSON Snippet')
-            ->withoutSyntaxHighlighting()
-            ->closeButton('I\'ve seen enough!');
+        return ModalResponse::stack([Block::text('hi')])
+            ->title('Demo')
+            ->closeButton('Close');
     }
 }

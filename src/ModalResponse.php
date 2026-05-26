@@ -2,116 +2,78 @@
 
 namespace Markwalet\NovaModalResponse;
 
+use Closure;
 use Illuminate\Support\Stringable;
-use JsonException;
+use InvalidArgumentException;
 use Laravel\Nova\Actions\ActionResponse;
-use Laravel\Nova\Actions\Responses\Modal;
+use Markwalet\NovaModalResponse\Blocks\Block;
 
 class ModalResponse extends ActionResponse
 {
-    /**
-     * Create a modal with a code snippet.
-     *
-     * @param string|Stringable $snippet
-     * @return self
-     */
-    public static function code(string|Stringable $snippet): self
-    {
-        return self::modal('modal-response', [
-            'code' => $snippet,
-        ]);
-    }
+    /** @var array<int, Block> */
+    private array $blocks = [];
+
+    /** @var array<string, mixed> */
+    private array $chrome = [];
+
+    private bool $withoutHighlight = false;
 
     /**
-     * Create a modal with a json payload.
-     *
-     * @param array<mixed> $data
-     * @return self
-     * @throws JsonException
+     * @param array<int, Block>|Closure $blocks
      */
-    public static function json(array $data): self
+    public static function stack(array|Closure $blocks): self
     {
-        return self::modal('modal-response', [
-            'code' => json_encode($data, JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR),
-        ]);
+        $response = new self;
+        $resolved = $blocks instanceof Closure ? $blocks() : $blocks;
+
+        if (! is_array($resolved)) {
+            throw new InvalidArgumentException('Stack closure must return an array of Block instances.');
+        }
+
+        foreach ($resolved as $block) {
+            if (! $block instanceof Block) {
+                throw new InvalidArgumentException('Stack must contain only Block instances.');
+            }
+        }
+
+        $response->blocks = array_values($resolved);
+        $response->refreshModal();
+
+        return $response;
     }
 
-    /**
-     * Create a modal with a single paragraph of text.
-     *
-     * @param string|Stringable $text
-     * @return self
-     */
-    public static function text(string|Stringable $text): self
+    public static function text(string|Stringable $value): self
     {
-        return self::modal('modal-response', [
-            'body' => $text,
-        ]);
+        return self::stack([Block::text($value)]);
     }
 
-    /**
-     * Create a modal with unescaped html.
-     *
-     * @param string|Stringable $text
-     * @return self
-     */
-    public static function html(string|Stringable $text): self
-    {
-        return self::modal('modal-response', [
-            'html' => $text,
-        ]);
-    }
-
-    /**
-     * Set the title for the modal.
-     *
-     * @param string $title
-     * @return self
-     */
     public function title(string $title): self
     {
-        return $this->setPayload('title', $title);
+        return $this->setChrome('title', $title);
     }
 
-    /**
-     * Adjust the width of the modal.
-     *
-     * @param string $size
-     * @return self
-     */
     public function size(string $size): self
     {
-        return $this->setPayload('size', $size);
+        return $this->setChrome('size', $size);
     }
 
-    /**
-     * Disable syntax highlighting for json or code blocks.
-     *
-     * @return self
-     */
-    public function withoutSyntaxHighlighting(): self
-    {
-        return $this->setPayload('highlight', false);
-    }
-
-    /**
-     * Adjust the text of the close button.
-     *
-     * @param string $label
-     * @return self
-     */
     public function closeButton(string $label): self
     {
-        return $this->setPayload('closeButtonText', $label);
+        return $this->setChrome('closeButtonText', $label);
     }
 
-    private function setPayload(string $key, mixed $value): self
+    private function setChrome(string $key, mixed $value): self
     {
-        $payload = $this->jsonSerialize();
-        /** @var Modal $modal */
-        $modal = $payload['modal'];
-        $modal->payload[$key] = $value;
+        $this->chrome[$key] = $value;
+        $this->refreshModal();
 
         return $this;
+    }
+
+    private function refreshModal(): void
+    {
+        $payload = (new PayloadBuilder)->build($this->blocks, $this->chrome, $this->withoutHighlight);
+
+        $this->withModal('modal-response', $payload);
     }
 }

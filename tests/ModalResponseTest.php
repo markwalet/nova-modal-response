@@ -2,71 +2,71 @@
 
 namespace Markwalet\NovaModalResponse\Tests;
 
-use JsonException;
 use Laravel\Nova\Actions\Responses\Modal;
+use Markwalet\NovaModalResponse\Blocks\Block;
 use Markwalet\NovaModalResponse\ModalResponse;
 
 class ModalResponseTest extends TestCase
 {
-    public function test_code_response_builds_the_expected_modal_payload(): void
+    public function test_text_sugar_produces_a_single_text_block_stack(): void
     {
-        $response = ModalResponse::code('echo "test";')
+        $response = ModalResponse::text('Plain text');
+
+        $this->assertSame([
+            'blocks' => [
+                ['type' => 'text', 'value' => 'Plain text'],
+            ],
+        ], $response['modal']->payload);
+    }
+
+    public function test_chrome_setters_serialise_to_the_expected_wire_keys(): void
+    {
+        $response = ModalResponse::stack([Block::text('body')])
             ->title('Snippet')
             ->size('7xl')
-            ->withoutSyntaxHighlighting()
             ->closeButton('Done');
+
+        $this->assertSame([
+            'title' => 'Snippet',
+            'size' => '7xl',
+            'closeButtonText' => 'Done',
+            'blocks' => [
+                ['type' => 'text', 'value' => 'body'],
+            ],
+        ], $response['modal']->payload);
+    }
+
+    public function test_stack_with_a_closure_resolves_the_blocks(): void
+    {
+        $response = ModalResponse::stack(fn () => [Block::text('one'), Block::text('two')]);
+
+        $this->assertSame([
+            'blocks' => [
+                ['type' => 'text', 'value' => 'one'],
+                ['type' => 'text', 'value' => 'two'],
+            ],
+        ], $response['modal']->payload);
+    }
+
+    public function test_stack_with_an_empty_array_produces_an_empty_blocks_list(): void
+    {
+        $response = ModalResponse::stack([]);
+
+        $this->assertSame(['blocks' => []], $response['modal']->payload);
+    }
+
+    public function test_stack_with_an_array_of_blocks_writes_the_blocks_wire_payload(): void
+    {
+        $response = ModalResponse::stack([Block::text('hi')]);
 
         $modal = $response['modal'];
 
         $this->assertInstanceOf(Modal::class, $modal);
         $this->assertSame('modal-response', $modal->component);
         $this->assertSame([
-            'code' => 'echo "test";',
-            'title' => 'Snippet',
-            'size' => '7xl',
-            'highlight' => false,
-            'closeButtonText' => 'Done',
+            'blocks' => [
+                ['type' => 'text', 'value' => 'hi'],
+            ],
         ], $modal->payload);
-    }
-
-    public function test_json_response_pretty_prints_the_payload(): void
-    {
-        $response = ModalResponse::json([
-            'lorem' => 'ipsum',
-            'dolor' => ['sit', 'amet'],
-        ]);
-
-        $modal = $response['modal'];
-
-        $this->assertInstanceOf(Modal::class, $modal);
-        $this->assertSame([
-            'code' => json_encode([
-                'lorem' => 'ipsum',
-                'dolor' => ['sit', 'amet'],
-            ], JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR),
-        ], $modal->payload);
-    }
-
-    public function test_json_response_throws_for_invalid_utf8(): void
-    {
-        $this->expectException(JsonException::class);
-
-        ModalResponse::json([
-            'invalid' => "\xB1\x31",
-        ]);
-    }
-
-    public function test_text_and_html_responses_use_the_expected_payload_keys(): void
-    {
-        $textResponse = ModalResponse::text('Plain text');
-        $htmlResponse = ModalResponse::html('<strong>HTML</strong>');
-
-        $this->assertSame([
-            'body' => 'Plain text',
-        ], $textResponse['modal']->payload);
-
-        $this->assertSame([
-            'html' => '<strong>HTML</strong>',
-        ], $htmlResponse['modal']->payload);
     }
 }
