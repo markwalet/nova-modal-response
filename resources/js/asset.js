@@ -3,6 +3,7 @@ import TextBlock from './components/TextBlock'
 import DividerBlock from './components/DividerBlock'
 import HtmlBlock from './components/HtmlBlock'
 import HeadingBlock from './components/HeadingBlock'
+import ListBlock from './components/ListBlock'
 
 Nova.booting(app => {
     app.component('modal-response', ModalActionResponse)
@@ -10,4 +11,5 @@ Nova.booting(app => {
     app.component('modal-response-divider-block', DividerBlock)
     app.component('modal-response-html-block', HtmlBlock)
     app.component('modal-response-heading-block', HeadingBlock)
+    app.component('modal-response-list-block', ListBlock)
 });

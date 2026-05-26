@@ -30,4 +30,12 @@ abstract class Block
     {
         return new HeadingBlock($value);
     }
+
+    /**
+     * @param array<int, string|\Stringable> $items
+     */
+    public static function list(array $items): ListBlock
+    {
+        return new ListBlock($items);
+    }
 }

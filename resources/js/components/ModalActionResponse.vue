@@ -38,6 +38,7 @@ import TextBlock from './TextBlock.vue'
 import DividerBlock from './DividerBlock.vue'
 import HtmlBlock from './HtmlBlock.vue'
 import HeadingBlock from './HeadingBlock.vue'
+import ListBlock from './ListBlock.vue'
 
 export default {
     components: {
@@ -58,6 +59,7 @@ export default {
                 divider: DividerBlock,
                 html: HtmlBlock,
                 heading: HeadingBlock,
+                list: ListBlock,
             },
         }
     },
