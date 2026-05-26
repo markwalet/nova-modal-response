@@ -16,7 +16,15 @@ class PayloadBuilder
         $payload = $chrome;
 
         $payload['blocks'] = array_map(
-            static fn (Block $block): array => $block->toArray(),
+            static function (Block $block) use ($withoutHighlight): array {
+                $serialized = $block->toArray();
+
+                if ($withoutHighlight && in_array($serialized['type'] ?? null, ['code', 'json'], true)) {
+                    $serialized['highlight'] = false;
+                }
+
+                return $serialized;
+            },
             array_values($blocks),
         );
 
