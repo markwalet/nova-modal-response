@@ -15,4 +15,9 @@ abstract class Block
     {
         return new TextBlock($value);
     }
+
+    public static function divider(): DividerBlock
+    {
+        return new DividerBlock;
+    }
 }
