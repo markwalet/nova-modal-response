@@ -83,6 +83,14 @@ class ModalResponse extends ActionResponse
         return $this->setChrome('closeButtonText', $label);
     }
 
+    public function withoutSyntaxHighlighting(): self
+    {
+        $this->withoutHighlight = true;
+        $this->refreshModal();
+
+        return $this;
+    }
+
     private function setChrome(string $key, mixed $value): self
     {
         $this->chrome[$key] = $value;
