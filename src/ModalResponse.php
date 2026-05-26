@@ -47,6 +47,11 @@ class ModalResponse extends ActionResponse
         return self::stack([Block::text($value)]);
     }
 
+    public static function html(string|Stringable $value): self
+    {
+        return self::stack([Block::html($value)]);
+    }
+
     public function title(string $title): self
     {
         return $this->setChrome('title', $title);
