@@ -38,4 +38,9 @@ abstract class Block
     {
         return new ListBlock($items);
     }
+
+    public static function badge(string|Stringable $value): BadgeBlock
+    {
+        return new BadgeBlock($value);
+    }
 }
