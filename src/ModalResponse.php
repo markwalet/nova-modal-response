@@ -5,6 +5,7 @@ namespace Markwalet\NovaModalResponse;
 use Closure;
 use Illuminate\Support\Stringable;
 use InvalidArgumentException;
+use JsonException;
 use Laravel\Nova\Actions\ActionResponse;
 use Markwalet\NovaModalResponse\Blocks\Block;
 
@@ -55,6 +56,16 @@ class ModalResponse extends ActionResponse
     public static function code(string|Stringable $value): self
     {
         return self::stack([Block::code($value)]);
+    }
+
+    /**
+     * @param array<mixed> $value
+     *
+     * @throws JsonException
+     */
+    public static function json(array $value): self
+    {
+        return self::stack([Block::json($value)]);
     }
 
     public function title(string $title): self
