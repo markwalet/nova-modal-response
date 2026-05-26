@@ -1,7 +1,7 @@
 import ModalActionResponse from './components/ModalActionResponse'
-import BlockText from './components/BlockText'
+import TextBlock from './components/TextBlock'
 
 Nova.booting(app => {
     app.component('modal-response', ModalActionResponse)
-    app.component('block-text', BlockText)
+    app.component('modal-response-text-block', TextBlock)
 });
