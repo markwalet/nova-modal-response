@@ -26,15 +26,9 @@ use Markwalet\NovaModalResponse\ModalResponse;
 
 ModalResponse::text('This is way better than that small notification in the bottom right!')
     ->title('Result in a modal');
-
-// Modals can also be manually created in Nova
-use Laravel\Nova\Actions\Action;
-
-return Action::modal('modal-response', [
-    'title' => 'Result in a model',
-    'body' => 'This is way better than that small notification in the bottom right!',
-]);
 ```
+
+> **Note:** Always build responses through the `ModalResponse` helper. Hand-rolling the raw payload with `Action::modal('modal-response', [...])` is not a supported part of this package's API and may break without notice.
 
 When you want to render raw html, you can use the `html` parameter instead:
 
