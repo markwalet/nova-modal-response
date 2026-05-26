@@ -43,4 +43,9 @@ abstract class Block
     {
         return new BadgeBlock($value);
     }
+
+    public static function code(string|Stringable $value): CodeBlock
+    {
+        return new CodeBlock($value);
+    }
 }
