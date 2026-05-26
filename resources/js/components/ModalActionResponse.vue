@@ -39,6 +39,7 @@ import DividerBlock from './DividerBlock.vue'
 import HtmlBlock from './HtmlBlock.vue'
 import HeadingBlock from './HeadingBlock.vue'
 import ListBlock from './ListBlock.vue'
+import BadgeBlock from './BadgeBlock.vue'
 
 export default {
     components: {
@@ -60,6 +61,7 @@ export default {
                 html: HtmlBlock,
                 heading: HeadingBlock,
                 list: ListBlock,
+                badge: BadgeBlock,
             },
         }
     },
