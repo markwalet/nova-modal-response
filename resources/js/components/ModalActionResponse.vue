@@ -7,14 +7,12 @@
             <slot>
                 <ModalHeader v-text="data.title" />
 
-                <template v-if="data.code">
-                    <pre v-if="data.highlight === false"><code v-text="data.code" class="language-plaintext" ref="plaintextCode"></code></pre>
-                    <highlightjs v-else autodetect :code="data.code" />
-                </template>
-                <div v-else class="py-3 px-8">
-                    <div v-if="data.html" v-html="data.html"/>
-                    <p v-if="data.body" v-text="data.body"/>
-                </div>
+                <component
+                    v-for="(block, index) in (data.blocks ?? [])"
+                    :is="blockComponents[block.type]"
+                    :key="index"
+                    :block="block"
+                />
             </slot>
 
             <ModalFooter>
@@ -35,27 +33,27 @@
 </template>
 
 <script>
-import hljs from 'highlight.js/lib/common';
-import hljsVuePlugin from "@highlightjs/vue-plugin";
 import { Button } from 'laravel-nova-ui'
+import BlockText from './BlockText.vue'
 
 export default {
     components: {
         Button,
-        highlightjs: hljsVuePlugin.component
     },
 
     emits: ['confirm', 'close'],
 
-    mounted() {
-        if (this.data.code && this.data.highlight === false) {
-            hljs.highlightElement(this.$refs.plaintextCode);
-        }
-    },
-
     props: {
         show: { type: Boolean, default: false },
         data: { type: Object, required: true },
+    },
+
+    data() {
+        return {
+            blockComponents: {
+                text: BlockText,
+            },
+        }
     },
 
     methods: {
