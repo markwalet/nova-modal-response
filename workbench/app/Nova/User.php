@@ -15,9 +15,7 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Lenses\Lens;
 use Laravel\Nova\Panel;
 use Laravel\Nova\ResourceTool;
-use Workbench\App\Nova\Actions\ViewCodeSnippetAction;
-use Workbench\App\Nova\Actions\ViewJsonSnippetModalAction;
-use Workbench\App\Nova\Actions\ViewRawHtmlAction;
+use Workbench\App\Nova\Actions\ViewTextStackAction;
 
 class User extends Resource
 {
@@ -111,9 +109,7 @@ class User extends Resource
     public function actions(NovaRequest $request): array
     {
         return [
-            new ViewJsonSnippetModalAction,
-            new ViewCodeSnippetAction,
-            new ViewRawHtmlAction,
+            new ViewTextStackAction,
         ];
     }
 }
