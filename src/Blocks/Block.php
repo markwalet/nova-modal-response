@@ -25,4 +25,9 @@ abstract class Block
     {
         return new HtmlBlock($value);
     }
+
+    public static function heading(string|Stringable $value): HeadingBlock
+    {
+        return new HeadingBlock($value);
+    }
 }
