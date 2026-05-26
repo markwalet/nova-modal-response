@@ -34,14 +34,7 @@
 
 <script>
 import { Button } from 'laravel-nova-ui'
-import TextBlock from './TextBlock.vue'
-import DividerBlock from './DividerBlock.vue'
-import HtmlBlock from './HtmlBlock.vue'
-import HeadingBlock from './HeadingBlock.vue'
-import ListBlock from './ListBlock.vue'
-import BadgeBlock from './BadgeBlock.vue'
-import CodeBlock from './CodeBlock.vue'
-import JsonBlock from './JsonBlock.vue'
+import { blockComponents } from './blockComponents.js'
 
 // v1 wire keys that v2 dropped in favour of `data.blocks`. A payload still
 // carrying any of these renders an empty modal body, so we warn instead of
@@ -66,16 +59,7 @@ export default {
 
     data() {
         return {
-            blockComponents: {
-                text: TextBlock,
-                divider: DividerBlock,
-                html: HtmlBlock,
-                heading: HeadingBlock,
-                list: ListBlock,
-                badge: BadgeBlock,
-                code: CodeBlock,
-                json: JsonBlock,
-            },
+            blockComponents,
         }
     },
 

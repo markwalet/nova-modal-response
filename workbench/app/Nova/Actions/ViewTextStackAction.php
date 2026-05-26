@@ -40,6 +40,17 @@ class ViewTextStackAction extends Action
             Block::badge('Deprecated')->warning(),
             Block::badge('Archived')->danger(),
             Block::divider(),
+            Block::heading('Inline group — packed (default)')->small(),
+            Block::inline([
+                Block::text('Status:'),
+                Block::badge('Published')->success(),
+            ]),
+            Block::heading('Inline group — spread (key/value row)')->small(),
+            Block::inline([
+                Block::text('Deployment'),
+                Block::badge('Live')->success(),
+            ])->spread(),
+            Block::divider(),
             Block::heading('Code — autodetect')->small(),
             Block::code("<?php\n\nfunction greet(string \$name): string {\n    return \"Hello, {\$name}!\";\n}"),
             Block::heading('Code — explicit language (sql)')->small(),
