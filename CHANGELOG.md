@@ -5,6 +5,9 @@
 ### Added
 - Added a Laravel Boost AI guideline so agents can use the package correctly ([#43](https://github.com/markwalet/nova-modal-response/issues/43))
 
+### Changed
+- Removed the raw `Action::modal('modal-response', [...])` pattern from the docs in favour of the `ModalResponse` helper ([#41](https://github.com/markwalet/nova-modal-response/issues/41))
+
 ## [v1.1.0 (2026-03-30)](https://github.com/markwalet/nova-modal-response/compare/v1.0.3...v1.1.0)
 
 ### Added
