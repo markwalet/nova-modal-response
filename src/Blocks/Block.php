@@ -3,6 +3,7 @@
 namespace Markwalet\NovaModalResponse\Blocks;
 
 use Illuminate\Support\Stringable;
+use JsonException;
 
 abstract class Block
 {
@@ -47,5 +48,15 @@ abstract class Block
     public static function code(string|Stringable $value): CodeBlock
     {
         return new CodeBlock($value);
+    }
+
+    /**
+     * @param array<mixed> $value
+     *
+     * @throws JsonException
+     */
+    public static function json(array $value): JsonBlock
+    {
+        return new JsonBlock($value);
     }
 }

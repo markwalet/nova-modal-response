@@ -6,6 +6,7 @@ import HeadingBlock from './components/HeadingBlock'
 import ListBlock from './components/ListBlock'
 import BadgeBlock from './components/BadgeBlock'
 import CodeBlock from './components/CodeBlock'
+import JsonBlock from './components/JsonBlock'
 
 Nova.booting(app => {
     app.component('modal-response', ModalActionResponse)
@@ -16,4 +17,5 @@ Nova.booting(app => {
     app.component('modal-response-list-block', ListBlock)
     app.component('modal-response-badge-block', BadgeBlock)
     app.component('modal-response-code-block', CodeBlock)
+    app.component('modal-response-json-block', JsonBlock)
 });
