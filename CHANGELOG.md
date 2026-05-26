@@ -1,6 +1,8 @@
 # Release Notes
 
-## [Unreleased](https://github.com/markwalet/nova-modal-response/compare/v1.1.0...main)
+## [Unreleased](https://github.com/markwalet/nova-modal-response/compare/v1.1.1...main)
+
+## [v1.1.1 (2026-05-26)](https://github.com/markwalet/nova-modal-response/compare/v1.1.0...v1.1.1)
 
 ### Added
 - Added a Laravel Boost AI guideline so agents can use the package correctly ([#43](https://github.com/markwalet/nova-modal-response/issues/43))
