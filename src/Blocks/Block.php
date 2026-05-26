@@ -20,4 +20,9 @@ abstract class Block
     {
         return new DividerBlock;
     }
+
+    public static function html(string|Stringable $value): HtmlBlock
+    {
+        return new HtmlBlock($value);
+    }
 }
