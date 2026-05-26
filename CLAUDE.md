@@ -13,3 +13,7 @@ Canonical label vocabulary (`needs-triage`, `needs-info`, `ready-for-agent`, `re
 ### Domain docs
 
 Single-context layout: one `CONTEXT.md` and `docs/adr/` at the repo root. See `docs/agents/domain.md`.
+
+### Preview env
+
+How to spin up a local review environment (target branch, setup steps, serve command) for the `implement-issues` skill. See `docs/agents/preview-env.md`.
