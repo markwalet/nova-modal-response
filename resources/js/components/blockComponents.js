@@ -7,6 +7,7 @@ import BadgeBlock from './BadgeBlock.vue'
 import CodeBlock from './CodeBlock.vue'
 import JsonBlock from './JsonBlock.vue'
 import InlineBlock from './InlineBlock.vue'
+import LinkBlock from './LinkBlock.vue'
 
 // The single source of truth mapping a block `type` to the component that
 // renders it. Both the stack (ModalActionResponse.vue) and the inline group
@@ -21,4 +22,5 @@ export const blockComponents = {
     code: CodeBlock,
     json: JsonBlock,
     inline: InlineBlock,
+    link: LinkBlock,
 }
