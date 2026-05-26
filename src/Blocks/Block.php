@@ -51,6 +51,14 @@ abstract class Block
     }
 
     /**
+     * @param array<int, Block> $atoms
+     */
+    public static function inline(array $atoms): InlineBlock
+    {
+        return new InlineBlock($atoms);
+    }
+
+    /**
      * @param array<mixed> $value
      *
      * @throws JsonException

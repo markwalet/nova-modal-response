@@ -4,7 +4,7 @@ namespace Markwalet\NovaModalResponse\Blocks;
 
 use Illuminate\Support\Stringable;
 
-class BadgeBlock extends Block
+class BadgeBlock extends Block implements Inlineable
 {
     private string $variant = 'default';
 

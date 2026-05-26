@@ -55,6 +55,26 @@ class ModalResponseTest extends TestCase
         $this->assertSame(['blocks' => []], $response['modal']->payload);
     }
 
+    public function test_an_inline_group_serialises_inside_the_stack(): void
+    {
+        $response = ModalResponse::stack([
+            Block::inline([Block::text('Status'), Block::badge('Active')->success()])->spread(),
+        ]);
+
+        $this->assertSame([
+            'blocks' => [
+                [
+                    'type' => 'inline',
+                    'spread' => true,
+                    'value' => [
+                        ['type' => 'text', 'value' => 'Status'],
+                        ['type' => 'badge', 'value' => 'Active', 'variant' => 'success'],
+                    ],
+                ],
+            ],
+        ], $response['modal']->payload);
+    }
+
     public function test_stack_with_an_array_of_blocks_writes_the_blocks_wire_payload(): void
     {
         $response = ModalResponse::stack([Block::text('hi')]);
