@@ -34,7 +34,7 @@
 
 <script>
 import { Button } from 'laravel-nova-ui'
-import BlockText from './BlockText.vue'
+import TextBlock from './TextBlock.vue'
 
 export default {
     components: {
@@ -51,7 +51,7 @@ export default {
     data() {
         return {
             blockComponents: {
-                text: BlockText,
+                text: TextBlock,
             },
         }
     },
