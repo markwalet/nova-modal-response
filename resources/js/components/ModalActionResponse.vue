@@ -35,6 +35,7 @@
 <script>
 import { Button } from 'laravel-nova-ui'
 import TextBlock from './TextBlock.vue'
+import DividerBlock from './DividerBlock.vue'
 
 export default {
     components: {
@@ -52,6 +53,7 @@ export default {
         return {
             blockComponents: {
                 text: TextBlock,
+                divider: DividerBlock,
             },
         }
     },
