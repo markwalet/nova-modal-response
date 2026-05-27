@@ -25,6 +25,22 @@ class MarkdownBlockTest extends TestCase
         $this->assertStringContainsString('<h1>Title</h1>', $result['value']);
     }
 
+    public function test_it_wraps_the_compiled_html_in_a_markdown_scoped_container(): void
+    {
+        $block = Block::markdown('# Title');
+
+        $result = $block->toArray();
+
+        // Still an html block on the wire (ADR-0002) — only the value is wrapped
+        // so the markdown-scoped stylesheet can style it without touching raw
+        // html blocks.
+        $this->assertSame('html', $result['type']);
+        $this->assertSame(
+            '<div class="modal-response-markdown"><h1>Title</h1>'."\n".'</div>',
+            $result['value'],
+        );
+    }
+
     public function test_it_compiles_a_file_to_an_html_block(): void
     {
         $path = tempnam(sys_get_temp_dir(), 'md').'.md';
@@ -59,7 +75,7 @@ class MarkdownBlockTest extends TestCase
 
         $this->assertSame([
             'blocks' => [
-                ['type' => 'html', 'value' => "<h1>Title</h1>\n"],
+                ['type' => 'html', 'value' => '<div class="modal-response-markdown"><h1>Title</h1>'."\n".'</div>'],
             ],
         ], $response['modal']->payload);
     }

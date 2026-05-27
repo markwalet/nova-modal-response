@@ -31,8 +31,18 @@ class MarkdownBlock extends Block
     {
         return [
             'type' => 'html',
-            'value' => Str::markdown($this->source()),
+            'value' => $this->wrap(Str::markdown($this->source())),
         ];
+    }
+
+    /**
+     * Wrap the compiled HTML in a markdown-scoped container so it can be styled
+     * to match the native blocks without affecting raw `html` blocks. The block
+     * still emits `type: html`; only the value carries the wrapper (see ADR-0002).
+     */
+    private function wrap(string $html): string
+    {
+        return '<div class="modal-response-markdown">'.$html.'</div>';
     }
 
     private function source(): string

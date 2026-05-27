@@ -54,3 +54,11 @@ apparent inconsistency by adding a client-side renderer.
   alongside — same trusted-input model, no new sanitizer.
 - Converter options/extensions are intentionally out of scope; they can be added
   later as additive fluent methods without touching the wire format.
+- To render close to the native `text`/`heading`/`link` blocks, the compiled HTML
+  is wrapped in a single `<div class="modal-response-markdown">` at serialize time
+  and a scoped stylesheet styles `.modal-response-markdown` descendants (links via
+  Nova's `--colors-primary-*` vars, so they stay theme-aware like `LinkBlock`).
+  This is **not** a wire-level branch: the block still emits `{ type: 'html' }`
+  with no new field, `HtmlBlock.vue` stays dumb, and raw `html` blocks are left
+  unstyled (they remain author-controlled markup). The styling lives entirely in
+  the markdown-scoped wrapper + CSS, never in the shared `html` render path.

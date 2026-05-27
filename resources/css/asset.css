@@ -5,3 +5,167 @@ html.dark {
 html {
     @import url('highlight.js/styles/github.css');
 }
+
+/*
+ * Markdown block styling.
+ *
+ * A markdown block compiles to an `html` block and is wrapped in this scoped
+ * container (see ADR-0002) so its compiled output can track the native
+ * text/heading/link blocks without restyling raw `html` blocks. Rules are
+ * hand-written CSS — this build does not run Tailwind `@apply` — and links
+ * reuse Nova's `--colors-primary-*` vars so they stay theme-aware, exactly
+ * like LinkBlock. The wrapper already sits inside HtmlBlock's `py-3 px-8`, so
+ * these rules only manage internal vertical rhythm.
+ */
+.modal-response-markdown > :first-child {
+    margin-top: 0;
+}
+
+.modal-response-markdown > :last-child {
+    margin-bottom: 0;
+}
+
+/* Paragraphs — matches the text block. */
+.modal-response-markdown p {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Headings — echo the heading block's small/medium/large scale.
+   h1 -> large, h2 -> medium, h3-h6 -> small. */
+.modal-response-markdown h1,
+.modal-response-markdown h2,
+.modal-response-markdown h3,
+.modal-response-markdown h4,
+.modal-response-markdown h5,
+.modal-response-markdown h6 {
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.modal-response-markdown h1 {
+    font-size: 1.125rem; /* text-lg */
+    line-height: 1.75rem;
+    font-weight: 700; /* font-bold */
+}
+
+.modal-response-markdown h2 {
+    font-size: 1rem; /* text-base */
+    line-height: 1.5rem;
+    font-weight: 600; /* font-semibold */
+}
+
+.modal-response-markdown h3,
+.modal-response-markdown h4,
+.modal-response-markdown h5,
+.modal-response-markdown h6 {
+    font-size: 0.875rem; /* text-sm */
+    line-height: 1.25rem;
+    font-weight: 600; /* font-semibold */
+}
+
+/* Links — same theme-aware primary color and weight as LinkBlock. */
+.modal-response-markdown a {
+    color: rgb(var(--colors-primary-500));
+    font-weight: 700;
+}
+
+.modal-response-markdown a:hover {
+    color: rgb(var(--colors-primary-400));
+}
+
+/* Lists — matches the list block (list-disc/decimal pl-6 space-y-1). */
+.modal-response-markdown ul,
+.modal-response-markdown ol {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    padding-left: 1.5rem; /* pl-6 */
+}
+
+.modal-response-markdown ul {
+    list-style-type: disc;
+}
+
+.modal-response-markdown ol {
+    list-style-type: decimal;
+}
+
+.modal-response-markdown li + li {
+    margin-top: 0.25rem; /* space-y-1 */
+}
+
+.modal-response-markdown li > ul,
+.modal-response-markdown li > ol {
+    margin-top: 0.25rem;
+    margin-bottom: 0;
+}
+
+/* Inline code. */
+.modal-response-markdown :not(pre) > code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.875em;
+    padding: 0.125rem 0.25rem;
+    border-radius: 0.25rem;
+    background-color: rgba(var(--colors-gray-500), 0.15);
+}
+
+/* Fenced code blocks. */
+.modal-response-markdown pre {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    padding: 0.75rem 1rem;
+    border-radius: 0.375rem;
+    overflow-x: auto;
+    background-color: rgba(var(--colors-gray-500), 0.1);
+}
+
+.modal-response-markdown pre code {
+    padding: 0;
+    background-color: transparent;
+}
+
+/* Blockquotes. */
+.modal-response-markdown blockquote {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    padding-left: 1rem;
+    border-left: 0.25rem solid rgba(var(--colors-gray-500), 0.4);
+    color: rgba(var(--colors-gray-500), 1);
+    font-style: italic;
+}
+
+/* Horizontal rule. */
+.modal-response-markdown hr {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border: 0;
+    border-top: 1px solid rgba(var(--colors-gray-500), 0.3);
+}
+
+/* Tables. */
+.modal-response-markdown table {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.modal-response-markdown th,
+.modal-response-markdown td {
+    padding: 0.375rem 0.75rem;
+    border: 1px solid rgba(var(--colors-gray-500), 0.3);
+    text-align: left;
+}
+
+.modal-response-markdown th {
+    font-weight: 600;
+}
+
+/* Inline emphasis. */
+.modal-response-markdown strong {
+    font-weight: 700;
+}
+
+.modal-response-markdown em {
+    font-style: italic;
+}
