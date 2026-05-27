@@ -13,27 +13,37 @@ class ModalResponse extends ActionResponse
      * Create a modal with a code snippet.
      *
      * @param string|Stringable $snippet
+     * @param bool $highlight Whether to syntax-highlight the snippet.
      * @return self
      */
-    public static function code(string|Stringable $snippet): self
+    public static function code(string|Stringable $snippet, bool $highlight = true): self
     {
-        return self::modal('modal-response', [
-            'code' => $snippet,
-        ]);
+        $payload = ['code' => $snippet];
+
+        if (! $highlight) {
+            $payload['highlight'] = false;
+        }
+
+        return self::modal('modal-response', $payload);
     }
 
     /**
      * Create a modal with a json payload.
      *
      * @param array<mixed> $data
+     * @param bool $highlight Whether to syntax-highlight the payload.
      * @return self
      * @throws JsonException
      */
-    public static function json(array $data): self
+    public static function json(array $data, bool $highlight = true): self
     {
-        return self::modal('modal-response', [
-            'code' => json_encode($data, JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR),
-        ]);
+        $payload = ['code' => json_encode($data, JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR)];
+
+        if (! $highlight) {
+            $payload['highlight'] = false;
+        }
+
+        return self::modal('modal-response', $payload);
     }
 
     /**
@@ -87,6 +97,8 @@ class ModalResponse extends ActionResponse
     /**
      * Disable syntax highlighting for json or code blocks.
      *
+     * @deprecated Pass `highlight: false` to ModalResponse::code() or ::json() instead.
+     *             This method is removed in v2.
      * @return self
      */
     public function withoutSyntaxHighlighting(): self

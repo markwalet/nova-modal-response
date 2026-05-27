@@ -29,6 +29,35 @@ class ModalResponseTest extends TestCase
         ], $modal->payload);
     }
 
+    public function test_code_response_highlights_by_default(): void
+    {
+        $response = ModalResponse::code('echo "test";');
+
+        $this->assertSame([
+            'code' => 'echo "test";',
+        ], $response['modal']->payload);
+    }
+
+    public function test_code_response_can_disable_highlighting_via_argument(): void
+    {
+        $response = ModalResponse::code('echo "test";', highlight: false);
+
+        $this->assertSame([
+            'code' => 'echo "test";',
+            'highlight' => false,
+        ], $response['modal']->payload);
+    }
+
+    public function test_json_response_can_disable_highlighting_via_argument(): void
+    {
+        $response = ModalResponse::json(['lorem' => 'ipsum'], highlight: false);
+
+        $this->assertSame([
+            'code' => json_encode(['lorem' => 'ipsum'], JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR),
+            'highlight' => false,
+        ], $response['modal']->payload);
+    }
+
     public function test_json_response_pretty_prints_the_payload(): void
     {
         $response = ModalResponse::json([
