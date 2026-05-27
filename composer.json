@@ -59,7 +59,12 @@
         "clear": "@php vendor/bin/testbench package:purge-skeleton --ansi",
         "prepare": "@php vendor/bin/testbench package:discover --ansi",
         "build": "@php vendor/bin/testbench workbench:build --ansi",
-        "test": "@php vendor/bin/phpunit",
+        "release-build": [
+            "@php vendor/bin/pint --test",
+            "@php vendor/bin/phpstan analyse --no-progress --memory-limit=1G",
+            "@php vendor/bin/phpunit",
+            "npm run prod"
+        ],
         "serve": [
             "Composer\\Config::disableProcessTimeout",
             "@build",
