@@ -45,6 +45,14 @@ abstract class Block
         return new HtmlBlock($value);
     }
 
+    /**
+     * @param array<string, mixed> $data
+     */
+    public static function view(string $view, array $data = []): ViewBlock
+    {
+        return new ViewBlock($view, $data);
+    }
+
     public static function heading(string|Stringable $value): HeadingBlock
     {
         return new HeadingBlock($value);

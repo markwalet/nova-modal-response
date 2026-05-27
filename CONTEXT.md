@@ -17,8 +17,12 @@ The ordered sequence of blocks that makes up a modal's body content. Set via `Mo
 _Avoid_: body, content list, items
 
 **Block**:
-A single, typed unit of modal body content. Blocks render top-to-bottom in the given order. Built-in types: `text`, `heading`, `code`, `json`, `html`, `badge`, `divider`, `list`, `link`, `icon`.
+A single, typed unit of modal body content. Blocks render top-to-bottom in the given order. Built-in types: `text`, `heading`, `code`, `json`, `html`, `badge`, `divider`, `list`, `link`, `icon` (plus the **view block**, an authoring-only sugar that serializes as `html`).
 _Avoid_: element, node, section
+
+**View block**:
+An authoring-level block that renders a named Blade view server-side and serializes *as an `html` block* — no distinct wire type and no Vue component; the rendered HTML flows through the existing `html` renderer. Built in PHP via `Block::view($view, $data)`, with `ModalResponse::view($view, $data)` sugar to render a view as the whole modal body. Named view files only; a missing view lets Laravel's `View [x] not found` exception bubble.
+_Avoid_: blade block, partial, template
 
 **Inline group**:
 A block (type `inline`) that lays a set of **atoms** on a single horizontal row, instead of stacking them vertically like the rest of the body. Built in PHP via `Block::inline([...])`. The only block that may contain other blocks.
