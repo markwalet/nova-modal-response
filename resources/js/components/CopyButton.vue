@@ -3,11 +3,11 @@
         v-if="supported"
         type="button"
         @click.prevent="copy"
-        class="p-1.5 rounded text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700"
+        class="nmr-copy-button"
         :title="copied ? 'Copied' : 'Copy'"
         dusk="copy-button"
     >
-        <Icon :name="copied ? 'check' : 'clipboard'" class="w-4 h-4" />
+        <Icon :name="copied ? 'check' : 'clipboard'" />
     </button>
 </template>
 
@@ -32,6 +32,12 @@ export default {
         supported() {
             return typeof navigator !== 'undefined' && !!navigator.clipboard
         },
+    },
+
+    mounted() {
+        if (! this.supported) {
+            console.warn('[nova-modal-response] Copy button hidden: clipboard API unavailable (requires a secure context such as HTTPS or localhost).')
+        }
     },
 
     methods: {

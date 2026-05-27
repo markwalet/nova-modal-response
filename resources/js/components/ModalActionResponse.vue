@@ -8,11 +8,8 @@
                 <ModalHeader v-text="data.title" />
 
                 <template v-if="data.code">
-                    <div class="relative group">
-                        <CopyButton
-                            :value="data.code"
-                            class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity"
-                        />
+                    <div class="nmr-code">
+                        <CopyButton :value="data.code" class="nmr-code__copy" />
                         <pre v-if="data.highlight === false"><code v-text="data.code" class="language-plaintext" ref="plaintextCode"></code></pre>
                         <highlightjs v-else autodetect :code="data.code" />
                     </div>
