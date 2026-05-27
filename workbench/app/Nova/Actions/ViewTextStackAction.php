@@ -55,11 +55,26 @@ class ViewTextStackAction extends Action
                 Block::icon('check-circle')->success(),
                 Block::badge('Published')->success(),
             ]),
+            Block::heading('Inline group — default alignment')->small(),
+            Block::inline([
+                Block::text('Deployment'),
+                Block::badge('Live')->success(),
+            ]),
             Block::heading('Inline group — spread (key/value row)')->small(),
             Block::inline([
                 Block::text('Deployment'),
                 Block::badge('Live')->success(),
             ])->spread(),
+            Block::heading('Inline group — center alignment')->small(),
+            Block::inline([
+                Block::text('Deployment'),
+                Block::badge('Live')->success(),
+            ])->center(),
+            Block::heading('Inline group — end alignment')->small(),
+            Block::inline([
+                Block::text('Deployment'),
+                Block::badge('Live')->success(),
+            ])->end(),
             Block::divider(),
             Block::heading('Links')->small(),
             Block::link('Same-tab link', 'https://nova.laravel.com'),

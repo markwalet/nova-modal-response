@@ -58,7 +58,7 @@ class IconBlockTest extends TestCase
 
         $this->assertSame([
             'type' => 'inline',
-            'spread' => false,
+            'alignment' => 'default',
             'value' => [
                 ['type' => 'icon', 'value' => 'check-circle', 'variant' => 'success'],
                 ['type' => 'text', 'value' => 'Done'],

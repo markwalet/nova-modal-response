@@ -76,7 +76,7 @@ class LinkBlockTest extends TestCase
 
         $this->assertSame([
             'type' => 'inline',
-            'spread' => false,
+            'alignment' => 'default',
             'value' => [
                 ['type' => 'text', 'value' => 'See'],
                 ['type' => 'link', 'value' => 'Docs', 'href' => 'https://example.test', 'appearance' => 'link', 'newTab' => true],

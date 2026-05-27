@@ -28,6 +28,10 @@ _Avoid_: blade block, partial, template
 A block (type `inline`) that lays a set of **atoms** on a single horizontal row, instead of stacking them vertically like the rest of the body. Built in PHP via `Block::inline([...])`. The only block that may contain other blocks.
 _Avoid_: row, inline block content, flex container
 
+**Alignment**:
+How an inline group distributes its atoms along the row. Four values: `default` (packed to the start, the implicit one), `spread` (first atom at the start, last at the end, gaps pushed between them), `center` (atoms clustered in the middle), `end` (packed to the trailing edge). Exposed in PHP as zero-arg fluent methods on the inline block (`->spread()`, `->center()`, `->end()`) or via the explicit `->alignment()` setter, which accepts either a value string or an `Alignment` enum case; `default` is what you get if none is called. Mirrors the **variant** pattern: one knob, one implicit value, named fluent setters. Main-axis only — atoms are always vertically centred regardless. `end` is direction-aware (the trailing edge, so the left under RTL), not physically "right".
+_Avoid_: justify, distribution, spacing, right
+
 **Atom**:
 A block permitted inside an **inline group**: `text`, `badge`, `icon`, `link`. Marked in PHP by the `Inlineable` interface — a promise about layout only (it may sit on a horizontal row); it does not change the block's serialized output. Blocks that are not atoms (e.g. `heading`, `code`, `divider`) are rejected from an inline group, as is a nested inline group.
 _Avoid_: inline element, item, child block

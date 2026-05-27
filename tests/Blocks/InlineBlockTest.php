@@ -5,7 +5,9 @@ namespace Markwalet\NovaModalResponse\Tests\Blocks;
 use InvalidArgumentException;
 use Markwalet\NovaModalResponse\Blocks\Block;
 use Markwalet\NovaModalResponse\Blocks\InlineBlock;
+use Markwalet\NovaModalResponse\Enums\Alignment;
 use Markwalet\NovaModalResponse\Tests\TestCase;
+use ValueError;
 
 class InlineBlockTest extends TestCase
 {
@@ -16,7 +18,7 @@ class InlineBlockTest extends TestCase
         $this->assertInstanceOf(InlineBlock::class, $block);
         $this->assertSame([
             'type' => 'inline',
-            'spread' => false,
+            'alignment' => 'default',
             'value' => [
                 ['type' => 'text', 'value' => 'Status'],
                 ['type' => 'badge', 'value' => 'Active', 'variant' => 'success'],
@@ -34,18 +36,67 @@ class InlineBlockTest extends TestCase
         );
     }
 
-    public function test_spread_flips_the_layout_knob(): void
+    public function test_spread_sets_the_alignment_knob(): void
     {
         $block = Block::inline([Block::text('key'), Block::badge('value')])->spread();
 
         $this->assertSame([
             'type' => 'inline',
-            'spread' => true,
+            'alignment' => 'spread',
             'value' => [
                 ['type' => 'text', 'value' => 'key'],
                 ['type' => 'badge', 'value' => 'value', 'variant' => 'default'],
             ],
         ], $block->toArray());
+    }
+
+    public function test_center_sets_the_alignment_knob(): void
+    {
+        $block = Block::inline([Block::text('key')])->center();
+
+        $this->assertSame('center', $block->toArray()['alignment']);
+    }
+
+    public function test_end_sets_the_alignment_knob(): void
+    {
+        $block = Block::inline([Block::text('key')])->end();
+
+        $this->assertSame('end', $block->toArray()['alignment']);
+    }
+
+    public function test_alignment_defaults_to_default(): void
+    {
+        $block = Block::inline([Block::text('key')]);
+
+        $this->assertSame('default', $block->toArray()['alignment']);
+    }
+
+    public function test_alignment_accepts_a_string(): void
+    {
+        $block = Block::inline([Block::text('key')])->alignment('center');
+
+        $this->assertSame('center', $block->toArray()['alignment']);
+    }
+
+    public function test_alignment_accepts_an_enum(): void
+    {
+        $block = Block::inline([Block::text('key')])->alignment(Alignment::CENTER);
+
+        $this->assertSame('center', $block->toArray()['alignment']);
+    }
+
+    public function test_alignment_rejects_an_unknown_string(): void
+    {
+        $this->expectException(ValueError::class);
+
+        Block::inline([Block::text('key')])->alignment('diagonal');
+    }
+
+    public function test_the_last_alignment_call_wins(): void
+    {
+        $block = Block::inline([Block::text('key')])->spread()->center()->end();
+
+        $this->assertSame('end', $block->toArray()['alignment']);
     }
 
     public function test_atoms_serialize_through_their_own_to_array(): void
@@ -62,7 +113,7 @@ class InlineBlockTest extends TestCase
     {
         $this->assertSame([
             'type' => 'inline',
-            'spread' => false,
+            'alignment' => 'default',
             'value' => [],
         ], Block::inline([])->toArray());
     }
@@ -73,7 +124,7 @@ class InlineBlockTest extends TestCase
 
         $this->assertSame([
             'type' => 'inline',
-            'spread' => false,
+            'alignment' => 'default',
             'value' => [
                 ['type' => 'text', 'value' => 'Hello'],
                 ['type' => 'badge', 'value' => 'New', 'variant' => 'default'],
