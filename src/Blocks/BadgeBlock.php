@@ -3,10 +3,12 @@
 namespace Markwalet\NovaModalResponse\Blocks;
 
 use Illuminate\Support\Stringable;
+use Markwalet\NovaModalResponse\Blocks\Concerns\HasEmbeddedIcon;
 use Markwalet\NovaModalResponse\Blocks\Concerns\HasVariants;
 
 class BadgeBlock implements Inlineable, Renderable
 {
+    use HasEmbeddedIcon;
     use HasVariants;
 
     public function __construct(private readonly string|Stringable $value) {}
@@ -20,6 +22,7 @@ class BadgeBlock implements Inlineable, Renderable
             'type' => 'badge',
             'value' => (string) $this->value,
             'variant' => $this->variant,
+            ...$this->iconAttributes(),
         ];
     }
 }

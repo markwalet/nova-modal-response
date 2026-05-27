@@ -8,7 +8,7 @@ use Illuminate\Support\Collection;
 use Laravel\Nova\Actions\Action;
 use Laravel\Nova\Actions\ActionResponse;
 use Laravel\Nova\Fields\ActionFields;
-use Markwalet\NovaModalResponse\Blocks\Block;
+use Markwalet\NovaModalResponse\Block;
 use Markwalet\NovaModalResponse\ModalResponse;
 
 class ViewTextStackAction extends Action
@@ -39,6 +39,9 @@ class ViewTextStackAction extends Action
             Block::badge('Published')->success(),
             Block::badge('Deprecated')->warning(),
             Block::badge('Archived')->danger(),
+            Block::heading('Badges with embedded icons')->small(),
+            Block::badge('Live')->success()->icon('check-circle'),
+            Block::badge('Deploying')->info()->icon('arrow-path', trailing: true),
             Block::divider(),
             Block::heading('Icon variants')->small(),
             Block::inline([
@@ -80,6 +83,9 @@ class ViewTextStackAction extends Action
             Block::link('Same-tab link', 'https://nova.laravel.com'),
             Block::link('New-tab link (target=_blank)', 'https://nova.laravel.com')->newTab(),
             Block::link('Button appearance', 'https://nova.laravel.com')->button()->newTab(),
+            Block::heading('Links with embedded icons')->small(),
+            Block::link('Add', 'https://nova.laravel.com')->button()->icon('plus'),
+            Block::link('Docs', 'https://nova.laravel.com')->newTab()->icon('arrow-top-right-on-square', trailing: true),
             Block::inline([
                 Block::text('Docs:'),
                 Block::link('Nova', 'https://nova.laravel.com')->newTab(),
