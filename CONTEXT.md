@@ -20,6 +20,14 @@ _Avoid_: body, content list, items
 A single, typed unit of modal body content. Blocks render top-to-bottom in the given order. Built-in types: `text`, `heading`, `code`, `json`, `html`, `badge`, `divider`, `list`, `link`, `icon`.
 _Avoid_: element, node, section
 
+**Inline group**:
+A block (type `inline`) that lays a set of **atoms** on a single horizontal row, instead of stacking them vertically like the rest of the body. Built in PHP via `Block::inline([...])`. The only block that may contain other blocks.
+_Avoid_: row, inline block content, flex container
+
+**Atom**:
+A block permitted inside an **inline group**: `text`, `badge`, `icon`, `link`. Marked in PHP by the `Inlineable` interface — a promise about layout only (it may sit on a horizontal row); it does not change the block's serialized output. Blocks that are not atoms (e.g. `heading`, `code`, `divider`) are rejected from an inline group, as is a nested inline group.
+_Avoid_: inline element, item, child block
+
 **Heading block**:
 A content-level heading inside the modal body. Carries a **visual size** (`small`, `medium`, `large`) — not a semantic HTML level. Distinct from the modal title.
 _Avoid_: title, h1/h2, section header
