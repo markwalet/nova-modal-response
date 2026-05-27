@@ -8,8 +8,11 @@
                 <ModalHeader v-text="data.title" />
 
                 <template v-if="data.code">
-                    <pre v-if="data.highlight === false"><code v-text="data.code" class="language-plaintext" ref="plaintextCode"></code></pre>
-                    <highlightjs v-else autodetect :code="data.code" />
+                    <div class="nmr-code">
+                        <CopyButton :value="data.code" class="nmr-code__copy" />
+                        <pre v-if="data.highlight === false"><code v-text="data.code" class="language-plaintext" ref="plaintextCode"></code></pre>
+                        <highlightjs v-else autodetect :code="data.code" />
+                    </div>
                 </template>
                 <div v-else class="py-3 px-8">
                     <div v-if="data.html" v-html="data.html"/>
@@ -38,10 +41,12 @@
 import hljs from 'highlight.js/lib/common';
 import hljsVuePlugin from "@highlightjs/vue-plugin";
 import { Button } from 'laravel-nova-ui'
+import CopyButton from './CopyButton.vue'
 
 export default {
     components: {
         Button,
+        CopyButton,
         highlightjs: hljsVuePlugin.component
     },
 
