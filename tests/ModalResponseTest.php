@@ -2,6 +2,7 @@
 
 namespace Markwalet\NovaModalResponse\Tests;
 
+use InvalidArgumentException;
 use Laravel\Nova\Actions\Responses\Modal;
 use Markwalet\NovaModalResponse\Blocks\Block;
 use Markwalet\NovaModalResponse\ModalResponse;
@@ -73,6 +74,26 @@ class ModalResponseTest extends TestCase
                 ],
             ],
         ], $response['modal']->payload);
+    }
+
+    public function test_stack_coerces_bare_strings_into_text_blocks(): void
+    {
+        $response = ModalResponse::stack(['Hello', Block::badge('New')]);
+
+        $this->assertSame([
+            'blocks' => [
+                ['type' => 'text', 'value' => 'Hello'],
+                ['type' => 'badge', 'value' => 'New', 'variant' => 'default'],
+            ],
+        ], $response['modal']->payload);
+    }
+
+    public function test_stack_rejects_a_non_block_non_string_value(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Blocks must be Block instances or strings.');
+
+        ModalResponse::stack([42]);
     }
 
     public function test_stack_with_an_array_of_blocks_writes_the_blocks_wire_payload(): void

@@ -3,6 +3,7 @@
 namespace Markwalet\NovaModalResponse\Blocks;
 
 use InvalidArgumentException;
+use Stringable;
 
 class InlineBlock extends Block
 {
@@ -12,13 +13,15 @@ class InlineBlock extends Block
     private readonly array $atoms;
 
     /**
-     * @param array<int, Block> $atoms
+     * @param array<int, Block|string|Stringable> $atoms
      */
     public function __construct(array $atoms)
     {
         $validated = [];
 
         foreach ($atoms as $atom) {
+            $atom = Block::normalize($atom);
+
             if (! $atom instanceof Inlineable) {
                 throw new InvalidArgumentException('Inline group may only contain Inlineable atoms.');
             }

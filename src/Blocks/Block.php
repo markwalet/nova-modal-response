@@ -3,7 +3,9 @@
 namespace Markwalet\NovaModalResponse\Blocks;
 
 use Illuminate\Support\Stringable;
+use InvalidArgumentException;
 use JsonException;
+use Stringable as StringableInterface;
 
 abstract class Block
 {
@@ -11,6 +13,22 @@ abstract class Block
      * @return array<string, mixed>
      */
     abstract public function toArray(): array;
+
+    /**
+     * Coerce a value into a Block: instances pass through, strings become text blocks.
+     */
+    public static function normalize(mixed $block): Block
+    {
+        if ($block instanceof Block) {
+            return $block;
+        }
+
+        if (is_string($block) || $block instanceof StringableInterface) {
+            return self::text((string) $block);
+        }
+
+        throw new InvalidArgumentException('Blocks must be Block instances or strings.');
+    }
 
     public static function text(string|Stringable $value): TextBlock
     {
@@ -33,7 +51,7 @@ abstract class Block
     }
 
     /**
-     * @param array<int, string|\Stringable> $items
+     * @param array<int, string|StringableInterface> $items
      */
     public static function list(array $items): ListBlock
     {
@@ -61,7 +79,7 @@ abstract class Block
     }
 
     /**
-     * @param array<int, Block> $atoms
+     * @param array<int, Block|string|StringableInterface> $atoms
      */
     public static function inline(array $atoms): InlineBlock
     {

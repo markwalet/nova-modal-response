@@ -67,9 +67,32 @@ class InlineBlockTest extends TestCase
         ], Block::inline([])->toArray());
     }
 
+    public function test_bare_strings_are_coerced_to_text_atoms(): void
+    {
+        $block = Block::inline(['Hello', Block::badge('New')]);
+
+        $this->assertSame([
+            'type' => 'inline',
+            'spread' => false,
+            'value' => [
+                ['type' => 'text', 'value' => 'Hello'],
+                ['type' => 'badge', 'value' => 'New', 'variant' => 'default'],
+            ],
+        ], $block->toArray());
+    }
+
+    public function test_a_non_block_non_string_atom_is_rejected(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Blocks must be Block instances or strings.');
+
+        Block::inline([42]);
+    }
+
     public function test_a_non_inlineable_block_is_rejected(): void
     {
         $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Inline group may only contain Inlineable atoms.');
 
         Block::inline([Block::text('ok'), Block::code('not allowed')]);
     }

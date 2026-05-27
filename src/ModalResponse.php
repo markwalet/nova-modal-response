@@ -20,7 +20,7 @@ class ModalResponse extends ActionResponse
     private bool $withoutHighlight = false;
 
     /**
-     * @param array<int, Block>|Closure $blocks
+     * @param array<int, Block|string|Stringable>|Closure $blocks
      */
     public static function stack(array|Closure $blocks): self
     {
@@ -31,13 +31,7 @@ class ModalResponse extends ActionResponse
             throw new InvalidArgumentException('Stack closure must return an array of Block instances.');
         }
 
-        foreach ($resolved as $block) {
-            if (! $block instanceof Block) {
-                throw new InvalidArgumentException('Stack must contain only Block instances.');
-            }
-        }
-
-        $response->blocks = array_values($resolved);
+        $response->blocks = array_values(array_map(Block::normalize(...), $resolved));
         $response->refreshModal();
 
         return $response;
