@@ -52,6 +52,10 @@ _Avoid_: glyph, image, svg block
 An inline atom that renders an anchor to an `href`. It carries two independent knobs: a **link appearance** (how it looks) and `newTab` (where it opens — `->newTab()` opens a new, secure-by-default tab). A button-appearance link still navigates via its `href`; it does **not** trigger a Nova action.
 _Avoid_: button block, action button, CTA
 
+**Collapsible block**:
+A block (type `collapsible`) that pairs a **header** string with a nested **stack** of child blocks, rendered as a section the user expands and collapses by clicking the header. Built in PHP via `Block::collapsible($header, [...])`; children are normalized through `Block::normalize` (bare strings become text blocks) and dispatched through the same shared block-component map the stack and inline group use. Defaults to collapsed; `->expanded()` starts it open and `->collapsed()` is the explicit inverse (last call wins). Both accept an optional `bool|callable` (default `true`) so the open/closed state can be set programmatically, e.g. `->expanded($user->isAdmin())`. The initial open/closed state travels on the wire as an `expanded` boolean. Unlike an inline group, it is not top-level-only nor restricted to atoms — it may hold any blocks.
+_Avoid_: accordion, disclosure, drawer, section
+
 **Link appearance**:
 How a link block is rendered: `link` (the implicit one — bold, primary-coloured text) or `button` (button chrome). Cosmetic only; it does not change what the link does. Distinct from **variant**: appearance is shape, not colour.
 _Avoid_: link variant, link style, link kind

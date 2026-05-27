@@ -10,6 +10,7 @@ import JsonBlock from './components/JsonBlock'
 import InlineBlock from './components/InlineBlock'
 import LinkBlock from './components/LinkBlock'
 import IconBlock from './components/IconBlock'
+import CollapsibleBlock from './components/CollapsibleBlock'
 
 Nova.booting(app => {
     app.component('modal-response', ModalActionResponse)
@@ -24,4 +25,5 @@ Nova.booting(app => {
     app.component('modal-response-inline-block', InlineBlock)
     app.component('modal-response-link-block', LinkBlock)
     app.component('modal-response-icon-block', IconBlock)
+    app.component('modal-response-collapsible-block', CollapsibleBlock)
 });

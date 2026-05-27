@@ -86,6 +86,18 @@ class ViewTextStackAction extends Action
             Block::divider(),
             Block::heading('Markdown (compiles to an html block)')->small(),
             Block::markdown("# Inline markdown\n\nCompiled to HTML by `Str::markdown()` — **bold**, *italic*, and a [link](https://nova.laravel.com)."),
+            Block::heading('Collapsible — collapsed (default)')->small(),
+            Block::collapsible('Details', [
+                Block::text('Some explanation'),
+                Block::list(['One', 'Two']),
+                Block::badge('New')->success(),
+            ]),
+            Block::heading('Collapsible — expanded')->small(),
+            Block::collapsible('Details', [
+                Block::text('Some explanation'),
+                Block::list(['One', 'Two']),
+                Block::badge('New')->success(),
+            ])->expanded(),
             Block::divider(),
             Block::heading('JSON payload')->small(),
             Block::json([

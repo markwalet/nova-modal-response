@@ -100,6 +100,14 @@ abstract class Block
     }
 
     /**
+     * @param array<int, Block|string|StringableInterface> $blocks
+     */
+    public static function collapsible(string $header, array $blocks): CollapsibleBlock
+    {
+        return new CollapsibleBlock($header, $blocks);
+    }
+
+    /**
      * @param array<mixed> $value
      *
      * @throws JsonException
