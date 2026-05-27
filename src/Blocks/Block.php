@@ -50,6 +50,11 @@ abstract class Block
         return new CodeBlock($value);
     }
 
+    public static function link(string|Stringable $label, string|Stringable $href): LinkBlock
+    {
+        return new LinkBlock($label, $href);
+    }
+
     /**
      * @param array<int, Block> $atoms
      */
