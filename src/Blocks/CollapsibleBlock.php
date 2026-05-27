@@ -2,22 +2,23 @@
 
 namespace Markwalet\NovaModalResponse\Blocks;
 
+use Markwalet\NovaModalResponse\Block;
 use Stringable;
 
-class CollapsibleBlock extends Block
+class CollapsibleBlock implements Renderable
 {
     private bool $expanded = false;
 
-    /** @var list<Block> */
+    /** @var list<Renderable> */
     private readonly array $blocks;
 
     /**
-     * @param array<int, Block|string|Stringable> $blocks
+     * @param array<int, Renderable|string|Stringable> $blocks
      */
     public function __construct(private readonly string $header, array $blocks)
     {
         $this->blocks = array_map(
-            static fn (mixed $block): Block => Block::normalize($block),
+            static fn (mixed $block): Renderable => Block::normalize($block),
             array_values($blocks),
         );
     }
@@ -45,7 +46,7 @@ class CollapsibleBlock extends Block
             'type' => 'collapsible',
             'header' => $this->header,
             'expanded' => $this->expanded,
-            'value' => array_map(static fn (Block $block): array => $block->toArray(), $this->blocks),
+            'value' => array_map(static fn (Renderable $block): array => $block->toArray(), $this->blocks),
         ];
     }
 }

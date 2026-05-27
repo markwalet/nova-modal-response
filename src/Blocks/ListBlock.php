@@ -4,7 +4,7 @@ namespace Markwalet\NovaModalResponse\Blocks;
 
 use Stringable;
 
-class ListBlock extends Block
+class ListBlock implements Renderable
 {
     private bool $ordered = false;
 

@@ -2,29 +2,21 @@
 
 namespace Markwalet\NovaModalResponse;
 
-use Markwalet\NovaModalResponse\Blocks\Block;
+use Markwalet\NovaModalResponse\Blocks\Renderable;
 
 class PayloadBuilder
 {
     /**
-     * @param array<int, Block> $blocks
+     * @param array<int, Renderable> $blocks
      * @param array<string, mixed> $chrome
      * @return array<string, mixed>
      */
-    public function build(array $blocks, array $chrome, bool $withoutHighlight): array
+    public function build(array $blocks, array $chrome): array
     {
         $payload = $chrome;
 
         $payload['blocks'] = array_map(
-            static function (Block $block) use ($withoutHighlight): array {
-                $serialized = $block->toArray();
-
-                if ($withoutHighlight && in_array($serialized['type'] ?? null, ['code', 'json'], true)) {
-                    $serialized['highlight'] = false;
-                }
-
-                return $serialized;
-            },
+            static fn (Renderable $block): array => $block->toArray(),
             array_values($blocks),
         );
 

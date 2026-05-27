@@ -6,7 +6,7 @@ use Illuminate\Support\Str;
 use InvalidArgumentException;
 use Stringable;
 
-class MarkdownBlock extends Block
+class MarkdownBlock implements Renderable
 {
     private bool $isFile = false;
 

@@ -4,7 +4,7 @@ namespace Markwalet\NovaModalResponse\Blocks;
 
 use Illuminate\Support\Stringable;
 
-class HtmlBlock extends Block
+class HtmlBlock implements Renderable
 {
     public function __construct(private readonly string|Stringable $value) {}
 

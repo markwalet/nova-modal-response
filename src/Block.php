@@ -1,25 +1,41 @@
 <?php
 
-namespace Markwalet\NovaModalResponse\Blocks;
+namespace Markwalet\NovaModalResponse;
 
 use Illuminate\Support\Stringable;
 use InvalidArgumentException;
 use JsonException;
+use Markwalet\NovaModalResponse\Blocks\BadgeBlock;
+use Markwalet\NovaModalResponse\Blocks\CodeBlock;
+use Markwalet\NovaModalResponse\Blocks\CollapsibleBlock;
+use Markwalet\NovaModalResponse\Blocks\DividerBlock;
+use Markwalet\NovaModalResponse\Blocks\HeadingBlock;
+use Markwalet\NovaModalResponse\Blocks\HtmlBlock;
+use Markwalet\NovaModalResponse\Blocks\IconBlock;
+use Markwalet\NovaModalResponse\Blocks\InlineBlock;
+use Markwalet\NovaModalResponse\Blocks\JsonBlock;
+use Markwalet\NovaModalResponse\Blocks\LinkBlock;
+use Markwalet\NovaModalResponse\Blocks\ListBlock;
+use Markwalet\NovaModalResponse\Blocks\MarkdownBlock;
+use Markwalet\NovaModalResponse\Blocks\Renderable;
+use Markwalet\NovaModalResponse\Blocks\TextBlock;
+use Markwalet\NovaModalResponse\Blocks\ViewBlock;
 use Stringable as StringableInterface;
 
-abstract class Block
+/**
+ * Factory hub for the built-in block types, alongside ModalResponse in the main
+ * namespace. Pure static facade: it builds blocks but is not itself a block.
+ */
+final class Block
 {
-    /**
-     * @return array<string, mixed>
-     */
-    abstract public function toArray(): array;
+    private function __construct() {}
 
     /**
-     * Coerce a value into a Block: instances pass through, strings become text blocks.
+     * Coerce a value into a block: instances pass through, strings become text blocks.
      */
-    public static function normalize(mixed $block): Block
+    public static function normalize(mixed $block): Renderable
     {
-        if ($block instanceof Block) {
+        if ($block instanceof Renderable) {
             return $block;
         }
 
@@ -92,7 +108,7 @@ abstract class Block
     }
 
     /**
-     * @param array<int, Block|string|StringableInterface> $atoms
+     * @param array<int, Renderable|string|StringableInterface> $atoms
      */
     public static function inline(array $atoms): InlineBlock
     {
@@ -100,7 +116,7 @@ abstract class Block
     }
 
     /**
-     * @param array<int, Block|string|StringableInterface> $blocks
+     * @param array<int, Renderable|string|StringableInterface> $blocks
      */
     public static function collapsible(string $header, array $blocks): CollapsibleBlock
     {

@@ -4,7 +4,7 @@ namespace Markwalet\NovaModalResponse\Tests;
 
 use InvalidArgumentException;
 use Laravel\Nova\Actions\Responses\Modal;
-use Markwalet\NovaModalResponse\Blocks\Block;
+use Markwalet\NovaModalResponse\Block;
 use Markwalet\NovaModalResponse\ModalResponse;
 
 class ModalResponseTest extends TestCase

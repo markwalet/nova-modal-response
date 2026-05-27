@@ -4,7 +4,7 @@ namespace Markwalet\NovaModalResponse\Blocks;
 
 use Illuminate\Support\Stringable;
 
-class HeadingBlock extends Block
+class HeadingBlock implements Renderable
 {
     private string $size = 'medium';
 

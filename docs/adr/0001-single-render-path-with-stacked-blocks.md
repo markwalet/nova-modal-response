@@ -19,7 +19,7 @@ Ship as **v2.0** with a hard wire-format break — no Vue-side compatibility shi
 ## Considered alternatives
 
 - **Vue-side shim for the legacy payload shape.** Rejected: it permanently doubles the number of render paths Vue has to support and undermines the entire point of the rework — a single, simple render code path.
-- **Top-level `highlight` flag on the wire with a Vue-side cascade to blocks.** Rejected: it would mean Vue has two sources of truth (modal-level default + per-block override) for the same property. Instead, `ModalResponse::withoutSyntaxHighlighting()` survives as a PHP-side bulk helper that walks the final stack at serialize time and writes `highlight: false` to every code/json block. Wire stays blocks-only.
+- **Top-level `highlight` flag on the wire with a Vue-side cascade to blocks.** Rejected: it would mean Vue has two sources of truth (modal-level default + per-block override) for the same property. Instead, `ModalResponse::withoutSyntaxHighlighting()` survives as a PHP-side bulk helper that walks the final stack at serialize time and writes `highlight: false` to every code/json block. Wire stays blocks-only. _(Superseded by ADR-0004: the bulk helper was removed; highlighting is now a per-block concern set via `->withoutHighlighting()` or the `highlight:` flag on the `code`/`json` sugar. The wire-stays-blocks-only decision still holds.)_
 - **Semantic `<h1>`–`<h6>` for the heading block.** Rejected: the modal title is already the implicit document heading, and Nova's typography doesn't map cleanly onto h-levels inside a modal body. Heading blocks instead carry a **visual size** (`small`/`medium`/`large`).
 
 ## Consequences

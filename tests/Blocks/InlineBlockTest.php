@@ -3,7 +3,7 @@
 namespace Markwalet\NovaModalResponse\Tests\Blocks;
 
 use InvalidArgumentException;
-use Markwalet\NovaModalResponse\Blocks\Block;
+use Markwalet\NovaModalResponse\Block;
 use Markwalet\NovaModalResponse\Blocks\InlineBlock;
 use Markwalet\NovaModalResponse\Enums\Alignment;
 use Markwalet\NovaModalResponse\Tests\TestCase;

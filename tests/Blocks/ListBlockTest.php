@@ -3,7 +3,7 @@
 namespace Markwalet\NovaModalResponse\Tests\Blocks;
 
 use Illuminate\Support\Stringable;
-use Markwalet\NovaModalResponse\Blocks\Block;
+use Markwalet\NovaModalResponse\Block;
 use Markwalet\NovaModalResponse\Blocks\ListBlock;
 use Markwalet\NovaModalResponse\Tests\TestCase;
 

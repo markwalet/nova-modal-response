@@ -3,18 +3,19 @@
 namespace Markwalet\NovaModalResponse\Blocks;
 
 use InvalidArgumentException;
+use Markwalet\NovaModalResponse\Block;
 use Markwalet\NovaModalResponse\Enums\Alignment;
 use Stringable;
 
-class InlineBlock extends Block
+class InlineBlock implements Renderable
 {
     private Alignment $alignment = Alignment::DEFAULT;
 
-    /** @var list<Block&Inlineable> */
+    /** @var list<Renderable&Inlineable> */
     private readonly array $atoms;
 
     /**
-     * @param array<int, Block|string|Stringable> $atoms
+     * @param array<int, Renderable|string|Stringable> $atoms
      */
     public function __construct(array $atoms)
     {
@@ -65,7 +66,7 @@ class InlineBlock extends Block
         return [
             'type' => 'inline',
             'alignment' => $this->alignment->value,
-            'value' => array_map(static fn (Block $atom): array => $atom->toArray(), $this->atoms),
+            'value' => array_map(static fn (Renderable $atom): array => $atom->toArray(), $this->atoms),
         ];
     }
 }

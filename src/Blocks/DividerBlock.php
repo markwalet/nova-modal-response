@@ -2,7 +2,7 @@
 
 namespace Markwalet\NovaModalResponse\Blocks;
 
-class DividerBlock extends Block
+class DividerBlock implements Renderable
 {
     /**
      * @return array<string, mixed>

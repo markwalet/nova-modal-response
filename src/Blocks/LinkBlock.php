@@ -4,7 +4,7 @@ namespace Markwalet\NovaModalResponse\Blocks;
 
 use Illuminate\Support\Stringable;
 
-class LinkBlock extends Block implements Inlineable
+class LinkBlock implements Inlineable, Renderable
 {
     private bool $newTab = false;
 

@@ -4,7 +4,7 @@ namespace Markwalet\NovaModalResponse\Blocks;
 
 use JsonException;
 
-class JsonBlock extends Block
+class JsonBlock implements Renderable
 {
     private bool $highlight = true;
 
