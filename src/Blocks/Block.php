@@ -45,6 +45,11 @@ abstract class Block
         return new BadgeBlock($value);
     }
 
+    public static function icon(string|Stringable $name): IconBlock
+    {
+        return new IconBlock($name);
+    }
+
     public static function code(string|Stringable $value): CodeBlock
     {
         return new CodeBlock($value);

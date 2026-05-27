@@ -17,21 +17,25 @@ The ordered sequence of blocks that makes up a modal's body content. Set via `Mo
 _Avoid_: body, content list, items
 
 **Block**:
-A single, typed unit of modal body content. Blocks render top-to-bottom in the given order. Built-in types: `text`, `heading`, `code`, `json`, `html`, `badge`, `divider`, `list`, `link`.
+A single, typed unit of modal body content. Blocks render top-to-bottom in the given order. Built-in types: `text`, `heading`, `code`, `json`, `html`, `badge`, `divider`, `list`, `link`, `icon`.
 _Avoid_: element, node, section
 
 **Heading block**:
 A content-level heading inside the modal body. Carries a **visual size** (`small`, `medium`, `large`) — not a semantic HTML level. Distinct from the modal title.
 _Avoid_: title, h1/h2, section header
 
-**Badge variant**:
-A semantic colour for a `badge` block. Five variants: `default` (neutral grey, the implicit one), `info`, `success`, `warning`, `danger`. Exposed in PHP as zero-arg fluent methods on the block (`->danger()`, …); `default` is what you get if no variant method is called.
-_Avoid_: badge type, badge color
+**Variant**:
+A semantic colour shared by the blocks that carry one (`badge`, `icon`). Five variants: `default` (neutral grey, the implicit one), `info`, `success`, `warning`, `danger`. Exposed in PHP as zero-arg fluent methods on the block (`->danger()`, …) via the shared `HasVariants` concern; `default` is what you get if no variant method is called.
+_Avoid_: badge type, badge color, icon color
+
+**Icon block**:
+An inline atom that renders a single Heroicon by `name` via Nova's bundled `Icon` component (from `laravel-nova-ui`, no new dependency), at one fixed size. Coloured by a **variant**. An unknown icon name renders nothing — Nova's `Icon` behaviour; the name set is not validated.
+_Avoid_: glyph, image, svg block
 
 **Link block**:
 An inline atom that renders an anchor to an `href`. It carries two independent knobs: a **link appearance** (how it looks) and `newTab` (where it opens — `->newTab()` opens a new, secure-by-default tab). A button-appearance link still navigates via its `href`; it does **not** trigger a Nova action.
 _Avoid_: button block, action button, CTA
 
 **Link appearance**:
-How a link block is rendered: `link` (the implicit one — bold, primary-coloured text) or `button` (button chrome). Cosmetic only; it does not change what the link does. Distinct from **badge variant**: appearance is shape, not colour.
+How a link block is rendered: `link` (the implicit one — bold, primary-coloured text) or `button` (button chrome). Cosmetic only; it does not change what the link does. Distinct from **variant**: appearance is shape, not colour.
 _Avoid_: link variant, link style, link kind

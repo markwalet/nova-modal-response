@@ -5,11 +5,11 @@ namespace Markwalet\NovaModalResponse\Blocks;
 use Illuminate\Support\Stringable;
 use Markwalet\NovaModalResponse\Blocks\Concerns\HasVariants;
 
-class BadgeBlock extends Block implements Inlineable
+class IconBlock extends Block implements Inlineable
 {
     use HasVariants;
 
-    public function __construct(private readonly string|Stringable $value) {}
+    public function __construct(private readonly string|Stringable $name) {}
 
     /**
      * @return array<string, mixed>
@@ -17,8 +17,8 @@ class BadgeBlock extends Block implements Inlineable
     public function toArray(): array
     {
         return [
-            'type' => 'badge',
-            'value' => (string) $this->value,
+            'type' => 'icon',
+            'value' => (string) $this->name,
             'variant' => $this->variant,
         ];
     }
