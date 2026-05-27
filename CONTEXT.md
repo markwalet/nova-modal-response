@@ -63,3 +63,7 @@ _Avoid_: accordion, disclosure, drawer, section
 **Link appearance**:
 How a link block is rendered: `link` (the implicit one — bold, primary-coloured text) or `button` (button chrome). Cosmetic only; it does not change what the link does. Distinct from **variant**: appearance is shape, not colour.
 _Avoid_: link variant, link style, link kind
+
+**Embedded icon**:
+A Heroicon rendered *inside* a host block's chrome — the link/button pill or the badge — sharing its background, padding and hover state, as opposed to the standalone **icon block** that sits beside the host in an inline group. Added fluently with a single `->icon(string $name, bool $trailing = false)` method (leading by default) on the link and badge blocks via the shared `HasEmbeddedIcon` concern, and travels on the wire as `icon` (`string|null`) and `iconPosition` (`leading`|`trailing`), both always emitted. Carries **no variant**: it inherits the host's foreground colour (button → white, link → primary, badge → the variant's text colour). Reuses the same `laravel-nova-ui` `Icon` primitive the icon block wraps — not the icon block itself — sized to the host. Unknown names render nothing, same as the icon block.
+_Avoid_: icon atom, inline icon, leading/trailing glyph

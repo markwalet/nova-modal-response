@@ -1,12 +1,17 @@
 <template>
     <div class="py-3 px-8">
         <span :class="variantClass"
-              class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold"
-              v-text="block.value" />
+              class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-sm font-semibold">
+            <Icon v-if="block.icon && block.iconPosition === 'leading'" :name="block.icon" type="micro" />
+            <span v-text="block.value" />
+            <Icon v-if="block.icon && block.iconPosition === 'trailing'" :name="block.icon" type="micro" />
+        </span>
     </div>
 </template>
 
 <script>
+import { Icon } from 'laravel-nova-ui'
+
 const VARIANT_CLASSES = {
     default: 'bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200',
     info: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
@@ -16,6 +21,8 @@ const VARIANT_CLASSES = {
 }
 
 export default {
+    components: { Icon },
+
     props: {
         block: { type: Object, required: true },
     },

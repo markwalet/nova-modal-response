@@ -20,6 +20,8 @@ class LinkBlockTest extends TestCase
             'href' => 'https://example.test',
             'appearance' => 'link',
             'newTab' => false,
+            'icon' => null,
+            'iconPosition' => 'leading',
         ], $block->toArray());
     }
 
@@ -33,6 +35,8 @@ class LinkBlockTest extends TestCase
             'href' => 'https://example.test',
             'appearance' => 'link',
             'newTab' => true,
+            'icon' => null,
+            'iconPosition' => 'leading',
         ], $block->toArray());
     }
 
@@ -46,6 +50,8 @@ class LinkBlockTest extends TestCase
             'href' => 'https://example.test',
             'appearance' => 'button',
             'newTab' => false,
+            'icon' => null,
+            'iconPosition' => 'leading',
         ], $block->toArray());
     }
 
@@ -59,6 +65,38 @@ class LinkBlockTest extends TestCase
             'href' => 'https://example.test',
             'appearance' => 'button',
             'newTab' => true,
+            'icon' => null,
+            'iconPosition' => 'leading',
+        ], $block->toArray());
+    }
+
+    public function test_icon_embeds_a_leading_icon_by_default(): void
+    {
+        $block = Block::link('Add', 'https://example.test')->button()->icon('plus');
+
+        $this->assertSame([
+            'type' => 'link',
+            'value' => 'Add',
+            'href' => 'https://example.test',
+            'appearance' => 'button',
+            'newTab' => false,
+            'icon' => 'plus',
+            'iconPosition' => 'leading',
+        ], $block->toArray());
+    }
+
+    public function test_icon_can_be_placed_trailing(): void
+    {
+        $block = Block::link('Docs', 'https://example.test')->icon('arrow-top-right-on-square', trailing: true);
+
+        $this->assertSame([
+            'type' => 'link',
+            'value' => 'Docs',
+            'href' => 'https://example.test',
+            'appearance' => 'link',
+            'newTab' => false,
+            'icon' => 'arrow-top-right-on-square',
+            'iconPosition' => 'trailing',
         ], $block->toArray());
     }
 
@@ -79,7 +117,7 @@ class LinkBlockTest extends TestCase
             'alignment' => 'default',
             'value' => [
                 ['type' => 'text', 'value' => 'See'],
-                ['type' => 'link', 'value' => 'Docs', 'href' => 'https://example.test', 'appearance' => 'link', 'newTab' => true],
+                ['type' => 'link', 'value' => 'Docs', 'href' => 'https://example.test', 'appearance' => 'link', 'newTab' => true, 'icon' => null, 'iconPosition' => 'leading'],
             ],
         ], $block->toArray());
     }
