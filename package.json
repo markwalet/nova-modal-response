@@ -10,6 +10,7 @@
   },
   "devDependencies": {
     "@highlightjs/vue-plugin": "^2.1.0",
+    "concurrently": "^9.2.1",
     "laravel-nova-devtool": "file:vendor/laravel/nova-devtool",
     "postcss": "^8.4.49",
     "postcss-loader": "^8.1.1",
