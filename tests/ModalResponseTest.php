@@ -66,7 +66,7 @@ class ModalResponseTest extends TestCase
             'blocks' => [
                 [
                     'type' => 'inline',
-                    'spread' => true,
+                    'alignment' => 'spread',
                     'value' => [
                         ['type' => 'text', 'value' => 'Status'],
                         ['type' => 'badge', 'value' => 'Active', 'variant' => 'success'],

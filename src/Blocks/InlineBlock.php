@@ -3,11 +3,12 @@
 namespace Markwalet\NovaModalResponse\Blocks;
 
 use InvalidArgumentException;
+use Markwalet\NovaModalResponse\Enums\Alignment;
 use Stringable;
 
 class InlineBlock extends Block
 {
-    private bool $spread = false;
+    private Alignment $alignment = Alignment::DEFAULT;
 
     /** @var list<Block&Inlineable> */
     private readonly array $atoms;
@@ -34,7 +35,24 @@ class InlineBlock extends Block
 
     public function spread(): self
     {
-        $this->spread = true;
+        return $this->alignment(Alignment::SPREAD);
+    }
+
+    public function center(): self
+    {
+        return $this->alignment(Alignment::CENTER);
+    }
+
+    public function end(): self
+    {
+        return $this->alignment(Alignment::END);
+    }
+
+    public function alignment(string|Alignment $alignment): self
+    {
+        $this->alignment = $alignment instanceof Alignment
+            ? $alignment
+            : Alignment::from($alignment);
 
         return $this;
     }
@@ -46,7 +64,7 @@ class InlineBlock extends Block
     {
         return [
             'type' => 'inline',
-            'spread' => $this->spread,
+            'alignment' => $this->alignment->value,
             'value' => array_map(static fn (Block $atom): array => $atom->toArray(), $this->atoms),
         ];
     }
