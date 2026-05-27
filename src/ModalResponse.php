@@ -90,6 +90,13 @@ class ModalResponse extends ActionResponse
         return $this->setChrome('closeButtonText', $label);
     }
 
+    /**
+     * Disable syntax highlighting for json or code blocks.
+     *
+     * @deprecated Pass `highlight: false` to ModalResponse::code() or ::json() instead.
+     *             This method is removed in v2.
+     * @return self
+     */
     public function withoutSyntaxHighlighting(): self
     {
         $this->withoutHighlight = true;

@@ -1,6 +1,14 @@
 # Release Notes
 
-## [Unreleased](https://github.com/markwalet/nova-modal-response/compare/v1.1.2...main)
+## [Unreleased](https://github.com/markwalet/nova-modal-response/compare/v1.1.3...main)
+
+## [v1.1.3 (2026-05-27)](https://github.com/markwalet/nova-modal-response/compare/v1.1.2...v1.1.3)
+
+### Added
+- `ModalResponse::code()` and `ModalResponse::json()` accept a `highlight` argument to toggle syntax highlighting at construction (e.g. `ModalResponse::code($snippet, highlight: false)`)
+
+### Deprecated
+- `ModalResponse::withoutSyntaxHighlighting()` — pass `highlight: false` to `code()`/`json()` instead. Removed in v2.
 
 ## [v1.1.2 (2026-05-27)](https://github.com/markwalet/nova-modal-response/compare/v1.1.1...v1.1.2)
 
