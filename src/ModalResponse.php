@@ -55,6 +55,11 @@ class ModalResponse extends ActionResponse
         return self::stack([Block::view($view, $data)]);
     }
 
+    public static function markdown(string|Stringable $content): self
+    {
+        return self::stack([Block::markdown($content)]);
+    }
+
     public static function code(string|Stringable $value): self
     {
         return self::stack([Block::code($value)]);
