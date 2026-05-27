@@ -13,3 +13,7 @@ Canonical label vocabulary (`needs-triage`, `needs-info`, `ready-for-agent`, `re
 ### Domain docs
 
 Single-context layout: one `CONTEXT.md` and `docs/adr/` at the repo root. See `docs/agents/domain.md`.
+
+### Assets
+
+Don't compile or commit `dist/` in PRs — edit only `resources/`, but still run QA & tests. Assets are built once per release via `composer release-build`. See `docs/agents/assets.md`.

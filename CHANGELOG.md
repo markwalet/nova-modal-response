@@ -2,6 +2,13 @@
 
 ## [Unreleased](https://github.com/markwalet/nova-modal-response/compare/v1.1.1...main)
 
+### Added
+- Added a contributing guide and a release process doc
+- Added a `composer release-build` script that runs QA and compiles assets for a release
+
+### Changed
+- Compiled assets in `dist/` are now built once per release instead of in every PR
+
 ## [v1.1.1 (2026-05-26)](https://github.com/markwalet/nova-modal-response/compare/v1.1.0...v1.1.1)
 
 ### Added
