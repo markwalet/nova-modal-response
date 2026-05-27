@@ -4,7 +4,7 @@ namespace Markwalet\NovaModalResponse\Blocks;
 
 use Illuminate\Support\Stringable;
 
-class TextBlock extends Block implements Inlineable
+class TextBlock implements Inlineable, Renderable
 {
     public function __construct(private readonly string|Stringable $value) {}
 

@@ -5,7 +5,7 @@ namespace Markwalet\NovaModalResponse\Blocks;
 use Illuminate\Support\Stringable;
 use Markwalet\NovaModalResponse\Blocks\Concerns\HasVariants;
 
-class BadgeBlock extends Block implements Inlineable
+class BadgeBlock implements Inlineable, Renderable
 {
     use HasVariants;
 

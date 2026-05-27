@@ -5,7 +5,7 @@ namespace Markwalet\NovaModalResponse\Blocks;
 use Illuminate\Support\Stringable;
 use Markwalet\NovaModalResponse\Blocks\Concerns\HasVariants;
 
-class IconBlock extends Block implements Inlineable
+class IconBlock implements Inlineable, Renderable
 {
     use HasVariants;
 

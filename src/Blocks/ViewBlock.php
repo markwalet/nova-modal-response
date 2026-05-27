@@ -2,7 +2,7 @@
 
 namespace Markwalet\NovaModalResponse\Blocks;
 
-class ViewBlock extends Block
+class ViewBlock implements Renderable
 {
     /**
      * @param array<string, mixed> $data

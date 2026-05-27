@@ -7,20 +7,18 @@ use Illuminate\Support\Stringable;
 use InvalidArgumentException;
 use JsonException;
 use Laravel\Nova\Actions\ActionResponse;
-use Markwalet\NovaModalResponse\Blocks\Block;
+use Markwalet\NovaModalResponse\Blocks\Renderable;
 
 class ModalResponse extends ActionResponse
 {
-    /** @var array<int, Block> */
+    /** @var array<int, Renderable> */
     private array $blocks = [];
 
     /** @var array<string, mixed> */
     private array $chrome = [];
 
-    private bool $withoutHighlight = false;
-
     /**
-     * @param array<int, Block|string|Stringable>|Closure $blocks
+     * @param array<int, Renderable|string|Stringable>|Closure $blocks
      */
     public static function stack(array|Closure $blocks): self
     {
@@ -60,9 +58,15 @@ class ModalResponse extends ActionResponse
         return self::stack([Block::markdown($content)]);
     }
 
-    public static function code(string|Stringable $value): self
+    public static function code(string|Stringable $value, bool $highlight = true): self
     {
-        return self::stack([Block::code($value)]);
+        $block = Block::code($value);
+
+        if (! $highlight) {
+            $block->withoutHighlighting();
+        }
+
+        return self::stack([$block]);
     }
 
     /**
@@ -70,9 +74,15 @@ class ModalResponse extends ActionResponse
      *
      * @throws JsonException
      */
-    public static function json(array $value): self
+    public static function json(array $value, bool $highlight = true): self
     {
-        return self::stack([Block::json($value)]);
+        $block = Block::json($value);
+
+        if (! $highlight) {
+            $block->withoutHighlighting();
+        }
+
+        return self::stack([$block]);
     }
 
     public function title(string $title): self
@@ -90,21 +100,6 @@ class ModalResponse extends ActionResponse
         return $this->setChrome('closeButtonText', $label);
     }
 
-    /**
-     * Disable syntax highlighting for json or code blocks.
-     *
-     * @deprecated Pass `highlight: false` to ModalResponse::code() or ::json() instead.
-     *             This method is removed in v2.
-     * @return self
-     */
-    public function withoutSyntaxHighlighting(): self
-    {
-        $this->withoutHighlight = true;
-        $this->refreshModal();
-
-        return $this;
-    }
-
     private function setChrome(string $key, mixed $value): self
     {
         $this->chrome[$key] = $value;
@@ -115,7 +110,7 @@ class ModalResponse extends ActionResponse
 
     private function refreshModal(): void
     {
-        $payload = (new PayloadBuilder)->build($this->blocks, $this->chrome, $this->withoutHighlight);
+        $payload = (new PayloadBuilder)->build($this->blocks, $this->chrome);
 
         $this->withModal('modal-response', $payload);
     }

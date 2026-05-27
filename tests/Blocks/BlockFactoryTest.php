@@ -4,7 +4,7 @@ namespace Markwalet\NovaModalResponse\Tests\Blocks;
 
 use Illuminate\Support\Stringable;
 use InvalidArgumentException;
-use Markwalet\NovaModalResponse\Blocks\Block;
+use Markwalet\NovaModalResponse\Block;
 use Markwalet\NovaModalResponse\Blocks\InlineBlock;
 use Markwalet\NovaModalResponse\Blocks\LinkBlock;
 use Markwalet\NovaModalResponse\Blocks\TextBlock;

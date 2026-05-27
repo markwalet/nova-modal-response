@@ -4,7 +4,7 @@ namespace Markwalet\NovaModalResponse\Blocks;
 
 use Illuminate\Support\Stringable;
 
-class CodeBlock extends Block
+class CodeBlock implements Renderable
 {
     private ?string $language = null;
 

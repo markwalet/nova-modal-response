@@ -2,7 +2,7 @@
 
 namespace Markwalet\NovaModalResponse\Tests\Blocks;
 
-use Markwalet\NovaModalResponse\Blocks\Block;
+use Markwalet\NovaModalResponse\Block;
 use Markwalet\NovaModalResponse\Blocks\ViewBlock;
 use Markwalet\NovaModalResponse\ModalResponse;
 use Markwalet\NovaModalResponse\Tests\TestCase;

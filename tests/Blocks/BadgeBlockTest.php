@@ -2,8 +2,8 @@
 
 namespace Markwalet\NovaModalResponse\Tests\Blocks;
 
+use Markwalet\NovaModalResponse\Block;
 use Markwalet\NovaModalResponse\Blocks\BadgeBlock;
-use Markwalet\NovaModalResponse\Blocks\Block;
 use Markwalet\NovaModalResponse\Tests\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 
