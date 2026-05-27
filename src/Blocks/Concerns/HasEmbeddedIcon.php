@@ -2,6 +2,8 @@
 
 namespace Markwalet\NovaModalResponse\Blocks\Concerns;
 
+use Markwalet\NovaModalResponse\Enums\IconPosition;
+
 /**
  * An icon rendered *inside* a host block's chrome (button pill, badge, link),
  * sharing its background, padding and foreground colour — not a standalone atom
@@ -12,12 +14,12 @@ trait HasEmbeddedIcon
 {
     private ?string $icon = null;
 
-    private string $iconPosition = 'leading';
+    private IconPosition $iconPosition = IconPosition::LEADING;
 
     public function icon(string $name, bool $trailing = false): self
     {
         $this->icon = $name;
-        $this->iconPosition = $trailing ? 'trailing' : 'leading';
+        $this->iconPosition = $trailing ? IconPosition::TRAILING : IconPosition::LEADING;
 
         return $this;
     }
@@ -31,7 +33,7 @@ trait HasEmbeddedIcon
     {
         return [
             'icon' => $this->icon,
-            'iconPosition' => $this->iconPosition,
+            'iconPosition' => $this->iconPosition->value,
         ];
     }
 }
