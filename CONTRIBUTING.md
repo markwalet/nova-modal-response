@@ -35,6 +35,8 @@ To try your changes in a real Nova panel, serve the bundled workbench app:
 composer serve
 ```
 
+This boots the workbench server and `npm run watch` together, so PHP **and** Vue/CSS edits recompile live. The watcher writes gitignored dev builds, so serving never dirties the tracked `dist/` bundle.
+
 ## Releasing
 
 Releases (including the asset build) are handled by maintainers — see [`docs/RELEASING.md`](docs/RELEASING.md).

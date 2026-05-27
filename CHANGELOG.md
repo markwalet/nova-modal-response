@@ -1,6 +1,15 @@
 # Release Notes
 
-## [Unreleased](https://github.com/markwalet/nova-modal-response/compare/v1.1.3...main)
+## [Unreleased](https://github.com/markwalet/nova-modal-response/compare/v1.2.0...main)
+
+### Changed
+- `composer serve` now runs `npm run watch` alongside the workbench server, so PHP and Vue/CSS changes recompile live
+- Dev asset builds are isolated from the shipped bundle: `npm run watch`/`dev` emit gitignored unminified files, and only `npm run prod` writes the tracked minified bundle (`dist/**/asset.min.*`)
+
+## [v1.2.0 (2026-05-27)](https://github.com/markwalet/nova-modal-response/compare/v1.1.3...v1.2.0)
+
+### Added
+- Added a copy-to-clipboard button to code and json modal content ([#76](https://github.com/markwalet/nova-modal-response/issues/76))
 
 ## [v1.1.3 (2026-05-27)](https://github.com/markwalet/nova-modal-response/compare/v1.1.2...v1.1.3)
 
