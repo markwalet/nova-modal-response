@@ -84,6 +84,19 @@ class ViewTextStackAction extends Action
                 'body' => 'This card is a Blade view compiled to HTML and serialized as an html block.',
             ]),
             Block::divider(),
+            Block::heading('Collapsible — collapsed (default)')->small(),
+            Block::collapsible('Details', [
+                Block::text('Some explanation'),
+                Block::list(['One', 'Two']),
+                Block::badge('New')->success(),
+            ]),
+            Block::heading('Collapsible — expanded')->small(),
+            Block::collapsible('Details', [
+                Block::text('Some explanation'),
+                Block::list(['One', 'Two']),
+                Block::badge('New')->success(),
+            ])->expanded(),
+            Block::divider(),
             Block::heading('JSON payload')->small(),
             Block::json([
                 'ok' => true,
