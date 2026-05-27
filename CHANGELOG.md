@@ -1,6 +1,8 @@
 # Release Notes
 
-## [Unreleased](https://github.com/markwalet/nova-modal-response/compare/v1.1.1...main)
+## [Unreleased](https://github.com/markwalet/nova-modal-response/compare/v1.1.2...main)
+
+## [v1.1.2 (2026-05-27)](https://github.com/markwalet/nova-modal-response/compare/v1.1.1...v1.1.2)
 
 ### Added
 - Added a contributing guide and a release process doc
