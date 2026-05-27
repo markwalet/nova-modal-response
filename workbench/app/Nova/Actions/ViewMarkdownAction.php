@@ -40,7 +40,7 @@ class ViewMarkdownAction extends Action
             Block::heading('Markdown loaded from a file')->small(),
             // testbench does not resolve this package's base_path(), so the demo
             // fixture lives in the workbench and is loaded via its real path.
-            Block::markdown(file: workbench_path('resources/demo.md')),
+            Block::markdown(workbench_path('resources/demo.md'))->file(),
         ])
             ->title('Demo — markdown block')
             ->closeButton('Close');

@@ -5,6 +5,7 @@ namespace Markwalet\NovaModalResponse\Tests\Blocks;
 use InvalidArgumentException;
 use Markwalet\NovaModalResponse\Blocks\Block;
 use Markwalet\NovaModalResponse\Blocks\MarkdownBlock;
+use Markwalet\NovaModalResponse\ModalResponse;
 use Markwalet\NovaModalResponse\Tests\TestCase;
 
 class MarkdownBlockTest extends TestCase
@@ -30,7 +31,7 @@ class MarkdownBlockTest extends TestCase
         file_put_contents($path, "# From file\n\nSome **bold** text.");
 
         try {
-            $block = Block::markdown(file: $path);
+            $block = Block::markdown($path)->file();
 
             $result = $block->toArray();
 
@@ -42,27 +43,24 @@ class MarkdownBlockTest extends TestCase
         }
     }
 
-    public function test_passing_both_content_and_file_throws(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-
-        Block::markdown('# Inline', file: 'whatever.md');
-    }
-
-    public function test_passing_neither_content_nor_file_throws(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-
-        Block::markdown();
-    }
-
     public function test_a_missing_file_throws_at_serialize(): void
     {
-        $block = Block::markdown(file: '/does/not/exist.md');
+        $block = Block::markdown('/does/not/exist.md')->file();
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Unable to read markdown file');
 
         $block->toArray();
+    }
+
+    public function test_markdown_sugar_produces_a_single_html_block_stack(): void
+    {
+        $response = ModalResponse::markdown('# Title');
+
+        $this->assertSame([
+            'blocks' => [
+                ['type' => 'html', 'value' => "<h1>Title</h1>\n"],
+            ],
+        ], $response['modal']->payload);
     }
 }

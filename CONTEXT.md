@@ -33,7 +33,7 @@ A block permitted inside an **inline group**: `text`, `badge`, `icon`, `link`. M
 _Avoid_: inline element, item, child block
 
 **Markdown block**:
-An authoring-time, block-level block built via `Block::markdown(content:|file:)`. It compiles Markdown to HTML at serialize time (Laravel's `Str::markdown()`, GitHub-flavored) and emits `type: html` on the wire — it has **no wire type and no Vue component of its own**, reusing `HtmlBlock.vue` to keep the single render path (ADR-0001) intact. Exactly one source: passing both `content` and `file`, or neither, throws; a missing/unreadable file throws at serialize. Block-level only (it produces `<h1>`/`<p>`-level HTML), so it is **not** an atom. Same trusted-input model as the `html` block — no sanitization.
+An authoring-time, block-level block built via `Block::markdown($content)`, with `ModalResponse::markdown($content)` sugar to render markdown as the whole modal body. It compiles Markdown to HTML at serialize time (Laravel's `Str::markdown()`, GitHub-flavored) and emits `type: html` on the wire — it has **no wire type and no Vue component of its own**, reusing `HtmlBlock.vue` to keep the single render path (ADR-0001) intact. `$content` is inline markdown by default; chaining `->file()` marks it as a filesystem path instead, which is read and compiled at serialize (a missing/unreadable file then throws). File-based markdown stays available via `ModalResponse::stack([Block::markdown($path)->file()])`. Block-level only (it produces `<h1>`/`<p>`-level HTML), so it is **not** an atom. Same trusted-input model as the `html` block — no sanitization.
 _Avoid_: md block, markdown wire type, markdown component
 
 **Heading block**:

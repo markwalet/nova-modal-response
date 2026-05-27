@@ -8,15 +8,20 @@ use Stringable;
 
 class MarkdownBlock extends Block
 {
+    private bool $isFile = false;
+
     public function __construct(
-        private readonly string|Stringable|null $content = null,
-        private readonly ?string $file = null,
-    ) {
-        if (($this->content === null) === ($this->file === null)) {
-            throw new InvalidArgumentException(
-                'A markdown block requires exactly one source: pass either content or file, not both or neither.',
-            );
-        }
+        private readonly string|Stringable $content,
+    ) {}
+
+    /**
+     * Treat the content as a filesystem path to a markdown file.
+     */
+    public function file(): self
+    {
+        $this->isFile = true;
+
+        return $this;
     }
 
     /**
@@ -32,12 +37,14 @@ class MarkdownBlock extends Block
 
     private function source(): string
     {
-        if ($this->content !== null) {
+        if (! $this->isFile) {
             return (string) $this->content;
         }
 
-        if (! is_file($this->file) || ($contents = @file_get_contents($this->file)) === false) {
-            throw new InvalidArgumentException("Unable to read markdown file [{$this->file}].");
+        $path = (string) $this->content;
+
+        if (! is_file($path) || ($contents = @file_get_contents($path)) === false) {
+            throw new InvalidArgumentException("Unable to read markdown file [{$path}].");
         }
 
         return $contents;

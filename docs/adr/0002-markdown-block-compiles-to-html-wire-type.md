@@ -38,9 +38,12 @@ apparent inconsistency by adding a client-side renderer.
   Markdown dependency, and would mean the wire carries un-compiled Markdown
   (raw source) to the browser — a larger, less-safe payload than the compiled,
   escaped HTML. It buys nothing over compiling in PHP.
-- **Silent precedence when both `content` and `file` are passed.** Rejected on
-  the same grounds ADR-0001 killed the v1 code-shadows-html footgun: exactly one
-  source, both/neither throws `InvalidArgumentException`.
+- **Two separate sources (`content` and `file` constructor params).** Rejected
+  in favour of a single `$content` source whose interpretation is switched by a
+  fluent `->file()` marker (`Block::markdown($content)` inline by default,
+  `Block::markdown($path)->file()` to read a file). Avoids the both/neither
+  ambiguity entirely instead of guarding it; an unreadable path under `->file()`
+  still throws `InvalidArgumentException` at serialize.
 
 ## Consequences
 
