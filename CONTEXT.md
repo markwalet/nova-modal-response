@@ -17,7 +17,7 @@ The ordered sequence of blocks that makes up a modal's body content. Set via `Mo
 _Avoid_: body, content list, items
 
 **Block**:
-A single, typed unit of modal body content. Blocks render top-to-bottom in the given order. Built-in types: `text`, `heading`, `code`, `json`, `html`, `badge`, `divider`, `list`, `link`, `icon`, `collapsible` (plus the **view block**, an authoring-only sugar that serializes as `html`).
+A single, typed unit of modal body content. Blocks render top-to-bottom in the given order. Built-in types: `text`, `heading`, `code`, `json`, `html`, `badge`, `divider`, `list`, `link`, `icon` (plus the authoring-only **view block** and **markdown block**, which both serialize as `html`).
 _Avoid_: element, node, section
 
 **View block**:
@@ -31,6 +31,10 @@ _Avoid_: row, inline block content, flex container
 **Atom**:
 A block permitted inside an **inline group**: `text`, `badge`, `icon`, `link`. Marked in PHP by the `Inlineable` interface — a promise about layout only (it may sit on a horizontal row); it does not change the block's serialized output. Blocks that are not atoms (e.g. `heading`, `code`, `divider`) are rejected from an inline group, as is a nested inline group.
 _Avoid_: inline element, item, child block
+
+**Markdown block**:
+An authoring-time, block-level block built via `Block::markdown($content)`, with `ModalResponse::markdown($content)` sugar to render markdown as the whole modal body. It compiles Markdown to HTML at serialize time (Laravel's `Str::markdown()`, GitHub-flavored) and emits `type: html` on the wire — it has **no wire type and no Vue component of its own**, reusing `HtmlBlock.vue` to keep the single render path (ADR-0001) intact. `$content` is inline markdown by default; chaining `->file()` marks it as a filesystem path instead, which is read and compiled at serialize (a missing/unreadable file then throws). File-based markdown stays available via `ModalResponse::stack([Block::markdown($path)->file()])`. Block-level only (it produces `<h1>`/`<p>`-level HTML), so it is **not** an atom. Same trusted-input model as the `html` block — no sanitization.
+_Avoid_: md block, markdown wire type, markdown component
 
 **Heading block**:
 A content-level heading inside the modal body. Carries a **visual size** (`small`, `medium`, `large`) — not a semantic HTML level. Distinct from the modal title.

@@ -16,6 +16,7 @@ use Laravel\Nova\Lenses\Lens;
 use Laravel\Nova\Panel;
 use Laravel\Nova\ResourceTool;
 use Workbench\App\Nova\Actions\ViewBladeViewAction;
+use Workbench\App\Nova\Actions\ViewMarkdownAction;
 use Workbench\App\Nova\Actions\ViewTextStackAction;
 use Workbench\App\Nova\Actions\ViewWithoutHighlightingAction;
 
@@ -114,6 +115,7 @@ class User extends Resource
             new ViewTextStackAction,
             new ViewBladeViewAction,
             new ViewWithoutHighlightingAction,
+            new ViewMarkdownAction,
         ];
     }
 }

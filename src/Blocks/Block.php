@@ -53,6 +53,11 @@ abstract class Block
         return new ViewBlock($view, $data);
     }
 
+    public static function markdown(string|Stringable $content): MarkdownBlock
+    {
+        return new MarkdownBlock($content);
+    }
+
     public static function heading(string|Stringable $value): HeadingBlock
     {
         return new HeadingBlock($value);

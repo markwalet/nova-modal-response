@@ -84,6 +84,8 @@ class ViewTextStackAction extends Action
                 'body' => 'This card is a Blade view compiled to HTML and serialized as an html block.',
             ]),
             Block::divider(),
+            Block::heading('Markdown (compiles to an html block)')->small(),
+            Block::markdown("# Inline markdown\n\nCompiled to HTML by `Str::markdown()` — **bold**, *italic*, and a [link](https://nova.laravel.com)."),
             Block::heading('Collapsible — collapsed (default)')->small(),
             Block::collapsible('Details', [
                 Block::text('Some explanation'),
