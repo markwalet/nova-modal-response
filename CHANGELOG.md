@@ -1,6 +1,11 @@
 # Release Notes
 
-## [Unreleased](https://github.com/markwalet/nova-modal-response/compare/v1.1.3...main)
+## [Unreleased](https://github.com/markwalet/nova-modal-response/compare/v1.2.0...main)
+
+## [v1.2.0 (2026-05-27)](https://github.com/markwalet/nova-modal-response/compare/v1.1.3...v1.2.0)
+
+### Added
+- Added a copy-to-clipboard button to code and json modal content ([#76](https://github.com/markwalet/nova-modal-response/issues/76))
 
 ## [v1.1.3 (2026-05-27)](https://github.com/markwalet/nova-modal-response/compare/v1.1.2...v1.1.3)
 
