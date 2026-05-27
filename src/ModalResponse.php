@@ -47,6 +47,14 @@ class ModalResponse extends ActionResponse
         return self::stack([Block::html($value)]);
     }
 
+    /**
+     * @param array<string, mixed> $data
+     */
+    public static function view(string $view, array $data = []): self
+    {
+        return self::stack([Block::view($view, $data)]);
+    }
+
     public static function code(string|Stringable $value): self
     {
         return self::stack([Block::code($value)]);

@@ -78,6 +78,12 @@ class ViewTextStackAction extends Action
             Block::heading('Code — plaintext (no highlighting)')->small(),
             Block::code("2026-05-26 18:30:11  INFO  job finished in 42ms\n2026-05-26 18:30:12  WARN  retrying upstream call")->withoutHighlighting(),
             Block::divider(),
+            Block::heading('View block (rendered Blade)')->small(),
+            Block::view('workbench::demo-block', [
+                'title' => 'Rendered server-side',
+                'body' => 'This card is a Blade view compiled to HTML and serialized as an html block.',
+            ]),
+            Block::divider(),
             Block::heading('JSON payload')->small(),
             Block::json([
                 'ok' => true,
