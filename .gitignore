@@ -9,3 +9,11 @@ phpunit.xml
 .phpunit.cache/
 .DS_Store
 Thumbs.db
+
+# Unminified dev/watch builds (npm run watch / composer serve). Only the
+# minified production bundle (dist/**/asset.min.*) is tracked and shipped.
+# See docs/adr/0005-dev-asset-builds-isolated-by-filename.md.
+/dist/js/asset.js
+/dist/css/asset.css
+/dist/mix-manifest.json
+/dist/**/*.LICENSE.txt

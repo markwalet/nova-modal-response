@@ -68,7 +68,7 @@
         "serve": [
             "Composer\\Config::disableProcessTimeout",
             "@build",
-            "@php vendor/bin/testbench serve --ansi"
+            "npx concurrently --kill-others-on-fail --names=server,assets -c \"#93c5fd,#fdba74\" \"php vendor/bin/testbench serve --ansi\" \"npm run watch\""
         ]
     }
 }
