@@ -5,7 +5,7 @@ A Nova action response that opens a modal. The modal has **chrome** (title, size
 ## Language
 
 **Modal chrome**:
-The frame Nova renders around the modal: header bar (with title), size, footer, close button. Configured via methods on `ModalResponse` (`->title()`, `->size()`, `->closeButton()`). Syntax highlighting is *not* chrome — it is a per-block concern of the `code`/`json` blocks (see the **Block** entry).
+The frame Nova renders around the modal: header bar (with title), modal-chrome width, footer, close button. Configured via methods on `ModalResponse` (`->title()`, `->size()`, `->closeButton()`). The `->size()` here is Nova's open string vocabulary for modal width — it is **not** a closed set and is unrelated to a block's **visual size**. Syntax highlighting is *not* chrome — it is a per-block concern of the `code`/`json` blocks (see the **Block** entry).
 _Avoid_: header, frame, layout
 
 **Modal title**:
@@ -41,19 +41,23 @@ An authoring-time, block-level block built via `Block::markdown($content)`, with
 _Avoid_: md block, markdown wire type, markdown component
 
 **Heading block**:
-A content-level heading inside the modal body. Carries a **visual size** (`small`, `medium`, `large`) — not a semantic HTML level. Distinct from the modal title.
+A content-level heading inside the modal body. Carries a **visual size** — not a semantic HTML level. Distinct from the modal title.
 _Avoid_: title, h1/h2, section header
 
 **Variant**:
-A semantic colour shared by the blocks that carry one (`badge`, `icon`). Five variants: `default` (neutral grey, the implicit one), `info`, `success`, `warning`, `danger`. Exposed in PHP as zero-arg fluent methods on the block (`->danger()`, …) via the shared `HasVariants` concern; `default` is what you get if no variant method is called.
+A semantic colour shared by the blocks that carry one (`badge`, `icon`). Five variants: `default` (neutral grey, the implicit one), `info`, `success`, `warning`, `danger`. Backed by the `Variant` string enum. Exposed in PHP as zero-arg fluent methods on the block (`->danger()`, …) via the shared `HasVariants` concern, or via the explicit `->variant()` setter, which accepts either a value string or a `Variant` enum case; `default` is what you get if no variant method is called. Mirrors the **visual size** and **alignment** pattern: one knob, one implicit value, named fluent setters.
 _Avoid_: badge type, badge color, icon color
 
+**Visual size**:
+A discrete rendering scale shared by the blocks that carry one (`heading`, `badge`, `icon`, `link`). Three values: `small`, `medium` (the implicit one), `large`. Backed by the `Size` string enum. Exposed in PHP as zero-arg fluent methods on the block (`->small()`, `->medium()`, `->large()`) via the shared `HasSize` concern, or via the explicit `->size()` setter, which accepts either a value string or a `Size` enum case; `medium` is what you get if no size method is called. Each block picks its own per-size styling (heading text scale, icon box, badge text/padding, link text); `medium` preserves the pre-enum rendering of each. **Not** the same as `ModalResponse::size()` — that is the **modal-chrome width**, Nova's open vocabulary, and stays a free string.
+_Avoid_: scale, dimension, modal size
+
 **Icon block**:
-An inline atom that renders a single Heroicon by `name` via Nova's bundled `Icon` component (from `laravel-nova-ui`, no new dependency), at one fixed size. Coloured by a **variant**. An unknown icon name renders nothing — Nova's `Icon` behaviour; the name set is not validated.
+An inline atom that renders a single Heroicon by `name` via Nova's bundled `Icon` component (from `laravel-nova-ui`, no new dependency). Carries a **visual size** (the icon box scales accordingly) and is coloured by a **variant**. An unknown icon name renders nothing — Nova's `Icon` behaviour; the name set is not validated.
 _Avoid_: glyph, image, svg block
 
 **Link block**:
-An inline atom that renders an anchor to an `href`. It carries two independent knobs: a **link appearance** (how it looks) and `newTab` (where it opens — `->newTab()` opens a new, secure-by-default tab). A button-appearance link still navigates via its `href`; it does **not** trigger a Nova action.
+An inline atom that renders an anchor to an `href`. It carries three independent knobs: a **link appearance** (how it looks), a **visual size** (text scale), and `newTab` (where it opens — `->newTab()` opens a new, secure-by-default tab). A button-appearance link still navigates via its `href`; it does **not** trigger a Nova action.
 _Avoid_: button block, action button, CTA
 
 **Collapsible block**:

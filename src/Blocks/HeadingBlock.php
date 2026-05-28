@@ -3,33 +3,13 @@
 namespace Markwalet\NovaModalResponse\Blocks;
 
 use Illuminate\Support\Stringable;
+use Markwalet\NovaModalResponse\Blocks\Concerns\HasSize;
 
 class HeadingBlock implements Renderable
 {
-    private string $size = 'medium';
+    use HasSize;
 
     public function __construct(private readonly string|Stringable $value) {}
-
-    public function small(): self
-    {
-        $this->size = 'small';
-
-        return $this;
-    }
-
-    public function medium(): self
-    {
-        $this->size = 'medium';
-
-        return $this;
-    }
-
-    public function large(): self
-    {
-        $this->size = 'large';
-
-        return $this;
-    }
 
     /**
      * @return array<string, mixed>
@@ -39,7 +19,7 @@ class HeadingBlock implements Renderable
         return [
             'type' => 'heading',
             'value' => (string) $this->value,
-            'size' => $this->size,
+            'size' => $this->size->value,
         ];
     }
 }

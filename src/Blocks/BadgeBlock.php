@@ -4,11 +4,13 @@ namespace Markwalet\NovaModalResponse\Blocks;
 
 use Illuminate\Support\Stringable;
 use Markwalet\NovaModalResponse\Blocks\Concerns\HasEmbeddedIcon;
+use Markwalet\NovaModalResponse\Blocks\Concerns\HasSize;
 use Markwalet\NovaModalResponse\Blocks\Concerns\HasVariants;
 
 class BadgeBlock implements Inlineable, Renderable
 {
     use HasEmbeddedIcon;
+    use HasSize;
     use HasVariants;
 
     public function __construct(private readonly string|Stringable $value) {}
@@ -21,7 +23,8 @@ class BadgeBlock implements Inlineable, Renderable
         return [
             'type' => 'badge',
             'value' => (string) $this->value,
-            'variant' => $this->variant,
+            'variant' => $this->variant->value,
+            'size' => $this->size->value,
             ...$this->iconAttributes(),
         ];
     }

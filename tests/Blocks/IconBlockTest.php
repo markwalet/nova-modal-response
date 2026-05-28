@@ -5,8 +5,11 @@ namespace Markwalet\NovaModalResponse\Tests\Blocks;
 use Markwalet\NovaModalResponse\Block;
 use Markwalet\NovaModalResponse\Blocks\IconBlock;
 use Markwalet\NovaModalResponse\Blocks\Inlineable;
+use Markwalet\NovaModalResponse\Enums\Size;
+use Markwalet\NovaModalResponse\Enums\Variant;
 use Markwalet\NovaModalResponse\Tests\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
+use ValueError;
 
 class IconBlockTest extends TestCase
 {
@@ -16,7 +19,7 @@ class IconBlockTest extends TestCase
 
         $this->assertInstanceOf(IconBlock::class, $block);
         $this->assertSame(
-            ['type' => 'icon', 'value' => 'check-circle', 'variant' => 'default'],
+            ['type' => 'icon', 'value' => 'check-circle', 'variant' => 'default', 'size' => 'medium'],
             $block->toArray(),
         );
     }
@@ -39,9 +42,56 @@ class IconBlockTest extends TestCase
     public function test_each_variant_method_sets_the_variant(string $variant): void
     {
         $this->assertSame(
-            ['type' => 'icon', 'value' => 'check-circle', 'variant' => $variant],
+            ['type' => 'icon', 'value' => 'check-circle', 'variant' => $variant, 'size' => 'medium'],
             Block::icon('check-circle')->{$variant}()->toArray(),
         );
+    }
+
+    /**
+     * @return array<string, array{string}>
+     */
+    public static function sizeProvider(): array
+    {
+        return [
+            'small' => ['small'],
+            'medium' => ['medium'],
+            'large' => ['large'],
+        ];
+    }
+
+    #[DataProvider('sizeProvider')]
+    public function test_each_size_method_sets_the_size(string $size): void
+    {
+        $this->assertSame(
+            ['type' => 'icon', 'value' => 'check-circle', 'variant' => 'default', 'size' => $size],
+            Block::icon('check-circle')->{$size}()->toArray(),
+        );
+    }
+
+    public function test_size_accepts_a_string_and_enum(): void
+    {
+        $this->assertSame('large', Block::icon('x')->size('large')->toArray()['size']);
+        $this->assertSame('small', Block::icon('x')->size(Size::SMALL)->toArray()['size']);
+    }
+
+    public function test_size_rejects_an_unknown_string(): void
+    {
+        $this->expectException(ValueError::class);
+
+        Block::icon('x')->size('huge');
+    }
+
+    public function test_variant_accepts_a_string_and_enum(): void
+    {
+        $this->assertSame('info', Block::icon('x')->variant('info')->toArray()['variant']);
+        $this->assertSame('danger', Block::icon('x')->variant(Variant::DANGER)->toArray()['variant']);
+    }
+
+    public function test_variant_rejects_an_unknown_string(): void
+    {
+        $this->expectException(ValueError::class);
+
+        Block::icon('x')->variant('chartreuse');
     }
 
     public function test_an_icon_is_an_inline_atom(): void
@@ -60,7 +110,7 @@ class IconBlockTest extends TestCase
             'type' => 'inline',
             'alignment' => 'default',
             'value' => [
-                ['type' => 'icon', 'value' => 'check-circle', 'variant' => 'success'],
+                ['type' => 'icon', 'value' => 'check-circle', 'variant' => 'success', 'size' => 'medium'],
                 ['type' => 'text', 'value' => 'Done'],
             ],
         ], $block->toArray());

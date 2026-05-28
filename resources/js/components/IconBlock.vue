@@ -1,6 +1,6 @@
 <template>
     <div class="py-3 px-8">
-        <Icon :name="block.value" :class="variantClass" class="w-5 h-5" />
+        <Icon :name="block.value" :class="[variantClass, sizeClass]" />
     </div>
 </template>
 
@@ -15,6 +15,12 @@ const VARIANT_CLASSES = {
     danger: 'text-red-500 dark:text-red-400',
 }
 
+const SIZE_CLASSES = {
+    small: 'w-4 h-4',
+    medium: 'w-5 h-5',
+    large: 'w-6 h-6',
+}
+
 export default {
     components: { Icon },
 
@@ -25,6 +31,9 @@ export default {
     computed: {
         variantClass() {
             return VARIANT_CLASSES[this.block.variant] ?? VARIANT_CLASSES.default
+        },
+        sizeClass() {
+            return SIZE_CLASSES[this.block.size] ?? SIZE_CLASSES.medium
         },
     },
 }

@@ -5,7 +5,10 @@ namespace Markwalet\NovaModalResponse\Tests\Blocks;
 use Markwalet\NovaModalResponse\Block;
 use Markwalet\NovaModalResponse\Blocks\Inlineable;
 use Markwalet\NovaModalResponse\Blocks\LinkBlock;
+use Markwalet\NovaModalResponse\Enums\Size;
 use Markwalet\NovaModalResponse\Tests\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use ValueError;
 
 class LinkBlockTest extends TestCase
 {
@@ -20,6 +23,7 @@ class LinkBlockTest extends TestCase
             'href' => 'https://example.test',
             'appearance' => 'link',
             'newTab' => false,
+            'size' => 'medium',
             'icon' => null,
             'iconPosition' => 'leading',
         ], $block->toArray());
@@ -35,6 +39,7 @@ class LinkBlockTest extends TestCase
             'href' => 'https://example.test',
             'appearance' => 'link',
             'newTab' => true,
+            'size' => 'medium',
             'icon' => null,
             'iconPosition' => 'leading',
         ], $block->toArray());
@@ -50,6 +55,7 @@ class LinkBlockTest extends TestCase
             'href' => 'https://example.test',
             'appearance' => 'button',
             'newTab' => false,
+            'size' => 'medium',
             'icon' => null,
             'iconPosition' => 'leading',
         ], $block->toArray());
@@ -65,6 +71,7 @@ class LinkBlockTest extends TestCase
             'href' => 'https://example.test',
             'appearance' => 'button',
             'newTab' => true,
+            'size' => 'medium',
             'icon' => null,
             'iconPosition' => 'leading',
         ], $block->toArray());
@@ -80,6 +87,7 @@ class LinkBlockTest extends TestCase
             'href' => 'https://example.test',
             'appearance' => 'button',
             'newTab' => false,
+            'size' => 'medium',
             'icon' => 'plus',
             'iconPosition' => 'leading',
         ], $block->toArray());
@@ -95,9 +103,41 @@ class LinkBlockTest extends TestCase
             'href' => 'https://example.test',
             'appearance' => 'link',
             'newTab' => false,
+            'size' => 'medium',
             'icon' => 'arrow-top-right-on-square',
             'iconPosition' => 'trailing',
         ], $block->toArray());
+    }
+
+    /**
+     * @return array<string, array{string}>
+     */
+    public static function sizeProvider(): array
+    {
+        return [
+            'small' => ['small'],
+            'medium' => ['medium'],
+            'large' => ['large'],
+        ];
+    }
+
+    #[DataProvider('sizeProvider')]
+    public function test_each_size_method_sets_the_size(string $size): void
+    {
+        $this->assertSame($size, Block::link('x', 'https://example.test')->{$size}()->toArray()['size']);
+    }
+
+    public function test_size_accepts_a_string_and_enum(): void
+    {
+        $this->assertSame('large', Block::link('x', 'https://example.test')->size('large')->toArray()['size']);
+        $this->assertSame('small', Block::link('x', 'https://example.test')->size(Size::SMALL)->toArray()['size']);
+    }
+
+    public function test_size_rejects_an_unknown_string(): void
+    {
+        $this->expectException(ValueError::class);
+
+        Block::link('x', 'https://example.test')->size('huge');
     }
 
     public function test_a_link_is_an_inline_atom(): void
@@ -117,7 +157,7 @@ class LinkBlockTest extends TestCase
             'alignment' => 'default',
             'value' => [
                 ['type' => 'text', 'value' => 'See'],
-                ['type' => 'link', 'value' => 'Docs', 'href' => 'https://example.test', 'appearance' => 'link', 'newTab' => true, 'icon' => null, 'iconPosition' => 'leading'],
+                ['type' => 'link', 'value' => 'Docs', 'href' => 'https://example.test', 'appearance' => 'link', 'newTab' => true, 'size' => 'medium', 'icon' => null, 'iconPosition' => 'leading'],
             ],
         ], $block->toArray());
     }

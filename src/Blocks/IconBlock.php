@@ -3,10 +3,12 @@
 namespace Markwalet\NovaModalResponse\Blocks;
 
 use Illuminate\Support\Stringable;
+use Markwalet\NovaModalResponse\Blocks\Concerns\HasSize;
 use Markwalet\NovaModalResponse\Blocks\Concerns\HasVariants;
 
 class IconBlock implements Inlineable, Renderable
 {
+    use HasSize;
     use HasVariants;
 
     public function __construct(private readonly string|Stringable $name) {}
@@ -19,7 +21,8 @@ class IconBlock implements Inlineable, Renderable
         return [
             'type' => 'icon',
             'value' => (string) $this->name,
-            'variant' => $this->variant,
+            'variant' => $this->variant->value,
+            'size' => $this->size->value,
         ];
     }
 }

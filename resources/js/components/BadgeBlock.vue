@@ -1,7 +1,7 @@
 <template>
     <div class="py-3 px-8">
-        <span :class="variantClass"
-              class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-sm font-semibold">
+        <span :class="[variantClass, sizeClass]"
+              class="inline-flex items-center gap-1 rounded font-semibold">
             <Icon v-if="block.icon && block.iconPosition === 'leading'" :name="block.icon" type="micro" />
             <span v-text="block.value" />
             <Icon v-if="block.icon && block.iconPosition === 'trailing'" :name="block.icon" type="micro" />
@@ -20,6 +20,12 @@ const VARIANT_CLASSES = {
     danger: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200',
 }
 
+const SIZE_CLASSES = {
+    small: 'text-xs px-1.5 py-0.5',
+    medium: 'text-sm px-2 py-0.5',
+    large: 'text-base px-2.5 py-1',
+}
+
 export default {
     components: { Icon },
 
@@ -30,6 +36,9 @@ export default {
     computed: {
         variantClass() {
             return VARIANT_CLASSES[this.block.variant] ?? VARIANT_CLASSES.default
+        },
+        sizeClass() {
+            return SIZE_CLASSES[this.block.size] ?? SIZE_CLASSES.medium
         },
     },
 }

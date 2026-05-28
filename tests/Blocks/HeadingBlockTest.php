@@ -4,7 +4,9 @@ namespace Markwalet\NovaModalResponse\Tests\Blocks;
 
 use Markwalet\NovaModalResponse\Block;
 use Markwalet\NovaModalResponse\Blocks\HeadingBlock;
+use Markwalet\NovaModalResponse\Enums\Size;
 use Markwalet\NovaModalResponse\Tests\TestCase;
+use ValueError;
 
 class HeadingBlockTest extends TestCase
 {
@@ -41,5 +43,22 @@ class HeadingBlockTest extends TestCase
             ['type' => 'heading', 'value' => 'x', 'size' => 'large'],
             Block::heading('x')->large()->toArray(),
         );
+    }
+
+    public function test_size_accepts_a_string(): void
+    {
+        $this->assertSame('large', Block::heading('x')->size('large')->toArray()['size']);
+    }
+
+    public function test_size_accepts_an_enum(): void
+    {
+        $this->assertSame('small', Block::heading('x')->size(Size::SMALL)->toArray()['size']);
+    }
+
+    public function test_size_rejects_an_unknown_string(): void
+    {
+        $this->expectException(ValueError::class);
+
+        Block::heading('x')->size('huge');
     }
 }

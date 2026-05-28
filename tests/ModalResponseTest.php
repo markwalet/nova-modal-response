@@ -69,7 +69,7 @@ class ModalResponseTest extends TestCase
                     'alignment' => 'spread',
                     'value' => [
                         ['type' => 'text', 'value' => 'Status'],
-                        ['type' => 'badge', 'value' => 'Active', 'variant' => 'success', 'icon' => null, 'iconPosition' => 'leading'],
+                        ['type' => 'badge', 'value' => 'Active', 'variant' => 'success', 'size' => 'medium', 'icon' => null, 'iconPosition' => 'leading'],
                     ],
                 ],
             ],
@@ -83,7 +83,7 @@ class ModalResponseTest extends TestCase
         $this->assertSame([
             'blocks' => [
                 ['type' => 'text', 'value' => 'Hello'],
-                ['type' => 'badge', 'value' => 'New', 'variant' => 'default', 'icon' => null, 'iconPosition' => 'leading'],
+                ['type' => 'badge', 'value' => 'New', 'variant' => 'default', 'size' => 'medium', 'icon' => null, 'iconPosition' => 'leading'],
             ],
         ], $response['modal']->payload);
     }

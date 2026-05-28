@@ -2,6 +2,8 @@
 
 namespace Markwalet\NovaModalResponse\Blocks\Concerns;
 
+use Markwalet\NovaModalResponse\Enums\Variant;
+
 /**
  * The five shared semantic colour variants, exposed as zero-arg fluent methods.
  * Used by every block that carries a `variant` (badge, icon); `default` is what
@@ -9,36 +11,38 @@ namespace Markwalet\NovaModalResponse\Blocks\Concerns;
  */
 trait HasVariants
 {
-    private string $variant = 'default';
+    private Variant $variant = Variant::DEFAULT;
 
     public function default(): self
     {
-        return $this->setVariant('default');
+        return $this->variant(Variant::DEFAULT);
     }
 
     public function info(): self
     {
-        return $this->setVariant('info');
+        return $this->variant(Variant::INFO);
     }
 
     public function success(): self
     {
-        return $this->setVariant('success');
+        return $this->variant(Variant::SUCCESS);
     }
 
     public function warning(): self
     {
-        return $this->setVariant('warning');
+        return $this->variant(Variant::WARNING);
     }
 
     public function danger(): self
     {
-        return $this->setVariant('danger');
+        return $this->variant(Variant::DANGER);
     }
 
-    private function setVariant(string $variant): self
+    public function variant(string|Variant $variant): self
     {
-        $this->variant = $variant;
+        $this->variant = $variant instanceof Variant
+            ? $variant
+            : Variant::from($variant);
 
         return $this;
     }
