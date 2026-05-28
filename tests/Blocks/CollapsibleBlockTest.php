@@ -94,7 +94,7 @@ class CollapsibleBlockTest extends TestCase
             'value' => [
                 ['type' => 'text', 'value' => 'Some explanation'],
                 ['type' => 'list', 'value' => ['One', 'Two'], 'ordered' => false],
-                ['type' => 'badge', 'value' => 'New', 'variant' => 'success', 'icon' => null, 'iconPosition' => 'leading'],
+                ['type' => 'badge', 'value' => 'New', 'variant' => 'success', 'size' => 'medium', 'icon' => null, 'iconPosition' => 'leading'],
             ],
         ], $block->toArray());
     }
@@ -109,7 +109,7 @@ class CollapsibleBlockTest extends TestCase
             'expanded' => false,
             'value' => [
                 ['type' => 'text', 'value' => 'Hello'],
-                ['type' => 'badge', 'value' => 'New', 'variant' => 'default', 'icon' => null, 'iconPosition' => 'leading'],
+                ['type' => 'badge', 'value' => 'New', 'variant' => 'default', 'size' => 'medium', 'icon' => null, 'iconPosition' => 'leading'],
             ],
         ], $block->toArray());
     }

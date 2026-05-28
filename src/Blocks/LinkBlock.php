@@ -4,10 +4,12 @@ namespace Markwalet\NovaModalResponse\Blocks;
 
 use Illuminate\Support\Stringable;
 use Markwalet\NovaModalResponse\Blocks\Concerns\HasEmbeddedIcon;
+use Markwalet\NovaModalResponse\Blocks\Concerns\HasSize;
 
 class LinkBlock implements Inlineable, Renderable
 {
     use HasEmbeddedIcon;
+    use HasSize;
 
     private bool $newTab = false;
 
@@ -43,6 +45,7 @@ class LinkBlock implements Inlineable, Renderable
             'href' => (string) $this->href,
             'appearance' => $this->appearance,
             'newTab' => $this->newTab,
+            'size' => $this->size->value,
             ...$this->iconAttributes(),
         ];
     }

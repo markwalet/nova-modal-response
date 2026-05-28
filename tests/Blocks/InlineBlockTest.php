@@ -21,7 +21,7 @@ class InlineBlockTest extends TestCase
             'alignment' => 'default',
             'value' => [
                 ['type' => 'text', 'value' => 'Status'],
-                ['type' => 'badge', 'value' => 'Active', 'variant' => 'success', 'icon' => null, 'iconPosition' => 'leading'],
+                ['type' => 'badge', 'value' => 'Active', 'variant' => 'success', 'size' => 'medium', 'icon' => null, 'iconPosition' => 'leading'],
             ],
         ], $block->toArray());
     }
@@ -45,7 +45,7 @@ class InlineBlockTest extends TestCase
             'alignment' => 'spread',
             'value' => [
                 ['type' => 'text', 'value' => 'key'],
-                ['type' => 'badge', 'value' => 'value', 'variant' => 'default', 'icon' => null, 'iconPosition' => 'leading'],
+                ['type' => 'badge', 'value' => 'value', 'variant' => 'default', 'size' => 'medium', 'icon' => null, 'iconPosition' => 'leading'],
             ],
         ], $block->toArray());
     }
@@ -127,7 +127,7 @@ class InlineBlockTest extends TestCase
             'alignment' => 'default',
             'value' => [
                 ['type' => 'text', 'value' => 'Hello'],
-                ['type' => 'badge', 'value' => 'New', 'variant' => 'default', 'icon' => null, 'iconPosition' => 'leading'],
+                ['type' => 'badge', 'value' => 'New', 'variant' => 'default', 'size' => 'medium', 'icon' => null, 'iconPosition' => 'leading'],
             ],
         ], $block->toArray());
     }

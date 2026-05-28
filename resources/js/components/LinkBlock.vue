@@ -4,7 +4,7 @@
             :href="block.href"
             :target="block.newTab ? '_blank' : null"
             :rel="block.newTab ? 'noopener noreferrer' : null"
-            :class="appearanceClass"
+            :class="[appearanceClass, sizeClass]"
             class="inline-flex items-center gap-1"
         >
             <Icon v-if="block.icon && block.iconPosition === 'leading'" :name="block.icon" type="micro" />
@@ -23,6 +23,12 @@ const APPEARANCE_CLASSES = {
         'bg-primary-500 text-white hover:bg-primary-400 active:bg-primary-600',
 }
 
+const SIZE_CLASSES = {
+    small: 'text-xs',
+    medium: '',
+    large: 'text-lg',
+}
+
 export default {
     components: { Icon },
 
@@ -33,6 +39,9 @@ export default {
     computed: {
         appearanceClass() {
             return APPEARANCE_CLASSES[this.block.appearance] ?? APPEARANCE_CLASSES.link
+        },
+        sizeClass() {
+            return SIZE_CLASSES[this.block.size] ?? SIZE_CLASSES.medium
         },
     },
 }
