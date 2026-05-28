@@ -65,7 +65,7 @@ How a link block is rendered: `link` (the implicit one — bold, primary-coloure
 _Avoid_: link variant, link style, link kind
 
 **Action block**:
-An inline atom that renders a button which, when clicked, dispatches a Nova action. Built in PHP via `Block::action(MyAction::class)` (label defaults to the action's `name()`) or `Block::action('Custom label', MyAction::class)`. Fieldless by construction — serializing throws if the target action declares `fields()`, with a message pointing to the planned form block (`Block::form`). Atoms (Inlineable), so a row of buttons composes inside an inline group. Carries the target action's **uriKey** and the **origin context** (resourceName + selected resource ids, captured server-side at serialize time). A successful dispatch always closes the current modal: a modal response replaces it (close-then-open, one modal at a time); a non-modal response (toast/redirect/download/openInNewTab) closes it after Nova's standard handling. A failed dispatch surfaces an error and leaves the modal open so the user can retry.
+An inline atom that renders a button which, when clicked, dispatches a Nova action. Built in PHP via `Block::action(MyAction::class)` (label defaults to the action's `name()`) or `Block::action('Custom label', MyAction::class)`. Fieldless by construction — serializing throws if the target action declares `fields()`, with a message pointing to the planned form block (`Block::form`). Atoms (Inlineable), so a row of buttons composes inside an inline group. Carries the target action's **uriKey** and the **origin context** (resourceName + selected resource ids, captured server-side at serialize time). A successful dispatch always closes the current modal: a modal response replaces it (close-then-open, one modal at a time); a non-modal response (toast/redirect/download/openInNewTab) closes it after Nova's standard handling. A failed dispatch surfaces an error and leaves the modal open so the user can retry. A successful dispatch also reloads the underlying resource view (see **Resource reload**); a failed dispatch does not.
 _Avoid_: button block, action button, dispatcher
 
 **Dispatch**:
@@ -75,6 +75,10 @@ _Avoid_: invoke, execute, fire, call
 **Intercept**:
 The Vue-side choice to drive the action dispatch itself rather than delegating to Nova's action runner. The action block POSTs to Nova's endpoint, owns the response, and applies the package's close-then-open rule — Nova's runner just stacks modals, which the package deliberately does not.
 _Avoid_: hijack, override, take over
+
+**Resource reload**:
+Restores Nova's native "the resource view refreshes after an action runs" behavior, which **interception** otherwise drops: bypassing Nova's runner means nothing emits the action-completed signal the parent Index/Lens listens to. After a successful **dispatch**, the action block emits Nova's `refresh-resources` event itself so the underlying resource view reloads to reflect a mutating action. On by default; opt out per-block with `->withoutReload()` for read-only / preview actions. Travels on the wire as `reload` (boolean, always emitted). A failed dispatch never reloads. Fires regardless of whether the response was a modal replace or a non-modal toast/redirect/download.
+_Avoid_: refresh, rerender, requery
 
 **Origin context**:
 The parent modal's resource (`resourceName` — the resource URI key) and selected resource ids (`resources`), captured server-side when an action block is serialized and shipped on the wire. The Vue side uses it to rebuild the action endpoint and form payload on click, so every dispatch runs against the same resource + selection the modal opened against. Outside an HTTP request (e.g. in serialization tests), resourceName falls back to `null` and resources to an empty array.

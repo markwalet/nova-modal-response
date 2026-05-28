@@ -74,6 +74,7 @@ export default {
                 })
 
                 this.handleResponse(response.data, response.headers)
+                this.reloadResourceView()
             } catch (error) {
                 this.surfaceError(error)
             } finally {
@@ -156,6 +157,19 @@ export default {
             if (data && data.message) {
                 Nova.success(data.message)
             }
+        },
+
+        reloadResourceView() {
+            // Restore Nova's native "the resource view refreshes after an
+            // action runs" behavior. The interception (see `dispatchAction`)
+            // bypasses Nova's runner, which is what otherwise emits this on
+            // the Index/Lens view. `block.reload === false` opts out for
+            // read-only / preview actions (PHP `->withoutReload()`).
+            if (this.block.reload === false) {
+                return
+            }
+
+            Nova.$emit('refresh-resources')
         },
 
         surfaceError(error) {

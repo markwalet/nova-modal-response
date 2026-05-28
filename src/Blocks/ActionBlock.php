@@ -29,6 +29,13 @@ class ActionBlock implements Inlineable, Renderable
     private readonly string $actionClass;
 
     /**
+     * Whether a successful dispatch should reload the underlying resource
+     * view. Defaults to true to mirror Nova's native action behavior; flip
+     * to false via {@see withoutReload()} for read-only/preview actions.
+     */
+    private bool $reload = true;
+
+    /**
      * @param class-string<Action> $actionClass
      */
     public function __construct(
@@ -45,6 +52,17 @@ class ActionBlock implements Inlineable, Renderable
     }
 
     /**
+     * Suppress the post-dispatch resource view reload. Use for actions that
+     * don't mutate the underlying data (read-only / preview).
+     */
+    public function withoutReload(): self
+    {
+        $this->reload = false;
+
+        return $this;
+    }
+
+    /**
      * @return array<string, mixed>
      */
     public function toArray(): array
@@ -57,6 +75,7 @@ class ActionBlock implements Inlineable, Renderable
             'type' => 'action',
             'value' => (string) ($this->label ?? $action->name()),
             'action' => $action->uriKey(),
+            'reload' => $this->reload,
             ...$this->originContext(),
         ];
     }

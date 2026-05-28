@@ -61,6 +61,27 @@ class ActionBlockTest extends TestCase
         $this->assertSame('fake-fieldless', $payload['action']);
     }
 
+    public function test_serialization_defaults_reload_to_true(): void
+    {
+        $payload = Block::action(FakeFieldlessAction::class)->toArray();
+
+        $this->assertTrue($payload['reload']);
+    }
+
+    public function test_without_reload_flips_the_reload_flag(): void
+    {
+        $payload = Block::action(FakeFieldlessAction::class)->withoutReload()->toArray();
+
+        $this->assertFalse($payload['reload']);
+    }
+
+    public function test_without_reload_returns_the_block_for_chaining(): void
+    {
+        $block = Block::action(FakeFieldlessAction::class);
+
+        $this->assertSame($block, $block->withoutReload());
+    }
+
     public function test_serialization_omits_disposition_and_stay_open_fields(): void
     {
         $payload = Block::action(FakeFieldlessAction::class)->toArray();
