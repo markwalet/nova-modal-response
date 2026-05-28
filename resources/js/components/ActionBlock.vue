@@ -13,6 +13,7 @@
 
 <script>
 import { Button } from 'laravel-nova-ui'
+import { handleDispatchResponse, surfaceDispatchError } from '../actionDispatch.js'
 
 export default {
     components: { Button },
@@ -37,9 +38,6 @@ export default {
 
     methods: {
         async dispatchAction() {
-            // Intercept the click rather than defer to Nova's action runner —
-            // deferring forfeits the close-then-open sequencing the form block
-            // also needs. Nova stacks modals; we don't.
             if (this.working) {
                 return
             }
@@ -73,112 +71,16 @@ export default {
                     data: formData,
                 })
 
-                this.handleResponse(response.data, response.headers)
-                this.reloadResourceView()
+                handleDispatchResponse(this.block, response.data, response.headers, {
+                    close: this.modalResponseClose,
+                    replace: this.modalResponseReplace,
+                })
             } catch (error) {
-                this.surfaceError(error)
+                surfaceDispatchError(error)
             } finally {
                 this.working = false
                 Nova.$progress.done()
             }
-        },
-
-        handleResponse(data, headers) {
-            // Modal response: replace the current modal with the new payload.
-            // The current modal unmounts; the new one renders in its place.
-            if (data && data.modal && data.modal.payload) {
-                Nova.$emit('action-executed')
-                this.modalResponseReplace(data.modal.payload)
-                return
-            }
-
-            // Non-modal response: delegate to Nova's standard handling, then
-            // close the current modal. Always closes — no stay-open exception.
-            this.delegateToNova(data, headers)
-            this.modalResponseClose()
-        },
-
-        delegateToNova(data, headers) {
-            if (!data) {
-                Nova.$emit('action-executed')
-                return
-            }
-
-            if (data.event) {
-                Nova.$emit(data.event.key, data.event.payload)
-            }
-
-            if (data.download) {
-                Nova.$emit('action-executed')
-                this.showMessage(data)
-                const link = document.createElement('a')
-                link.href = data.download.url
-                link.download = data.download.name
-                document.body.appendChild(link)
-                link.click()
-                document.body.removeChild(link)
-                return
-            }
-
-            if (data.deleted) {
-                Nova.$emit('action-executed')
-                this.showMessage(data)
-                return
-            }
-
-            if (data.redirect) {
-                if (data.redirect.openInNewTab) {
-                    Nova.$emit('action-executed')
-                    window.open(data.redirect.url, '_blank')
-                    return
-                }
-                window.location = data.redirect.url
-                return
-            }
-
-            if (data.visit) {
-                this.showMessage(data)
-                Nova.visit({
-                    url: Nova.url(data.visit.path, data.visit.options),
-                    remote: false,
-                })
-                return
-            }
-
-            Nova.$emit('action-executed')
-            this.showMessage(data)
-        },
-
-        showMessage(data) {
-            if (data && data.danger) {
-                Nova.error(data.danger)
-                return
-            }
-            if (data && data.message) {
-                Nova.success(data.message)
-            }
-        },
-
-        reloadResourceView() {
-            // Restore Nova's native "the resource view refreshes after an
-            // action runs" behavior. The interception (see `dispatchAction`)
-            // bypasses Nova's runner, which is what otherwise emits this on
-            // the Index/Lens view. `block.reload === false` opts out for
-            // read-only / preview actions (PHP `->withoutReload()`).
-            if (this.block.reload === false) {
-                return
-            }
-
-            Nova.$emit('refresh-resources')
-        },
-
-        surfaceError(error) {
-            // Surface the error and leave the modal open so the user can retry.
-            const message = (error && error.response && error.response.data && error.response.data.message)
-                || (error && error.message)
-                || 'There was a problem dispatching the action.'
-
-            Nova.error(message)
         },
     },
 }

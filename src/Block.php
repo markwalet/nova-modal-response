@@ -11,6 +11,7 @@ use Markwalet\NovaModalResponse\Blocks\BadgeBlock;
 use Markwalet\NovaModalResponse\Blocks\CodeBlock;
 use Markwalet\NovaModalResponse\Blocks\CollapsibleBlock;
 use Markwalet\NovaModalResponse\Blocks\DividerBlock;
+use Markwalet\NovaModalResponse\Blocks\FormBlock;
 use Markwalet\NovaModalResponse\Blocks\HeadingBlock;
 use Markwalet\NovaModalResponse\Blocks\HtmlBlock;
 use Markwalet\NovaModalResponse\Blocks\IconBlock;
@@ -127,6 +128,26 @@ final class Block
         }
 
         return new ActionBlock($labelOrAction, $action);
+    }
+
+    /**
+     * Build a fieldful form-dispatch block. Renders the target action's
+     * fields() inline; submit label defaults to the action's
+     * confirmButtonText (Nova's own default is 'Run Action').
+     *
+     *   Block::form(MyAction::class)
+     *   Block::form('Save and run', MyAction::class)
+     *
+     * @param class-string<Action>|string|Stringable $labelOrAction
+     * @param class-string<Action>|null $action
+     */
+    public static function form(string|Stringable $labelOrAction, ?string $action = null): FormBlock
+    {
+        if ($action === null) {
+            return new FormBlock(null, (string) $labelOrAction);
+        }
+
+        return new FormBlock($labelOrAction, $action);
     }
 
     /**
