@@ -7,6 +7,8 @@ use InvalidArgumentException;
 use Markwalet\NovaModalResponse\Block;
 use Markwalet\NovaModalResponse\Blocks\InlineBlock;
 use Markwalet\NovaModalResponse\Blocks\LinkBlock;
+use Markwalet\NovaModalResponse\Blocks\Tab;
+use Markwalet\NovaModalResponse\Blocks\TabsBlock;
 use Markwalet\NovaModalResponse\Blocks\TextBlock;
 use Markwalet\NovaModalResponse\Tests\TestCase;
 
@@ -63,6 +65,25 @@ class BlockFactoryTest extends TestCase
             Block::text('Hello')->toArray(),
             Block::normalize('Hello')->toArray(),
         );
+    }
+
+    public function test_tab_factory_returns_a_tab_value_object(): void
+    {
+        $tab = Block::tab('Overview', [Block::text('Hi')]);
+
+        $this->assertInstanceOf(Tab::class, $tab);
+        $this->assertSame([
+            'label' => 'Overview',
+            'active' => false,
+            'value' => [['type' => 'text', 'value' => 'Hi']],
+        ], $tab->toArray());
+    }
+
+    public function test_tabs_factory_returns_a_tabs_block(): void
+    {
+        $block = Block::tabs([Block::tab('Overview', [])]);
+
+        $this->assertInstanceOf(TabsBlock::class, $block);
     }
 
     public function test_normalize_rejects_a_non_block_non_string_value(): void
