@@ -1,7 +1,7 @@
 <template>
     <div class="py-3 px-8">
         <span :class="[variantClass, sizeClass]"
-              class="inline-flex items-center gap-1 rounded font-semibold">
+              class="inline-flex items-center gap-1 rounded font-bold">
             <Icon v-if="block.icon && block.iconPosition === 'leading'" :name="block.icon" type="micro" />
             <span v-text="block.value" />
             <Icon v-if="block.icon && block.iconPosition === 'trailing'" :name="block.icon" type="micro" />
@@ -23,7 +23,7 @@ const VARIANT_CLASSES = {
 const SIZE_CLASSES = {
     small: 'text-xs px-1.5 py-0.5',
     medium: 'text-sm px-2 py-0.5',
-    large: 'text-base px-3 py-1.5',
+    large: 'text-lg px-3 py-1.5',
 }
 
 export default {
