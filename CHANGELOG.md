@@ -1,6 +1,8 @@
 # Release Notes
 
-## [Unreleased](https://github.com/markwalet/nova-modal-response/compare/v1.2.0...main)
+## [Unreleased](https://github.com/markwalet/nova-modal-response/compare/v1.2.1...main)
+
+## [v1.2.1 (2026-05-28)](https://github.com/markwalet/nova-modal-response/compare/v1.2.0...v1.2.1)
 
 ### Changed
 - `composer serve` now runs `npm run watch` alongside the workbench server, so PHP and Vue/CSS changes recompile live
