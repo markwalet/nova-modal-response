@@ -65,7 +65,7 @@ How a link block is rendered: `link` (the implicit one — bold, primary-coloure
 _Avoid_: link variant, link style, link kind
 
 **Action block**:
-An inline atom that renders a button which, when clicked, dispatches a Nova action. Built in PHP via `Block::action(MyAction::class)` (label defaults to the action's `name()`) or `Block::action('Custom label', MyAction::class)`. Fieldless by construction — serializing throws if the target action declares `fields()`, with a message pointing to the planned form block (`Block::form`). Atoms (Inlineable), so a row of buttons composes inside an inline group. Carries the target action's **uriKey**, the **origin context** (resourceName + selected resource ids, captured server-side at serialize time), a **disposition** for modal responses (default `child` — see entry), and a `stayOpen` flag (default false) controlling whether the parent modal closes after a non-modal response. Default behaviour is `->stayOpen()` off and `->inChildModal()` on; only `->stayOpen()` is exposed on the first slice.
+An inline atom that renders a button which, when clicked, dispatches a Nova action. Built in PHP via `Block::action(MyAction::class)` (label defaults to the action's `name()`) or `Block::action('Custom label', MyAction::class)`. Fieldless by construction — serializing throws if the target action declares `fields()`, with a message pointing to the planned form block (`Block::form`). Atoms (Inlineable), so a row of buttons composes inside an inline group. Carries the target action's **uriKey** and the **origin context** (resourceName + selected resource ids, captured server-side at serialize time). A successful dispatch always closes the current modal: a modal response replaces it (close-then-open, one modal at a time); a non-modal response (toast/redirect/download/openInNewTab) closes it after Nova's standard handling. A failed dispatch surfaces an error and leaves the modal open so the user can retry.
 _Avoid_: button block, action button, dispatcher
 
 **Dispatch**:
@@ -73,16 +73,12 @@ The act of running a Nova action from inside the modal response: a POST to Nova'
 _Avoid_: invoke, execute, fire, call
 
 **Intercept**:
-The Vue-side choice to drive the action dispatch itself rather than delegating to Nova's action runner. The action block POSTs to Nova's endpoint, owns the response, and applies the package's **disposition** rules — which Nova's runner has no hook for. See ADR-0006.
+The Vue-side choice to drive the action dispatch itself rather than delegating to Nova's action runner. The action block POSTs to Nova's endpoint, owns the response, and applies the package's close-then-open rule — Nova's runner just stacks modals, which the package deliberately does not.
 _Avoid_: hijack, override, take over
 
 **Origin context**:
-The parent modal's resource (`resourceName` — the resource URI key) and selected resource ids (`resources`), captured server-side when an action block is serialized and shipped on the wire. The Vue side uses it to rebuild the action endpoint and form payload on click, so every dispatch — at any depth in a stacked modal — runs against the same resource + selection the parent modal opened against. Outside an HTTP request (e.g. in serialization tests), resourceName falls back to `null` and resources to an empty array.
+The parent modal's resource (`resourceName` — the resource URI key) and selected resource ids (`resources`), captured server-side when an action block is serialized and shipped on the wire. The Vue side uses it to rebuild the action endpoint and form payload on click, so every dispatch runs against the same resource + selection the modal opened against. Outside an HTTP request (e.g. in serialization tests), resourceName falls back to `null` and resources to an empty array.
 _Avoid_: parent context, selection, target resource
-
-**Disposition**:
-How a modal response coming back from a button inside the modal is placed in the modal stack. Two values: `child` (the default, also expressed in PHP as `->inChildModal()` on a future ModalResponse — first slice ships the default only) stacks the response over the parent modal so the parent stays mounted underneath; `inPlace` (planned, not yet on the first slice) swaps the parent's stack for the response's stack in the same modal frame. Carried on the action block as the `disposition` wire field; only takes effect when the response is a modal response — non-modal responses follow the close-vs-`->stayOpen()` rule instead.
-_Avoid_: placement, target, mode, swap
 
 **Embedded icon**:
 A Heroicon rendered *inside* a host block's chrome — the link/button pill or the badge — sharing its background, padding and hover state, as opposed to the standalone **icon block** that sits beside the host in an inline group. Added fluently with a single `->icon(string $name, bool $trailing = false)` method (leading by default) on the link and badge blocks via the shared `HasEmbeddedIcon` concern, and travels on the wire as `icon` (`string|null`) and `iconPosition` (`leading`|`trailing`), both always emitted. Carries **no variant**: it inherits the host's foreground colour (button → white, link → primary, badge → the variant's text colour). Reuses the same `laravel-nova-ui` `Icon` primitive the icon block wraps — not the icon block itself — sized to the host. Unknown names render nothing, same as the icon block.

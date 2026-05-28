@@ -1,5 +1,12 @@
 <template>
-    <Modal :show="show"
+    <ModalActionResponse
+        v-if="replacement"
+        :show="true"
+        :data="replacement"
+        @close="handleClose"
+    />
+    <Modal v-else
+           :show="show"
            :size="data.size ?? '2xl'"
            @close-via-escape="handleClose"
            role="alertdialog">
@@ -29,18 +36,6 @@
                 </div>
             </ModalFooter>
         </div>
-
-        <!--
-            Child modal stacked over this one (default disposition for a
-            modal action response from an inline action block). Closing the
-            child returns control to this parent modal underneath.
-        -->
-        <ModalActionResponse
-            v-if="childModalData"
-            :show="true"
-            :data="childModalData"
-            @close="childModalData = null"
-        />
     </Modal>
 </template>
 
@@ -74,17 +69,18 @@ export default {
     data() {
         return {
             blockComponents,
-            childModalData: null,
+            replacement: null,
         }
     },
 
     provide() {
         return {
-            // Allow descendant blocks (the action block) to close *this*
-            // modal — the parent in the stack from the child's point of
-            // view — and to open a child modal stacked over it.
+            // Allow descendant blocks (the action block) to close this
+            // modal or replace its payload. A replace unmounts the current
+            // modal and renders a fresh one with the new payload in its
+            // place — never two modals at once.
             modalResponseClose: () => this.handleClose(),
-            modalResponseOpenChild: payload => { this.childModalData = payload },
+            modalResponseReplace: payload => { this.replacement = payload },
         }
     },
 

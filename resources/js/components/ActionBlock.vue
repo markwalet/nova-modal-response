@@ -19,9 +19,10 @@ export default {
 
     inject: {
         // Provided by ModalActionResponse. `close` shuts the current modal;
-        // `openChild` opens a child modal stacked over it.
+        // `replace` swaps the current modal's payload with a new one
+        // (close-then-open in a single step — one modal visible at any time).
         modalResponseClose: { default: () => () => {} },
-        modalResponseOpenChild: { default: () => () => {} },
+        modalResponseReplace: { default: () => () => {} },
     },
 
     props: {
@@ -37,8 +38,8 @@ export default {
     methods: {
         async dispatchAction() {
             // Intercept the click rather than defer to Nova's action runner —
-            // deferring forfeits in-place re-render and cedes disposition
-            // control. See ADR-0006.
+            // deferring forfeits the close-then-open sequencing the form block
+            // also needs. Nova stacks modals; we don't.
             if (this.working) {
                 return
             }
@@ -82,20 +83,18 @@ export default {
         },
 
         handleResponse(data, headers) {
-            // Modal response: stack as a child over the parent modal.
+            // Modal response: replace the current modal with the new payload.
+            // The current modal unmounts; the new one renders in its place.
             if (data && data.modal && data.modal.payload) {
                 Nova.$emit('action-executed')
-                this.modalResponseOpenChild(data.modal.payload)
+                this.modalResponseReplace(data.modal.payload)
                 return
             }
 
-            // Non-modal response: delegate to Nova's standard handling.
+            // Non-modal response: delegate to Nova's standard handling, then
+            // close the current modal. Always closes — no stay-open exception.
             this.delegateToNova(data, headers)
-
-            // Close the parent modal by default; ->stayOpen() keeps it open.
-            if (!this.block.stayOpen) {
-                this.modalResponseClose()
-            }
+            this.modalResponseClose()
         },
 
         delegateToNova(data, headers) {

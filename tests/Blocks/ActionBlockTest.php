@@ -53,21 +53,20 @@ class ActionBlockTest extends TestCase
         $this->assertSame('Custom label', $block->toArray()['value']);
     }
 
-    public function test_serialization_carries_uri_key_disposition_and_stay_open_defaults(): void
+    public function test_serialization_carries_type_and_uri_key(): void
     {
         $payload = Block::action(FakeFieldlessAction::class)->toArray();
 
         $this->assertSame('action', $payload['type']);
         $this->assertSame('fake-fieldless', $payload['action']);
-        $this->assertSame('child', $payload['disposition']);
-        $this->assertFalse($payload['stayOpen']);
     }
 
-    public function test_stay_open_flips_the_stay_open_flag(): void
+    public function test_serialization_omits_disposition_and_stay_open_fields(): void
     {
-        $payload = Block::action(FakeFieldlessAction::class)->stayOpen()->toArray();
+        $payload = Block::action(FakeFieldlessAction::class)->toArray();
 
-        $this->assertTrue($payload['stayOpen']);
+        $this->assertArrayNotHasKey('disposition', $payload);
+        $this->assertArrayNotHasKey('stayOpen', $payload);
     }
 
     public function test_serialization_includes_origin_context_keys(): void

@@ -14,7 +14,8 @@ use LogicException;
  * A fieldless dispatcher: a button that, when clicked, POSTs to Nova's action
  * endpoint against the origin context (the parent modal's resource +
  * selection). The Vue side intercepts the click rather than handing off to
- * Nova's runner (see ADR-0006).
+ * Nova's runner so the package can own the close-then-open sequencing — Nova
+ * stacks modals, we don't.
  *
  * Inlineable / Atom: fieldless dispatch is safe on a single horizontal row,
  * because an action block can never carry fields by construction (the
@@ -26,10 +27,6 @@ class ActionBlock implements Inlineable, Renderable
      * @var class-string<Action>
      */
     private readonly string $actionClass;
-
-    private bool $stayOpen = false;
-
-    private string $disposition = 'child';
 
     /**
      * @param class-string<Action> $actionClass
@@ -48,17 +45,6 @@ class ActionBlock implements Inlineable, Renderable
     }
 
     /**
-     * Keep the modal open after a non-modal response (toast, redirect,
-     * download, openInNewTab). The default is to close it.
-     */
-    public function stayOpen(): self
-    {
-        $this->stayOpen = true;
-
-        return $this;
-    }
-
-    /**
      * @return array<string, mixed>
      */
     public function toArray(): array
@@ -71,8 +57,6 @@ class ActionBlock implements Inlineable, Renderable
             'type' => 'action',
             'value' => (string) ($this->label ?? $action->name()),
             'action' => $action->uriKey(),
-            'disposition' => $this->disposition,
-            'stayOpen' => $this->stayOpen,
             ...$this->originContext(),
         ];
     }
