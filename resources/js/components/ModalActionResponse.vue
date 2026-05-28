@@ -29,6 +29,18 @@
                 </div>
             </ModalFooter>
         </div>
+
+        <!--
+            Child modal stacked over this one (default disposition for a
+            modal action response from an inline action block). Closing the
+            child returns control to this parent modal underneath.
+        -->
+        <ModalActionResponse
+            v-if="childModalData"
+            :show="true"
+            :data="childModalData"
+            @close="childModalData = null"
+        />
     </Modal>
 </template>
 
@@ -46,6 +58,8 @@ const LEGACY_KEYS = ['body', 'code', 'html', 'highlight']
 const warnedPayloads = new WeakSet()
 
 export default {
+    name: 'ModalActionResponse',
+
     components: {
         Button,
     },
@@ -60,6 +74,17 @@ export default {
     data() {
         return {
             blockComponents,
+            childModalData: null,
+        }
+    },
+
+    provide() {
+        return {
+            // Allow descendant blocks (the action block) to close *this*
+            // modal — the parent in the stack from the child's point of
+            // view — and to open a child modal stacked over it.
+            modalResponseClose: () => this.handleClose(),
+            modalResponseOpenChild: payload => { this.childModalData = payload },
         }
     },
 
