@@ -23,7 +23,7 @@ const VARIANT_CLASSES = {
 const SIZE_CLASSES = {
     small: 'text-xs px-1.5 py-0.5',
     medium: 'text-sm px-2 py-0.5',
-    large: 'text-base px-2.5 py-1',
+    large: 'text-base px-2.5 py-1.5',
 }
 
 export default {

@@ -24,7 +24,7 @@ const APPEARANCE_CLASSES = {
 }
 
 const SIZE_CLASSES = {
-    small: 'text-sm',
+    small: 'text-xs',
     medium: '',
     large: 'text-lg',
 }
