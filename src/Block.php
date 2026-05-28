@@ -5,6 +5,8 @@ namespace Markwalet\NovaModalResponse;
 use Illuminate\Support\Stringable;
 use InvalidArgumentException;
 use JsonException;
+use Laravel\Nova\Actions\Action;
+use Markwalet\NovaModalResponse\Blocks\ActionBlock;
 use Markwalet\NovaModalResponse\Blocks\BadgeBlock;
 use Markwalet\NovaModalResponse\Blocks\CodeBlock;
 use Markwalet\NovaModalResponse\Blocks\CollapsibleBlock;
@@ -105,6 +107,26 @@ final class Block
     public static function link(string|Stringable $label, string|Stringable $href): LinkBlock
     {
         return new LinkBlock($label, $href);
+    }
+
+    /**
+     * Build a fieldless action-dispatch button. Called either with the
+     * action class on its own (label defaults to the action's `name()`) or
+     * with an explicit label first followed by the action class.
+     *
+     *   Block::action(MyAction::class)
+     *   Block::action('Custom label', MyAction::class)
+     *
+     * @param class-string<Action>|string|Stringable $labelOrAction
+     * @param class-string<Action>|null $action
+     */
+    public static function action(string|Stringable $labelOrAction, ?string $action = null): ActionBlock
+    {
+        if ($action === null) {
+            return new ActionBlock(null, (string) $labelOrAction);
+        }
+
+        return new ActionBlock($labelOrAction, $action);
     }
 
     /**

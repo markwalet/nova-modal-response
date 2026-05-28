@@ -15,6 +15,9 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Lenses\Lens;
 use Laravel\Nova\Panel;
 use Laravel\Nova\ResourceTool;
+use Workbench\App\Nova\Actions\DemoChildModalAction;
+use Workbench\App\Nova\Actions\DemoToastAction;
+use Workbench\App\Nova\Actions\ViewActionBlockAction;
 use Workbench\App\Nova\Actions\ViewBladeViewAction;
 use Workbench\App\Nova\Actions\ViewMarkdownAction;
 use Workbench\App\Nova\Actions\ViewTextStackAction;
@@ -116,6 +119,9 @@ class User extends Resource
             new ViewBladeViewAction,
             new ViewWithoutHighlightingAction,
             new ViewMarkdownAction,
+            new ViewActionBlockAction,
+            new DemoToastAction,
+            new DemoChildModalAction,
         ];
     }
 }

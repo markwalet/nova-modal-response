@@ -1,5 +1,12 @@
 <template>
-    <Modal :show="show"
+    <ModalActionResponse
+        v-if="replacement"
+        :show="true"
+        :data="replacement"
+        @close="handleClose"
+    />
+    <Modal v-else
+           :show="show"
            :size="data.size ?? '2xl'"
            @close-via-escape="handleClose"
            role="alertdialog">
@@ -46,6 +53,8 @@ const LEGACY_KEYS = ['body', 'code', 'html', 'highlight']
 const warnedPayloads = new WeakSet()
 
 export default {
+    name: 'ModalActionResponse',
+
     components: {
         Button,
     },
@@ -60,6 +69,18 @@ export default {
     data() {
         return {
             blockComponents,
+            replacement: null,
+        }
+    },
+
+    provide() {
+        return {
+            // Allow descendant blocks (the action block) to close this
+            // modal or replace its payload. A replace unmounts the current
+            // modal and renders a fresh one with the new payload in its
+            // place — never two modals at once.
+            modalResponseClose: () => this.handleClose(),
+            modalResponseReplace: payload => { this.replacement = payload },
         }
     },
 

@@ -10,6 +10,7 @@ import InlineBlock from './InlineBlock.vue'
 import LinkBlock from './LinkBlock.vue'
 import IconBlock from './IconBlock.vue'
 import CollapsibleBlock from './CollapsibleBlock.vue'
+import ActionBlock from './ActionBlock.vue'
 
 // The single source of truth mapping a block `type` to the component that
 // renders it. Both the stack (ModalActionResponse.vue) and the inline group
@@ -27,4 +28,5 @@ export const blockComponents = {
     link: LinkBlock,
     icon: IconBlock,
     collapsible: CollapsibleBlock,
+    action: ActionBlock,
 }

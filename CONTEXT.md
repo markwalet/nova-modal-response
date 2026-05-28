@@ -17,7 +17,7 @@ The ordered sequence of blocks that makes up a modal's body content. Set via `Mo
 _Avoid_: body, content list, items
 
 **Block**:
-A single, typed unit of modal body content. Blocks render top-to-bottom in the given order. Built-in types: `text`, `heading`, `code`, `json`, `html`, `badge`, `divider`, `list`, `link`, `icon` (plus the authoring-only **view block** and **markdown block**, which both serialize as `html`). A class *is* a block by implementing the `Renderable` contract (the `toArray()` wire-serialization promise); the `Block` factory — alongside `ModalResponse` in the main namespace — is the static hub that constructs them (`Block::badge()`, `Block::code()`, …) and coerces loose values via `Block::normalize()`. The two are distinct: `Block` builds blocks but is not itself a block. Syntax highlighting is carried only by the `code` and `json` blocks (default on, disabled per-block via `->withoutHighlighting()`, or via the `highlight:` flag on the `ModalResponse::code()`/`json()` sugar).
+A single, typed unit of modal body content. Blocks render top-to-bottom in the given order. Built-in types: `text`, `heading`, `code`, `json`, `html`, `badge`, `divider`, `list`, `link`, `icon`, `action` (plus the authoring-only **view block** and **markdown block**, which both serialize as `html`). A class *is* a block by implementing the `Renderable` contract (the `toArray()` wire-serialization promise); the `Block` factory — alongside `ModalResponse` in the main namespace — is the static hub that constructs them (`Block::badge()`, `Block::code()`, …) and coerces loose values via `Block::normalize()`. The two are distinct: `Block` builds blocks but is not itself a block. Syntax highlighting is carried only by the `code` and `json` blocks (default on, disabled per-block via `->withoutHighlighting()`, or via the `highlight:` flag on the `ModalResponse::code()`/`json()` sugar).
 _Avoid_: element, node, section
 
 **View block**:
@@ -33,7 +33,7 @@ How an inline group distributes its atoms along the row. Four values: `default` 
 _Avoid_: justify, distribution, spacing, right
 
 **Atom**:
-A block permitted inside an **inline group**: `text`, `badge`, `icon`, `link`. Marked in PHP by the `Inlineable` interface — a promise about layout only (it may sit on a horizontal row); it does not change the block's serialized output. Blocks that are not atoms (e.g. `heading`, `code`, `divider`) are rejected from an inline group, as is a nested inline group.
+A block permitted inside an **inline group**: `text`, `badge`, `icon`, `link`, `action`. Marked in PHP by the `Inlineable` interface — a promise about layout only (it may sit on a horizontal row); it does not change the block's serialized output. Blocks that are not atoms (e.g. `heading`, `code`, `divider`) are rejected from an inline group, as is a nested inline group.
 _Avoid_: inline element, item, child block
 
 **Markdown block**:
@@ -63,6 +63,22 @@ _Avoid_: accordion, disclosure, drawer, section
 **Link appearance**:
 How a link block is rendered: `link` (the implicit one — bold, primary-coloured text) or `button` (button chrome). Cosmetic only; it does not change what the link does. Distinct from **variant**: appearance is shape, not colour.
 _Avoid_: link variant, link style, link kind
+
+**Action block**:
+An inline atom that renders a button which, when clicked, dispatches a Nova action. Built in PHP via `Block::action(MyAction::class)` (label defaults to the action's `name()`) or `Block::action('Custom label', MyAction::class)`. Fieldless by construction — serializing throws if the target action declares `fields()`, with a message pointing to the planned form block (`Block::form`). Atoms (Inlineable), so a row of buttons composes inside an inline group. Carries the target action's **uriKey** and the **origin context** (resourceName + selected resource ids, captured server-side at serialize time). A successful dispatch always closes the current modal: a modal response replaces it (close-then-open, one modal at a time); a non-modal response (toast/redirect/download/openInNewTab) closes it after Nova's standard handling. A failed dispatch surfaces an error and leaves the modal open so the user can retry.
+_Avoid_: button block, action button, dispatcher
+
+**Dispatch**:
+The act of running a Nova action from inside the modal response: a POST to Nova's action endpoint (`/nova-api/{resourceName}/action?action={uriKey}`) carrying the origin context (`resources[]`) as form data. Nova's endpoint still enforces `authorizedToRun` + validation — the dispatch is just where the request originates. Shared by the action block (fieldless) and the planned form block (fields-carrying), via one dispatch core on the Vue side.
+_Avoid_: invoke, execute, fire, call
+
+**Intercept**:
+The Vue-side choice to drive the action dispatch itself rather than delegating to Nova's action runner. The action block POSTs to Nova's endpoint, owns the response, and applies the package's close-then-open rule — Nova's runner just stacks modals, which the package deliberately does not.
+_Avoid_: hijack, override, take over
+
+**Origin context**:
+The parent modal's resource (`resourceName` — the resource URI key) and selected resource ids (`resources`), captured server-side when an action block is serialized and shipped on the wire. The Vue side uses it to rebuild the action endpoint and form payload on click, so every dispatch runs against the same resource + selection the modal opened against. Outside an HTTP request (e.g. in serialization tests), resourceName falls back to `null` and resources to an empty array.
+_Avoid_: parent context, selection, target resource
 
 **Embedded icon**:
 A Heroicon rendered *inside* a host block's chrome — the link/button pill or the badge — sharing its background, padding and hover state, as opposed to the standalone **icon block** that sits beside the host in an inline group. Added fluently with a single `->icon(string $name, bool $trailing = false)` method (leading by default) on the link and badge blocks via the shared `HasEmbeddedIcon` concern, and travels on the wire as `icon` (`string|null`) and `iconPosition` (`leading`|`trailing`), both always emitted. Carries **no variant**: it inherits the host's foreground colour (button → white, link → primary, badge → the variant's text colour). Reuses the same `laravel-nova-ui` `Icon` primitive the icon block wraps — not the icon block itself — sized to the host. Unknown names render nothing, same as the icon block.
