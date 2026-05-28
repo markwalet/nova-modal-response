@@ -36,6 +36,15 @@ class ActionBlock implements Inlineable, Renderable
     private bool $reload = true;
 
     /**
+     * Whether the block has explicitly opted into a confirmation prompt via
+     * `->confirm(...)`. Distinct from `$blockConfirmText` so a null override
+     * still wins over the target action's default text.
+     */
+    private bool $blockConfirmCalled = false;
+
+    private string|Stringable|null $blockConfirmText = null;
+
+    /**
      * @param class-string<Action> $actionClass
      */
     public function __construct(
@@ -63,6 +72,21 @@ class ActionBlock implements Inlineable, Renderable
     }
 
     /**
+     * Force a confirmation prompt before dispatch, overriding whatever the
+     * target action declares. Passing null uses the action's own `confirmText`
+     * (or Nova's default if the action doesn't override it). Calling
+     * `->confirm()` always results in a prompt, even when the action sets
+     * `withoutConfirmation = true`.
+     */
+    public function confirm(string|Stringable|null $text = null): static
+    {
+        $this->blockConfirmCalled = true;
+        $this->blockConfirmText = $text;
+
+        return $this;
+    }
+
+    /**
      * @return array<string, mixed>
      */
     public function toArray(): array
@@ -76,8 +100,32 @@ class ActionBlock implements Inlineable, Renderable
             'value' => (string) ($this->label ?? $action->name()),
             'action' => $action->uriKey(),
             'reload' => $this->reload,
+            ...$this->confirmation($action),
             ...$this->originContext(),
         ];
+    }
+
+    /**
+     * Resolve the confirmation guard. The block-level `->confirm(...)` always
+     * wins; otherwise the action's own `confirmText` is used unless the action
+     * opted out via `withoutConfirmation`. When no prompt is requested,
+     * `confirmText` is shipped as `null` so the Vue side dispatches directly.
+     *
+     * @return array{confirmText: string|null}
+     */
+    private function confirmation(Action $action): array
+    {
+        if ($this->blockConfirmCalled) {
+            $text = $this->blockConfirmText ?? $action->confirmText;
+
+            return ['confirmText' => (string) $text];
+        }
+
+        if ($action->withoutConfirmation) {
+            return ['confirmText' => null];
+        }
+
+        return ['confirmText' => (string) $action->confirmText];
     }
 
     private function guardAgainstFieldfulAction(Action $action): void
