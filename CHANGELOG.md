@@ -1,10 +1,13 @@
 # Release Notes
 
-## [Unreleased](https://github.com/markwalet/nova-modal-response/compare/v1.2.0...main)
+## [Unreleased](https://github.com/markwalet/nova-modal-response/compare/v1.2.1...main)
+
+## [v1.2.1 (2026-05-28)](https://github.com/markwalet/nova-modal-response/compare/v1.2.0...v1.2.1)
 
 ### Changed
 - `composer serve` now runs `npm run watch` alongside the workbench server, so PHP and Vue/CSS changes recompile live
 - Dev asset builds are isolated from the shipped bundle: `npm run watch`/`dev` emit gitignored unminified files, and only `npm run prod` writes the tracked minified bundle (`dist/**/asset.min.*`)
+- Agent documentation moved from a Boost first-party guideline (always loaded into consumers' `CLAUDE.md`) to an on-demand Boost first-party skill (`nova-modal-response-development`)
 
 ## [v1.2.0 (2026-05-27)](https://github.com/markwalet/nova-modal-response/compare/v1.1.3...v1.2.0)
 

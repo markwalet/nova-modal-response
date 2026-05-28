@@ -1,3 +1,8 @@
+---
+name: nova-modal-response-development
+description: Apply when working with Laravel Nova action responses that display a modal (code, JSON, text, or HTML). Covers ModalResponse static factories and modal chrome configuration.
+---
+
 ## Nova Modal Response
 
 `Markwalet\NovaModalResponse\ModalResponse` is a Laravel Nova `ActionResponse` that you return from a Nova action's `handle()` method. Instead of running a mutation, it opens a modal that displays content — a code snippet, a JSON payload, plain text, or raw HTML.
@@ -18,7 +23,6 @@ Return a `ModalResponse` when the result of an action is something the user shou
 
 Use `ModalResponse::code()` to display a string of code. It is syntax-highlighted automatically.
 
-@verbatim
 <code-snippet name="Show a code snippet in a modal" lang="php">
 public function handle(ActionFields $fields, Collection $models): ModalResponse
 {
@@ -26,13 +30,11 @@ public function handle(ActionFields $fields, Collection $models): ModalResponse
         ->title('Generated script');
 }
 </code-snippet>
-@endverbatim
 
 ### Showing a JSON payload
 
 Use `ModalResponse::json()` to display data as pretty-printed, syntax-highlighted JSON. It accepts an `array` (not a JSON string) and encodes it for you.
 
-@verbatim
 <code-snippet name="Show a JSON payload in a modal" lang="php">
 public function handle(ActionFields $fields, Collection $models): ModalResponse
 {
@@ -40,13 +42,11 @@ public function handle(ActionFields $fields, Collection $models): ModalResponse
         ->title('User payload');
 }
 </code-snippet>
-@endverbatim
 
 ### Showing a block of plain text
 
 Use `ModalResponse::text()` for a single short paragraph. The text is HTML-escaped. It renders inside one `<p>`, so newlines and extra whitespace are **not** preserved — for multi-line output use `code()` (preserves whitespace) or `html()` with explicit markup.
 
-@verbatim
 <code-snippet name="Show plain text in a modal" lang="php">
 public function handle(ActionFields $fields, Collection $models): ModalResponse
 {
@@ -54,7 +54,6 @@ public function handle(ActionFields $fields, Collection $models): ModalResponse
         ->title('Done');
 }
 </code-snippet>
-@endverbatim
 
 ### Showing arbitrary HTML
 
@@ -62,7 +61,6 @@ Use `ModalResponse::html()` to render an HTML string verbatim.
 
 **Warning:** `html()` renders the string with no sanitisation or escaping whatsoever. Never pass untrusted input (request data, user-provided content, AI output) directly — escape or vet it first.
 
-@verbatim
 <code-snippet name="Show raw HTML in a modal" lang="php">
 public function handle(ActionFields $fields, Collection $models): ModalResponse
 {
@@ -70,7 +68,6 @@ public function handle(ActionFields $fields, Collection $models): ModalResponse
         ->title('Report');
 }
 </code-snippet>
-@endverbatim
 
 ### Modal chrome
 
