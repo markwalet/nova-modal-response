@@ -27,14 +27,14 @@ class ViewTabsAction extends Action
                 Block::text('Tabs accept a "label => [blocks]" shorthand.'),
                 Block::badge('Default')->info(),
             ],
-            'Details' => [
+            Block::tab('Details', [
                 Block::heading('Details'),
                 Block::list(['Item one', 'Item two', 'Item three']),
-            ],
-            Block::tab('Activity', [
+            ])->active(),
+            'Activity' => [
                 Block::heading('Activity'),
                 Block::code('git log --oneline -5'),
-            ])->active(),
+            ],
             'Archived' => [
                 Block::heading('Archived'),
                 Block::badge('Archived')->danger(),
