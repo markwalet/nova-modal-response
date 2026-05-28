@@ -42,6 +42,18 @@ export default {
                 return
             }
 
+            // Confirmation guard. Nova's action runner shows a confirm modal
+            // before POSTing; intercepting bypasses it, so honor the same
+            // contract here. `confirmText` is null when no prompt is wanted.
+            // A native browser confirm keeps the "one modal at a time" rule
+            // (it's not a Nova modal stacked on top of ours).
+            if (this.block.confirmText) {
+                const ok = await this.confirmDispatch(this.block.confirmText)
+                if (!ok) {
+                    return
+                }
+            }
+
             const resourceName = this.block.resourceName
             if (!resourceName) {
                 Nova.error(
@@ -81,6 +93,12 @@ export default {
                 this.working = false
                 Nova.$progress.done()
             }
+        },
+
+        confirmDispatch(text) {
+            // Indirection point: tests stub this to simulate confirm/cancel
+            // without invoking the browser dialog.
+            return Promise.resolve(window.confirm(text))
         },
     },
 }

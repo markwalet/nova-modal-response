@@ -118,6 +118,56 @@ class ActionBlockTest extends TestCase
         $this->assertSame(['1', '2'], $payload['resources']);
     }
 
+    public function test_confirmation_defaults_to_the_actions_confirm_text(): void
+    {
+        $payload = Block::action(FakeFieldlessAction::class)->toArray();
+
+        $this->assertSame('Are you sure you want to run this action?', $payload['confirmText']);
+    }
+
+    public function test_confirmation_honors_the_actions_custom_confirm_text(): void
+    {
+        $payload = Block::action(FakeConfirmingAction::class)->toArray();
+
+        $this->assertSame('Really wipe everything?', $payload['confirmText']);
+    }
+
+    public function test_no_confirmation_when_action_disables_it(): void
+    {
+        $payload = Block::action(FakeSilentAction::class)->toArray();
+
+        $this->assertNull($payload['confirmText']);
+    }
+
+    public function test_confirm_method_with_custom_text_forces_a_prompt(): void
+    {
+        $payload = Block::action(FakeSilentAction::class)
+            ->confirm('Are you sure?')
+            ->toArray();
+
+        $this->assertSame('Are you sure?', $payload['confirmText']);
+    }
+
+    public function test_confirm_method_without_arguments_uses_the_actions_text(): void
+    {
+        $payload = Block::action(FakeConfirmingAction::class)
+            ->confirm()
+            ->toArray();
+
+        $this->assertSame('Really wipe everything?', $payload['confirmText']);
+    }
+
+    public function test_confirm_method_overrides_an_action_that_opts_out(): void
+    {
+        $payload = Block::action(FakeSilentAction::class)
+            ->confirm()
+            ->toArray();
+
+        // Action sets withoutConfirmation = true, but the block forces a
+        // prompt and falls back to Nova's default text.
+        $this->assertSame('Are you sure you want to run this action?', $payload['confirmText']);
+    }
+
     public function test_serialization_throws_when_target_action_declares_fields(): void
     {
         $this->expectException(LogicException::class);
@@ -152,6 +202,30 @@ class ActionBlockTest extends TestCase
 class FakeFieldlessAction extends Action
 {
     public $name = 'Fake fieldless';
+
+    public function handle(ActionFields $fields, Collection $models): ActionResponse
+    {
+        return ActionResponse::message('ok');
+    }
+}
+
+class FakeConfirmingAction extends Action
+{
+    public $name = 'Fake confirming';
+
+    public $confirmText = 'Really wipe everything?';
+
+    public function handle(ActionFields $fields, Collection $models): ActionResponse
+    {
+        return ActionResponse::message('ok');
+    }
+}
+
+class FakeSilentAction extends Action
+{
+    public $name = 'Fake silent';
+
+    public $withoutConfirmation = true;
 
     public function handle(ActionFields $fields, Collection $models): ActionResponse
     {
