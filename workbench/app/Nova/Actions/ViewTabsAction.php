@@ -35,7 +35,7 @@ class ViewTabsAction extends Action
                 ],
                 'Activity' => [
                     Block::heading('Activity tab'),
-                    Block::code("git log --oneline -5"),
+                    Block::code('git log --oneline -5'),
                 ],
             ]),
             Block::divider(),
