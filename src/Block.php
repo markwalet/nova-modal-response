@@ -18,6 +18,8 @@ use Markwalet\NovaModalResponse\Blocks\LinkBlock;
 use Markwalet\NovaModalResponse\Blocks\ListBlock;
 use Markwalet\NovaModalResponse\Blocks\MarkdownBlock;
 use Markwalet\NovaModalResponse\Blocks\Renderable;
+use Markwalet\NovaModalResponse\Blocks\Tab;
+use Markwalet\NovaModalResponse\Blocks\TabsBlock;
 use Markwalet\NovaModalResponse\Blocks\TextBlock;
 use Markwalet\NovaModalResponse\Blocks\ViewBlock;
 use Stringable as StringableInterface;
@@ -131,5 +133,21 @@ final class Block
     public static function json(array $value): JsonBlock
     {
         return new JsonBlock($value);
+    }
+
+    /**
+     * @param array<int, Renderable|string|StringableInterface> $blocks
+     */
+    public static function tab(string $label, array $blocks): Tab
+    {
+        return new Tab($label, $blocks);
+    }
+
+    /**
+     * @param array<mixed> $tabs
+     */
+    public static function tabs(array $tabs): TabsBlock
+    {
+        return new TabsBlock($tabs);
     }
 }

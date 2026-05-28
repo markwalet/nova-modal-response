@@ -96,6 +96,34 @@ class ModalResponseTest extends TestCase
         ModalResponse::stack([42]);
     }
 
+    public function test_tabs_sugar_produces_a_single_tabs_block_stack(): void
+    {
+        $response = ModalResponse::tabs([
+            Block::tab('Overview', [Block::text('Hello')])->active(),
+            'Logs' => [Block::text('log line')],
+        ]);
+
+        $this->assertSame([
+            'blocks' => [
+                [
+                    'type' => 'tabs',
+                    'value' => [
+                        [
+                            'label' => 'Overview',
+                            'active' => true,
+                            'value' => [['type' => 'text', 'value' => 'Hello']],
+                        ],
+                        [
+                            'label' => 'Logs',
+                            'active' => false,
+                            'value' => [['type' => 'text', 'value' => 'log line']],
+                        ],
+                    ],
+                ],
+            ],
+        ], $response['modal']->payload);
+    }
+
     public function test_stack_with_an_array_of_blocks_writes_the_blocks_wire_payload(): void
     {
         $response = ModalResponse::stack([Block::text('hi')]);

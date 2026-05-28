@@ -85,6 +85,14 @@ class ModalResponse extends ActionResponse
         return self::stack([$block]);
     }
 
+    /**
+     * @param array<mixed> $tabs
+     */
+    public static function tabs(array $tabs): self
+    {
+        return self::stack([Block::tabs($tabs)]);
+    }
+
     public function title(string $title): self
     {
         return $this->setChrome('title', $title);

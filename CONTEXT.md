@@ -64,6 +64,14 @@ _Avoid_: button block, action button, CTA
 A block (type `collapsible`) that pairs a **header** string with a nested **stack** of child blocks, rendered as a section the user expands and collapses by clicking the header. Built in PHP via `Block::collapsible($header, [...])`; children are normalized through `Block::normalize` (bare strings become text blocks) and dispatched through the same shared block-component map the stack and inline group use. Defaults to collapsed; `->expanded()` starts it open and `->collapsed()` is the explicit inverse (last call wins). Both accept an optional `bool|callable` (default `true`) so the open/closed state can be set programmatically, e.g. `->expanded($user->isAdmin())`. The initial open/closed state travels on the wire as an `expanded` boolean. Unlike an inline group, it is not top-level-only nor restricted to atoms — it may hold any blocks.
 _Avoid_: accordion, disclosure, drawer, section
 
+**Tabs block**:
+A block (type `tabs`) that holds an ordered set of **tabs**, of which exactly one is visible at a time; clicking a label in the header bar switches the visible panel. Built in PHP via `Block::tabs([...])`, with `ModalResponse::tabs([...])` sugar to render a tabbed interface as the whole modal body. The array is normalized to **Tab** value objects: a `Tab` instance passes through, a `string => array` entry becomes `Block::tab($label, $blocks)`, and anything else throws. Like the **collapsible block** it is block-level (not an **atom**) and may hold any blocks, nesting included. Renders with Nova's own `tab-group`/`tab-menu`/`tab-item`/`tab-card` styling (that CSS ships in Nova's `app.css`) and manages the active tab itself in Vue — it does not import Nova's tab components, which Nova does not export.
+_Avoid_: tab group, tab panel, accordion
+
+**Tab**:
+One entry in a **tabs block**: a cosmetic string **label** paired with a nested **stack** of child blocks (normalized through `Block::normalize`; bare strings become text blocks). Built via `Block::tab($label, [...])`. Identified by its position (index) in the tabs block, never by its label — so two tabs may share a label. `->active(bool|callable $result = true)` marks it the initially-visible tab (mirrors the collapsible's `->expanded()`); if several are marked active the last in order wins, and if none is, the first tab opens. A Tab is an internal value object of the tabs block, **not** an independently renderable block — its serialized node carries `label`/`active`/`value` and deliberately no `type` key.
+_Avoid_: panel, page, section, slug
+
 **Link appearance**:
 How a link block is rendered: `link` (the implicit one — bold, primary-coloured text) or `button` (button chrome). Cosmetic only; it does not change what the link does. Distinct from **variant**: appearance is shape, not colour.
 _Avoid_: link variant, link style, link kind
