@@ -124,11 +124,47 @@ class CollapsibleBlockTest extends TestCase
         ], Block::collapsible('Details', [])->toArray());
     }
 
+    public function test_a_single_block_wraps_to_a_one_element_value_list(): void
+    {
+        $block = Block::collapsible('Details', Block::text('hi'));
+
+        $this->assertSame([
+            'type' => 'collapsible',
+            'header' => 'Details',
+            'expanded' => false,
+            'value' => [
+                ['type' => 'text', 'value' => 'hi'],
+            ],
+        ], $block->toArray());
+    }
+
+    public function test_a_single_bare_string_is_coerced_to_one_text_block(): void
+    {
+        $block = Block::collapsible('Details', 'hi');
+
+        $this->assertSame([
+            'type' => 'collapsible',
+            'header' => 'Details',
+            'expanded' => false,
+            'value' => [
+                ['type' => 'text', 'value' => 'hi'],
+            ],
+        ], $block->toArray());
+    }
+
     public function test_a_non_block_non_string_child_is_rejected(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Blocks must be Block instances or strings.');
 
         Block::collapsible('Details', [42]);
+    }
+
+    public function test_a_single_non_block_non_string_child_is_rejected(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Blocks must be Block instances or strings.');
+
+        Block::collapsible('Details', 42);
     }
 }

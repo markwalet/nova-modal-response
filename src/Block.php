@@ -118,9 +118,9 @@ final class Block
     }
 
     /**
-     * @param array<int, Renderable|string|StringableInterface> $blocks
+     * @param Renderable|string|StringableInterface|array<int, Renderable|string|StringableInterface> $blocks
      */
-    public static function collapsible(string $header, array $blocks): CollapsibleBlock
+    public static function collapsible(string $header, mixed $blocks): CollapsibleBlock
     {
         return new CollapsibleBlock($header, $blocks);
     }

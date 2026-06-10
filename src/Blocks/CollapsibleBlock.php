@@ -2,6 +2,7 @@
 
 namespace Markwalet\NovaModalResponse\Blocks;
 
+use Illuminate\Support\Arr;
 use Markwalet\NovaModalResponse\Block;
 use Stringable;
 
@@ -13,13 +14,13 @@ class CollapsibleBlock implements Renderable
     private readonly array $blocks;
 
     /**
-     * @param array<int, Renderable|string|Stringable> $blocks
+     * @param Renderable|string|Stringable|array<int, Renderable|string|Stringable> $blocks
      */
-    public function __construct(private readonly string $header, array $blocks)
+    public function __construct(private readonly string $header, mixed $blocks)
     {
         $this->blocks = array_map(
             static fn (mixed $block): Renderable => Block::normalize($block),
-            array_values($blocks),
+            array_values(Arr::wrap($blocks)),
         );
     }
 
