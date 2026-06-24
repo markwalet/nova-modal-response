@@ -10,9 +10,9 @@ use Laravel\Nova\Actions\ActionResponse;
 use Laravel\Nova\Fields\ActionFields;
 use Markwalet\NovaModalResponse\ModalResponse;
 
-class ViewJsonSnippetModalAction extends Action
+class ViewBladeViewAction extends Action
 {
-    public $name = 'Show JSON snippet';
+    public $name = 'View blade view';
 
     public $withoutConfirmation = true;
 
@@ -20,17 +20,11 @@ class ViewJsonSnippetModalAction extends Action
 
     public function handle(ActionFields $fields, Collection $models): Action|ActionResponse
     {
-        $data = [
-            'lorem' => 'ipsum',
-            'dolor' => [
-                'sit',
-                'amet',
-            ],
-        ];
-
-        return ModalResponse::json($data)
-            ->title('JSON Snippet')
-            ->withoutSyntaxHighlighting()
-            ->closeButton('I\'ve seen enough!');
+        return ModalResponse::view('workbench::demo-block', [
+            'title' => 'A whole modal body from one Blade view',
+            'body' => 'ModalResponse::view() renders the named view server-side and wraps it in a single-block stack.',
+        ])
+            ->title('Demo — view() top-level sugar')
+            ->closeButton('Close');
     }
 }

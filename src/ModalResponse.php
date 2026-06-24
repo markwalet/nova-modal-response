@@ -2,128 +2,124 @@
 
 namespace Markwalet\NovaModalResponse;
 
+use Closure;
 use Illuminate\Support\Stringable;
+use InvalidArgumentException;
 use JsonException;
 use Laravel\Nova\Actions\ActionResponse;
-use Laravel\Nova\Actions\Responses\Modal;
+use Markwalet\NovaModalResponse\Blocks\Renderable;
 
 class ModalResponse extends ActionResponse
 {
-    /**
-     * Create a modal with a code snippet.
-     *
-     * @param string|Stringable $snippet
-     * @param bool $highlight Whether to syntax-highlight the snippet.
-     * @return self
-     */
-    public static function code(string|Stringable $snippet, bool $highlight = true): self
-    {
-        $payload = ['code' => $snippet];
+    /** @var array<int, Renderable> */
+    private array $blocks = [];
 
-        if (! $highlight) {
-            $payload['highlight'] = false;
+    /** @var array<string, mixed> */
+    private array $chrome = [];
+
+    /**
+     * @param array<int, Renderable|string|Stringable>|Closure $blocks
+     */
+    public static function stack(array|Closure $blocks): self
+    {
+        $response = new self;
+        $resolved = $blocks instanceof Closure ? $blocks() : $blocks;
+
+        if (! is_array($resolved)) {
+            throw new InvalidArgumentException('Stack closure must return an array of Block instances.');
         }
 
-        return self::modal('modal-response', $payload);
+        $response->blocks = array_values(array_map(Block::normalize(...), $resolved));
+        $response->refreshModal();
+
+        return $response;
+    }
+
+    public static function text(string|Stringable $value): self
+    {
+        return self::stack([Block::text($value)]);
+    }
+
+    public static function html(string|Stringable $value): self
+    {
+        return self::stack([Block::html($value)]);
     }
 
     /**
-     * Create a modal with a json payload.
+     * @param array<string, mixed> $data
+     */
+    public static function view(string $view, array $data = []): self
+    {
+        return self::stack([Block::view($view, $data)]);
+    }
+
+    public static function markdown(string|Stringable $content): self
+    {
+        return self::stack([Block::markdown($content)]);
+    }
+
+    public static function code(string|Stringable $value, bool $highlight = true): self
+    {
+        $block = Block::code($value);
+
+        if (! $highlight) {
+            $block->withoutHighlighting();
+        }
+
+        return self::stack([$block]);
+    }
+
+    /**
+     * @param array<mixed> $value
      *
-     * @param array<mixed> $data
-     * @param bool $highlight Whether to syntax-highlight the payload.
-     * @return self
      * @throws JsonException
      */
-    public static function json(array $data, bool $highlight = true): self
+    public static function json(array $value, bool $highlight = true): self
     {
-        $payload = ['code' => json_encode($data, JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR)];
+        $block = Block::json($value);
 
         if (! $highlight) {
-            $payload['highlight'] = false;
+            $block->withoutHighlighting();
         }
 
-        return self::modal('modal-response', $payload);
+        return self::stack([$block]);
     }
 
     /**
-     * Create a modal with a single paragraph of text.
-     *
-     * @param string|Stringable $text
-     * @return self
+     * @param array<mixed> $tabs
      */
-    public static function text(string|Stringable $text): self
+    public static function tabs(array $tabs): self
     {
-        return self::modal('modal-response', [
-            'body' => $text,
-        ]);
+        return self::stack([Block::tabs($tabs)]);
     }
 
-    /**
-     * Create a modal with unescaped html.
-     *
-     * @param string|Stringable $text
-     * @return self
-     */
-    public static function html(string|Stringable $text): self
-    {
-        return self::modal('modal-response', [
-            'html' => $text,
-        ]);
-    }
-
-    /**
-     * Set the title for the modal.
-     *
-     * @param string $title
-     * @return self
-     */
     public function title(string $title): self
     {
-        return $this->setPayload('title', $title);
+        return $this->setChrome('title', $title);
     }
 
-    /**
-     * Adjust the width of the modal.
-     *
-     * @param string $size
-     * @return self
-     */
     public function size(string $size): self
     {
-        return $this->setPayload('size', $size);
+        return $this->setChrome('size', $size);
     }
 
-    /**
-     * Disable syntax highlighting for json or code blocks.
-     *
-     * @deprecated Pass `highlight: false` to ModalResponse::code() or ::json() instead.
-     *             This method is removed in v2.
-     * @return self
-     */
-    public function withoutSyntaxHighlighting(): self
-    {
-        return $this->setPayload('highlight', false);
-    }
-
-    /**
-     * Adjust the text of the close button.
-     *
-     * @param string $label
-     * @return self
-     */
     public function closeButton(string $label): self
     {
-        return $this->setPayload('closeButtonText', $label);
+        return $this->setChrome('closeButtonText', $label);
     }
 
-    private function setPayload(string $key, mixed $value): self
+    private function setChrome(string $key, mixed $value): self
     {
-        $payload = $this->jsonSerialize();
-        /** @var Modal $modal */
-        $modal = $payload['modal'];
-        $modal->payload[$key] = $value;
+        $this->chrome[$key] = $value;
+        $this->refreshModal();
 
         return $this;
+    }
+
+    private function refreshModal(): void
+    {
+        $payload = (new PayloadBuilder)->build($this->blocks, $this->chrome);
+
+        $this->withModal('modal-response', $payload);
     }
 }
