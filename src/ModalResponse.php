@@ -37,7 +37,11 @@ class ModalResponse extends ActionResponse
      */
     public static function json(array $data, bool $highlight = true): self
     {
-        $payload = ['code' => json_encode($data, JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR)];
+        $payload = [
+            'code' => json_encode($data, JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR),
+            // Tell the frontend it's JSON: auto-detection guesses wrong for common payloads.
+            'language' => 'json',
+        ];
 
         if (! $highlight) {
             $payload['highlight'] = false;

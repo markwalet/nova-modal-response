@@ -54,6 +54,7 @@ class ModalResponseTest extends TestCase
 
         $this->assertSame([
             'code' => json_encode(['lorem' => 'ipsum'], JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR),
+            'language' => 'json',
             'highlight' => false,
         ], $response['modal']->payload);
     }
@@ -73,6 +74,7 @@ class ModalResponseTest extends TestCase
                 'lorem' => 'ipsum',
                 'dolor' => ['sit', 'amet'],
             ], JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR),
+            'language' => 'json',
         ], $modal->payload);
     }
 

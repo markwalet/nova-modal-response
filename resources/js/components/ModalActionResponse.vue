@@ -11,6 +11,8 @@
                     <div class="nmr-code">
                         <CopyButton :value="data.code" class="nmr-code__copy" />
                         <pre v-if="data.highlight === false"><code v-text="data.code" class="language-plaintext" ref="plaintextCode"></code></pre>
+                        <!-- autodetect defaults to true in the plugin and would override `language`. -->
+                        <highlightjs v-else-if="data.language" :language="data.language" :autodetect="false" :code="data.code" />
                         <highlightjs v-else autodetect :code="data.code" />
                     </div>
                 </template>
