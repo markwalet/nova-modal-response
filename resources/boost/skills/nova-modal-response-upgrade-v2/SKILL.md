@@ -24,12 +24,15 @@ PHP, Laravel, and Nova constraints are identical in v1 and v2, so `composer requ
 - **S2** — hand-built payloads (`Action::modal('modal-response', …)`, `withModal('modal-response', …)`): removed in v2, render an empty body.
   `git grep -nE "['\"]modal-response['\"]" -- '*.php'`
 - **S3** — code reading the v1 wire format (`body` / `code` / `html` / top-level `highlight`), usually tests asserting on the payload.
-  `git grep -nE "payload\[['\"](body|code|html|highlight)['\"]\]|payload\.(body|code|html|highlight)|['\"]payload['\"] *=>" -- '*.php' '*.js' '*.ts' '*.vue' ':!public/*' ':!*dist/*'`
-  The `'payload' =>` alternative catches nested `assertJson([... 'payload' => [...]])`; keep only those hits whose keys are v1 wire keys.
+  Direct reads, repo-wide:
+  `git grep -nE "payload\[['\"](body|code|html|highlight)['\"]\]|payload\.(body|code|html|highlight)" -- '*.php' '*.js' '*.ts' '*.vue' ':!public/*' ':!*dist/*'`
+  Nested `assertJson([... 'payload' => [...]])`, only in files that mention `ModalResponse` (apps use `payload` for their own data too):
+  `for f in $(git grep -l 'ModalResponse' -- '*.php'); do git grep -nE "['\"]payload['\"] *=>" -- "$f"; done`
+  Keep a hit only if it reads a v1 wire key off the modal payload.
 - **S4** — a custom Vue override of the `modal-response` component.
   `git grep -nE "['\"]modal-response['\"]" -- '*.js' '*.ts' '*.vue' ':!public/*' ':!*dist/*'` (the excludes skip compiled bundles; the source file is what counts)
 
-Report every hit to the developer, grouped by S1–S4, with file and line. Done when all four scans have run and their hits are listed.
+Report the real hits to the developer, grouped by S1–S4, with file and line, plus one line per scan summarising what you dropped as noise and why (e.g. "S3: 4 `'payload' =>` lines are the app's own webhook data"). Done when all four scans have run and every raw hit is either listed or covered by a summary line.
 
 **S4 hit = HARD STOP.** The developer owns that component and its build. Report the file(s), point them to the guide's "If you overrode the `modal-response` Vue component" section, and end the run here — no migration, no bump, no edits to their JS. Resume from A2 only once the developer confirms the override is migrated or removed.
 
@@ -52,14 +55,23 @@ Done when S1 and S2 return zero hits.
 
 Find the app's **QA suite** — tests plus any linters/static analysis — in this order, stopping at the first source that defines it:
 
-1. `composer.json` `scripts`
+1. `composer.json` `scripts` — QA commands only; lifecycle hooks (`post-install-cmd`, `post-update-cmd`, `post-autoload-dump`, …) are not a QA suite
 2. `Makefile` / `*.mk`
 3. CI config (`.github/workflows/`, `.gitlab-ci.yml`, …)
 4. Fallback: `php artisan test` (or `vendor/bin/phpunit`), plus `vendor/bin/pint --test` and `vendor/bin/phpstan analyse` if those binaries exist.
 
-Run it. If it is green, the **baseline** is "green". If parts cannot run here (they need a database, queue, or other infra), record the exact set of failing tests/checks as the baseline and tell the developer. Fix any failure that A2 caused before moving on, so a later difference can only come from the bump.
+If a discovered command wraps a container runner (`docker compose exec …`, `sail …`), run the inner command on the host only if it works there; otherwise ask the developer to run it in their environment. Leave their services as they are — starting containers is their call.
 
-Done when the baseline is recorded.
+Run it and record the **baseline**:
+
+- Green → the baseline is "green".
+- Parts fail because they need infra that isn't here (database, queue, …) → the baseline is the exact set of failing tests/checks; tell the developer.
+- The whole suite aborts before running any test (e.g. database unreachable in parallel mode) → say so, then retry serially, or hand the test run to the developer.
+- Random test order → pin a seed (e.g. PHPUnit's `--random-order-seed`) and reuse it in A6.
+
+Fix any failure that A2 caused before moving on, so a later difference can only come from the bump.
+
+Done when the baseline (and seed, if any) is recorded.
 
 ### A4. Bump
 
@@ -76,7 +88,9 @@ Done when `composer show markwalet/nova-modal-response` reports a `2.x` version 
 
 Rewrite every S3 hit to read the v2 `blocks` array; the guide's section on tests that assert on the payload shows the shape. Locate each block **by type** — e.g. the first block whose `type` is `json` or `code` — never by index: Phase B can prepend blocks, which silently breaks `blocks[0]`.
 
-Done when every S3 file reads only the v2 shape.
+Then run the tests you rewrote and the static analysis from A3, and fix any regression the rewrites caused before moving on.
+
+Done when every S3 file reads only the v2 shape and those checks pass (or fail only where the A3 baseline already did).
 
 ### A6. Verify on v2
 
@@ -86,7 +100,7 @@ Two halves, reported separately.
 
 - `composer show markwalet/nova-modal-response` → `2.x`.
 - S1 and S2 re-run → zero hits.
-- The A3 QA suite → matches the baseline exactly: green if the baseline was green, otherwise the identical failure set — no new failures, none missing.
+- The A3 QA suite, same command and seed → matches the baseline exactly: green if the baseline was green, otherwise the identical failure set — no new failures, none missing. If a test rewritten in A5 is in the failing baseline, say explicitly that this comparison cannot prove it, and add "run these tests where the infra exists" to the developer's checklist.
 
 **Human (you cannot do these):** you have no browser, so the static checks cannot prove a modal renders. Every modal now goes through the v2 renderer, so the checklist covers **every** Nova action that returns a `ModalResponse`, not just the ones you edited. Find them with `git grep -l 'ModalResponse' -- '*.php' ':!tests/*'`, and for each action class find where it is registered with `git grep -nw '<ActionClass>' -- app/Nova` (an `actions()` method on a resource, lens, or dashboard). Give the developer the list (action class + where it is registered), and ask them to trigger each once and confirm:
 
