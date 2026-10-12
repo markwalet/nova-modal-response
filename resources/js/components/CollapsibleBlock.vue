@@ -2,18 +2,19 @@
     <div class="py-3 px-8">
         <button
             type="button"
-            class="flex w-full items-center gap-x-2 text-left text-sm font-semibold text-gray-700 dark:text-gray-200"
+            class="flex w-full items-center gap-2 text-left text-sm font-semibold text-gray-700 dark:text-gray-200"
             :aria-expanded="expanded"
             @click.prevent="toggle"
         >
             <Icon
                 :name="expanded ? 'chevron-down' : 'chevron-right'"
-                class="w-4 h-4 text-gray-500 dark:text-gray-400"
+                type="micro"
+                class="text-gray-500 dark:text-gray-400"
             />
             <span v-text="block.header" />
         </button>
 
-        <div v-show="expanded" class="mt-2 -mx-8">
+        <div v-show="expanded" class="nmr-collapsible__body mt-2">
             <component
                 v-for="(child, index) in (block.value ?? [])"
                 :is="blockComponents[child.type]"
