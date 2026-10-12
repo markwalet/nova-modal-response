@@ -43,31 +43,21 @@ class ApiProbeAction extends Action
 
         $ms = (int) round((microtime(true) - $start) * 1000);
 
-        $statusRow = Block::inline([
-            Block::text($ok ? 'Request succeeded' : 'Request failed'),
+        $statusRow = [
             $ok
                 ? Block::badge("GET {$status}")->success()->icon('check-circle')
                 : Block::badge($status > 0 ? "GET {$status}" : 'GET failed')->danger()->icon('x-circle'),
-        ]);
-
-        $blocks = [
-            Block::heading('API probe'),
-            Block::text('Live GET against the JSONPlaceholder todos endpoint.'),
-            $statusRow,
-            Block::inline([
-                Block::text('Response time'),
-                Block::badge("{$ms} ms")->info(),
-            ]),
+            Block::badge("{$ms} ms")->info(),
         ];
 
         if ($total !== null) {
-            $blocks[] = Block::inline([
-                Block::text('Results'),
-                Block::badge(count($body).' of '.$total),
-            ]);
+            $statusRow[] = Block::badge(count($body).' of '.$total);
         }
 
-        $blocks[] = Block::divider();
+        $blocks = [
+            Block::inline($statusRow),
+        ];
+
         $blocks[] = Block::heading('Response body')->small();
         $blocks[] = Block::json($body);
         $blocks[] = Block::inline([
