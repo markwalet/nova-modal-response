@@ -1,6 +1,8 @@
 # Release Notes
 
-## [Unreleased](https://github.com/markwalet/nova-modal-response/compare/v1.3.0...main)
+## [Unreleased](https://github.com/markwalet/nova-modal-response/compare/v2.0.0...main)
+
+## [v2.0.0 (2026-10-13)](https://github.com/markwalet/nova-modal-response/compare/v1.3.0...v2.0.0)
 
 ### Changed
 - **Breaking:** the modal body is now an ordered stack of typed blocks, and the payload sent to the browser changed to `{ title, size, closeButtonText, blocks: [...] }`. Code that builds the payload with `Action::modal('modal-response', [...])` breaks; the `ModalResponse` API keeps working. See [UPGRADE.md](UPGRADE.md) and [ADR-0001](docs/adr/0001-single-render-path-with-stacked-blocks.md) ([#21](https://github.com/markwalet/nova-modal-response/issues/21))
