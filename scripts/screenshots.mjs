@@ -8,8 +8,9 @@
  * browser, and composites the pair into one image: light on the left, dark on
  * the right, split by a slightly slanted line through the middle.
  *
- * The hero is the whole Nova page (users index behind the modal); the other
- * scenes are cropped to the modal.
+ * The hero is the whole Nova page (users index behind the modal), the
+ * one-liner is the whole modal, and the block scenes are cropped to just the
+ * blocks (no title bar or footer).
  */
 import { execSync, spawn } from 'node:child_process'
 import { mkdir } from 'node:fs/promises'
@@ -23,12 +24,12 @@ const PORT = 8799
 const BASE = `http://127.0.0.1:${PORT}`
 
 const SHOTS = [
-    { scene: 'hero', file: 'hero.png', page: true },
-    { scene: 'text', file: 'blocks-text.png' },
-    { scene: 'code', file: 'blocks-code.png' },
-    { scene: 'inline', file: 'blocks-inline.png' },
-    { scene: 'containers', file: 'blocks-containers.png' },
-    { scene: 'one-liner', file: 'one-liner.png' },
+    { scene: 'hero', file: 'hero.png', frame: 'page' },
+    { scene: 'text', file: 'blocks-text.png', frame: 'body' },
+    { scene: 'code', file: 'blocks-code.png', frame: 'body' },
+    { scene: 'inline', file: 'blocks-inline.png', frame: 'body' },
+    { scene: 'containers', file: 'blocks-containers.png', frame: 'body' },
+    { scene: 'one-liner', file: 'one-liner.png', frame: 'modal' },
 ]
 
 const SCALE = 2 // device pixel ratio
@@ -54,7 +55,9 @@ async function waitForServer(url, timeoutMs = 30000) {
     throw new Error(`Workbench didn't start on ${url}`)
 }
 
-async function capture(browser, theme, { scene, page: fullPage }) {
+async function capture(browser, theme, { scene, frame }) {
+    const fullPage = frame === 'page'
+
     const context = await browser.newContext({
         viewport: fullPage ? PAGE_VIEWPORT : MODAL_VIEWPORT,
         deviceScaleFactor: SCALE,
@@ -83,9 +86,23 @@ async function capture(browser, theme, { scene, page: fullPage }) {
     await card.waitFor()
     await page.waitForTimeout(600) // highlight.js + modal transition
 
-    const png = fullPage
-        ? await page.screenshot({ animations: 'disabled' })
-        : await card.screenshot({ animations: 'disabled' })
+    let png
+    if (frame === 'page') {
+        png = await page.screenshot({ animations: 'disabled' })
+    } else if (frame === 'body') {
+        // Everything between the modal's title bar (first child) and footer (last child).
+        const clip = await card.evaluate((element) => {
+            const children = [...element.children]
+            const first = children[1].getBoundingClientRect()
+            const last = children[children.length - 2].getBoundingClientRect()
+            const box = element.getBoundingClientRect()
+
+            return { x: box.left, y: first.top, width: box.width, height: last.bottom - first.top }
+        })
+        png = await page.screenshot({ clip, animations: 'disabled' })
+    } else {
+        png = await card.screenshot({ animations: 'disabled' })
+    }
     await context.close()
 
     return png
@@ -172,7 +189,7 @@ async function main() {
             }
 
             const result = await split(light, dark)
-            const png = shot.page ? result.image : await asCard(result)
+            const png = shot.frame === 'page' ? result.image : await asCard(result)
 
             await sharp(png).png({ compressionLevel: 9 }).toFile(`${OUT}/${shot.file}`)
             console.log(`art/${shot.file}`)

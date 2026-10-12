@@ -7,7 +7,7 @@
 
 Enabling custom modals for action responses in [Laravel Nova](https://nova.laravel.com).
 
-![A Nova page with a modal showing a heading, status badges, a collapsible build log and a button link, split between light and dark mode](art/hero.png)
+![A Nova page with a modal showing a heading, status badges and the highlighted PHP that builds it, split between light and dark mode](art/hero.png)
 
 More info for this specific feature can be found in the [Nova Documentation](https://nova.laravel.com/docs/v5/actions/defining-actions#custom-modal-responses).
 
@@ -132,7 +132,7 @@ A horizontal rule between blocks.
 Block::divider();
 ```
 
-<p align="center"><img src="art/blocks-code.png" alt="Code, JSON and markdown blocks" width="600"></p>
+<p align="center"><img src="art/blocks-code.png" alt="A SQL code block, a JSON block and a markdown block" width="600"></p>
 
 #### Code
 

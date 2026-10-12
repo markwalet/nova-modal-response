@@ -53,13 +53,19 @@ class ScreenshotAction extends Action
 
     private function hero(): ModalResponse
     {
-        $log = <<<'LOG'
-            [12:04:01] Fetching dependencies...
-            [12:04:09] Running migrations (3 ran)
-            [12:04:12] Compiling assets...
-            [12:04:31] Restarting queue workers
-            [12:04:32] Deploy finished in 42s
-            LOG;
+        // The hero shows the code that builds it: keep $source in sync with the return below.
+        $source = <<<'PHP'
+            return ModalResponse::stack([
+                Block::heading('Deploy #1284'),
+                Block::inline([
+                    Block::icon('check-circle')->success(),
+                    'Succeeded',
+                    Block::badge('production')->info(),
+                ]),
+                Block::inline(['Duration', Block::badge('42s')])->spread(),
+                Block::code($source)->language('php'),
+            ])->title('Deployment summary');
+            PHP;
 
         return ModalResponse::stack([
             Block::heading('Deploy #1284'),
@@ -69,15 +75,7 @@ class ScreenshotAction extends Action
                 Block::badge('production')->info(),
             ]),
             Block::inline(['Duration', Block::badge('42s')])->spread(),
-            Block::inline(['Commit', Block::badge('a1b2c3d')])->spread(),
-            Block::collapsible('Build log', Block::code($log)->withoutHighlighting())->expanded(),
-            Block::divider(),
-            Block::inline([
-                Block::link('View changelog', 'https://github.com/markwalet/nova-modal-response/blob/main/CHANGELOG.md')
-                    ->button()
-                    ->newTab()
-                    ->icon('arrow-top-right-on-square', trailing: true),
-            ]),
+            Block::code($source)->language('php'),
         ])->title('Deployment summary');
     }
 
@@ -104,21 +102,22 @@ class ScreenshotAction extends Action
     private function code(): ModalResponse
     {
         return ModalResponse::stack([
-            Block::heading('Request')->small(),
-            Block::code(<<<'BASH'
-                curl -X POST https://api.example.com/webhooks/orders \
-                  -H "Content-Type: application/json" \
-                  -d @order-10421.json
-                BASH)->language('bash'),
-            Block::heading('Response')->small(),
+            Block::heading('Query')->small(),
+            Block::code(<<<'SQL'
+                SELECT id, email, created_at
+                FROM customers
+                WHERE country = 'GB' AND deleted_at IS NULL
+                ORDER BY created_at DESC
+                LIMIT 1;
+                SQL)->language('sql'),
+            Block::heading('Result')->small(),
             Block::json([
-                'id' => 'evt_7Hq2Lk',
-                'status' => 'accepted',
-                'attempt' => 2,
-                'order' => ['number' => 10421, 'total' => 129.95, 'currency' => 'EUR'],
+                'id' => 5521,
+                'email' => 'ada@example.com',
+                'created_at' => '2026-03-14T10:22:05+00:00',
             ]),
-            Block::markdown('Delivered on the **second** attempt. See the [retry policy](https://example.com/docs/retries) for the backoff schedule.'),
-        ])->title('Webhook delivery')->size('xl');
+            Block::markdown('Ran in **4 ms** on the read replica. See [query logging](https://example.com/docs/queries) for details.'),
+        ])->title('Query preview')->size('xl');
     }
 
     private function inline(): ModalResponse
