@@ -22,8 +22,9 @@ you maintain your own build).
 
 ## If you only use the `ModalResponse` PHP API
 
-**No code changes required.** Every v1 method keeps the same signature and the
-same observable behavior:
+**Almost no code changes required.** Every v1 method except
+`withoutSyntaxHighlighting()` keeps the same signature and the same observable
+behavior:
 
 ```php
 ModalResponse::text('…')->title('…');
@@ -35,7 +36,6 @@ ModalResponse::json(['key' => 'value']);
 ->title('…')
 ->size('7xl')
 ->closeButton('…')
-->withoutSyntaxHighlighting()
 ```
 
 Under the hood each of these now builds a single-block stack instead of a
@@ -45,7 +45,8 @@ New in v2 — you can now combine content in one modal instead of being limited
 to a single shape:
 
 ```php
-use Markwalet\NovaModalResponse\Blocks\Block;
+use Markwalet\NovaModalResponse\Block;
+use Markwalet\NovaModalResponse\ModalResponse;
 
 ModalResponse::stack([
     Block::heading('Import finished')->large(),
@@ -56,16 +57,37 @@ ModalResponse::stack([
 ])->title('Result');
 ```
 
-`stack()` also accepts a closure returning the block array. The built-in block
-types are `text`, `heading`, `code`, `json`, `html`, `badge`, `divider`, and
-`list`.
+`stack()` also accepts a closure returning the block array, and bare strings
+in the array become text blocks. See the [README](README.md#blocks) for every
+available block.
 
-### `withoutSyntaxHighlighting()`
+### `withoutSyntaxHighlighting()` is removed
 
-Same method, same result for single-block use. The only change is on the wire:
-v1 emitted a single top-level `highlight: false` flag; v2 writes `highlight:
-false` onto every `code` and `json` block in the stack at serialize time. No
-action needed unless you read the raw payload (see below).
+`ModalResponse::withoutSyntaxHighlighting()` was deprecated in v1.1.3 and is
+removed in v2. Syntax highlighting is now set per `code`/`json` block.
+
+For the single-block factories, pass `highlight: false` (available since
+v1.1.3):
+
+```php
+// v1
+ModalResponse::code($snippet)->withoutSyntaxHighlighting();
+ModalResponse::json($data)->withoutSyntaxHighlighting();
+
+// v2
+ModalResponse::code($snippet, highlight: false);
+ModalResponse::json($data, highlight: false);
+```
+
+Inside a stack, call `withoutHighlighting()` on each block that should render
+as plain text:
+
+```php
+ModalResponse::stack([
+    Block::code($snippet)->withoutHighlighting(),
+    Block::json($data)->withoutHighlighting(),
+]);
+```
 
 ## If you hand-built the payload with `Action::modal('modal-response', …)`
 
@@ -87,16 +109,16 @@ console warning — see the next section).
 Move to the `ModalResponse` PHP API, which produces the correct v2 payload for
 you:
 
-| v1 raw payload key            | v2 replacement                                   |
-| ----------------------------- | ------------------------------------------------ |
-| `['body' => $text]`           | `ModalResponse::text($text)`                     |
-| `['html' => $html]`           | `ModalResponse::html($html)`                     |
-| `['code' => $snippet]`        | `ModalResponse::code($snippet)`                  |
-| `['code' => json_encode($d)]` | `ModalResponse::json($d)`                        |
-| `['highlight' => false]`      | `->withoutSyntaxHighlighting()`                  |
-| `['title' => $t]`             | `->title($t)`                                    |
-| `['size' => $s]`              | `->size($s)`                                     |
-| `['closeButtonText' => $l]`   | `->closeButton($l)`                              |
+| v1 raw payload key            | v2 replacement                                    |
+| ----------------------------- | ------------------------------------------------- |
+| `['body' => $text]`           | `ModalResponse::text($text)`                      |
+| `['html' => $html]`           | `ModalResponse::html($html)`                      |
+| `['code' => $snippet]`        | `ModalResponse::code($snippet)`                   |
+| `['code' => json_encode($d)]` | `ModalResponse::json($d)`                         |
+| `['highlight' => false]`      | `ModalResponse::code($snippet, highlight: false)` |
+| `['title' => $t]`             | `->title($t)`                                     |
+| `['size' => $s]`              | `->size($s)`                                      |
+| `['closeButtonText' => $l]`   | `->closeButton($l)`                               |
 
 For anything more than a single shape, reach for `ModalResponse::stack([...])`
 with explicit `Block` instances.
@@ -124,8 +146,10 @@ dispatches each block through an explicit `{ type → component }` map — there
 no `v-if` precedence between content shapes anymore. If you maintain a custom
 component, mirror that: iterate the stack and render each block by its `type`.
 The bundled `resources/js/components/ModalActionResponse.vue` is the reference
-implementation, and each block type has a matching
-`resources/js/components/{Type}Block.vue`.
+implementation, the map lives in `resources/js/components/blockComponents.js`,
+and each wire `type` has a matching `resources/js/components/{Type}Block.vue`.
+The `markdown` and `view` blocks have no wire type of their own: they are
+rendered to HTML on the server and arrive as `html` blocks.
 
 A `console.warn` fires once per modal open if the package detects v1 payload
 keys (`body` / `code` / `html` / top-level `highlight`) on the `data` prop.
