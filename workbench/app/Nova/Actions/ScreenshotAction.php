@@ -116,7 +116,6 @@ class ScreenshotAction extends Action
                 'email' => 'ada@example.com',
                 'created_at' => '2026-03-14T10:22:05+00:00',
             ]),
-            Block::markdown('Ran in **4 ms** on the read replica. See [query logging](https://example.com/docs/queries) for details.'),
         ])->title('Query preview')->size('xl');
     }
 
