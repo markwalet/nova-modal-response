@@ -110,7 +110,7 @@ Chain onto any `ModalResponse` (the sugar factories and `stack()` alike):
 - **Icons** are Heroicon names (`check-circle`, `arrow-path`). An unknown name renders nothing, silently.
 - **`markdown(...)->file()`** reads the path at serialize time; a missing file throws `InvalidArgumentException`. `view()` with a missing view throws Laravel's `View [x] not found`.
 - **Tab labels** render capitalized by CSS; tabs are identified by position, so duplicate labels are allowed.
-- **Build through `ModalResponse` and `Block`**, never a hand-written `Action::modal('modal-response', [...])` array. Reading the payload in tests is fine: take `$response['modal']->payload['blocks']` and find blocks by `type`, not index — e.g. `collect($payload['blocks'])->firstWhere('type', 'json')['value']`. The shape may change between majors.
+- **Build through `ModalResponse` and `Block`**, never a hand-written `Action::modal('modal-response', [...])` array. Reading the payload in tests is fine: take `$response['modal']->payload['blocks']`, narrow it with `$this->assertIsArray($blocks)` (keeps PHPStan happy), and find blocks by `type`, not index — e.g. `collect($blocks)->firstWhere('type', 'json')['value']`. See UPGRADE.md's "Payload Assertions In Tests". The shape may change between majors.
 
 ### Reference
 
