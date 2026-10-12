@@ -34,7 +34,7 @@ PHP, Laravel, and Nova constraints are identical in v1 and v2, so `composer requ
 
 Report the real hits to the developer, grouped by S1–S4, with file and line, plus one line per scan summarising what you dropped as noise and why (e.g. "S3: 4 `'payload' =>` lines are the app's own webhook data"). Done when all four scans have run and every raw hit is either listed or covered by a summary line.
 
-**S4 hit = HARD STOP.** The developer owns that component and its build. Report the file(s), point them to the guide's "If you overrode the `modal-response` Vue component" section, and end the run here — no migration, no bump, no edits to their JS. Resume from A2 only once the developer confirms the override is migrated or removed.
+**S4 hit = HARD STOP.** The developer owns that component and its build. Report the file(s), point them to the guide's "Custom Vue Component" section, and end the run here — no migration, no bump, no edits to their JS. Resume from A2 only once the developer confirms the override is migrated or removed.
 
 ### A2. Migrate on v1
 
@@ -43,7 +43,7 @@ Migrate S1 and S2 while the app is still on v1. This skill ships only in the lat
 Rewrite every S1 and S2 hit using the guide's replacements:
 
 - S1: move the flag onto the factory — `ModalResponse::code($x)->withoutSyntaxHighlighting()` becomes `ModalResponse::code($x, highlight: false)` (same for `json()`). On a `text()`/`html()` response the call did nothing; delete it.
-- S2: rebuild the payload with the `ModalResponse` API, following the guide's v1-key → v2 table.
+- S2: rebuild the payload with the `ModalResponse` API, following the v1-key → v2 table in the guide's "Hand-Built `modal-response` Payloads" section.
 
 S3 waits for A5: those readers expect whatever shape the installed version emits, so they change together with the bump.
 
@@ -86,7 +86,7 @@ Done when `composer show markwalet/nova-modal-response` reports a `2.x` version 
 
 ### A5. Migrate wire-format readers
 
-Rewrite every S3 hit to read the v2 `blocks` array; the guide's section on tests that assert on the payload shows the shape. Locate each block **by type** — e.g. the first block whose `type` is `json` or `code` — never by index: Phase B can prepend blocks, which silently breaks `blocks[0]`.
+Rewrite every S3 hit to read the v2 `blocks` array; the guide's "Payload Assertions In Tests" section shows the shape and a snippet that passes PHPStan. Locate each block **by type** — e.g. the first block whose `type` is `json` or `code` — never by index: Phase B can prepend blocks, which silently breaks `blocks[0]`.
 
 Then run the tests you rewrote and the static analysis from A3, and fix any regression the rewrites caused before moving on.
 
