@@ -8,11 +8,12 @@ use Illuminate\Support\Collection;
 use Laravel\Nova\Actions\Action;
 use Laravel\Nova\Actions\ActionResponse;
 use Laravel\Nova\Fields\ActionFields;
+use Laravel\Nova\Nova;
 use Markwalet\NovaModalResponse\ModalResponse;
 
-class ViewBladeViewAction extends Action
+class AboutAppAction extends Action
 {
-    public $name = 'View blade view';
+    public $name = 'About this app';
 
     public $withoutConfirmation = true;
 
@@ -20,11 +21,12 @@ class ViewBladeViewAction extends Action
 
     public function handle(ActionFields $fields, Collection $models): Action|ActionResponse
     {
-        return ModalResponse::view('workbench::demo-block', [
-            'title' => 'A whole modal body from one Blade view',
-            'body' => 'ModalResponse::view() renders the named view server-side and wraps it in a single-block stack.',
+        return ModalResponse::view('workbench::about', [
+            'php' => PHP_VERSION,
+            'laravel' => app()->version(),
+            'nova' => Nova::version(),
         ])
-            ->title('Demo — view() top-level sugar')
+            ->title('Demo — about this app')
             ->closeButton('Close');
     }
 }

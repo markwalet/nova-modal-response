@@ -1,5 +1,5 @@
 <template>
-    <div class="py-3 px-8">
+    <div :class="inline ? '' : 'py-3 px-8'">
         <span :class="[variantClass, sizeClass]"
               class="inline-flex items-center gap-1 rounded font-bold">
             <Icon v-if="block.icon && block.iconPosition === 'leading'" :name="block.icon" type="micro" />
@@ -12,13 +12,9 @@
 <script>
 import { Icon } from 'laravel-nova-ui'
 
-const VARIANT_CLASSES = {
-    default: 'bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200',
-    info: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
-    success: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
-    warning: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
-    danger: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200',
-}
+// Variant colours live in asset.css (.nmr-badge--*): Nova's compiled Tailwind
+// lacks most of the coloured text-* and dark:* utilities.
+const VARIANTS = ['default', 'info', 'success', 'warning', 'danger']
 
 const SIZE_CLASSES = {
     small: 'text-xs px-3 py-1',
@@ -31,11 +27,12 @@ export default {
 
     props: {
         block: { type: Object, required: true },
+        inline: { type: Boolean, default: false },
     },
 
     computed: {
         variantClass() {
-            return VARIANT_CLASSES[this.block.variant] ?? VARIANT_CLASSES.default
+            return `nmr-badge--${VARIANTS.includes(this.block.variant) ? this.block.variant : 'default'}`
         },
         sizeClass() {
             return SIZE_CLASSES[this.block.size] ?? SIZE_CLASSES.medium

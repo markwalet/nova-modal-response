@@ -1,7 +1,7 @@
 <template>
-    <div class="py-3 px-8">
+    <div class="py-2 px-8">
         <div
-            class="flex flex-wrap items-center gap-x-2 gap-y-1"
+            class="flex flex-wrap items-center gap-2"
             :class="alignmentClass"
         >
             <component
@@ -9,6 +9,7 @@
                 :is="blockComponents[atom.type]"
                 :key="index"
                 :block="atom"
+                :inline="true"
             />
         </div>
     </div>

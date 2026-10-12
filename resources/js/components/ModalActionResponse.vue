@@ -3,7 +3,8 @@
            :size="data.size ?? '2xl'"
            @close-via-escape="handleClose"
            role="alertdialog">
-        <div class="mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+        <div class="mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden"
+             :class="{ 'nmr-body--single': (data.blocks ?? []).length === 1 }">
             <slot>
                 <ModalHeader v-text="data.title" />
 

@@ -11,9 +11,14 @@ use Laravel\Nova\Fields\ActionFields;
 use Markwalet\NovaModalResponse\Block;
 use Markwalet\NovaModalResponse\ModalResponse;
 
-class ViewTextStackAction extends Action
+/**
+ * Exhaustive QA backstop: one place to eyeball every block type, variant,
+ * size and alignment. The other workbench actions are realistic scenarios;
+ * this one deliberately enumerates every knob.
+ */
+class BlockGalleryAction extends Action
 {
-    public $name = 'View text stack';
+    public $name = 'Block gallery';
 
     public $withoutConfirmation = true;
 
@@ -142,6 +147,16 @@ class ViewTextStackAction extends Action
                 Block::list(['One', 'Two']),
                 Block::badge('New')->success(),
             ])->expanded(),
+            Block::heading('Tabs — second tab active')->small(),
+            Block::tabs([
+                Block::tab('Request', [
+                    Block::code('GET /api/users/1')->withoutHighlighting(),
+                ]),
+                Block::tab('Response', [
+                    Block::badge('200 OK')->success(),
+                    Block::json(['id' => 1, 'name' => 'Ada']),
+                ])->active(),
+            ]),
             Block::divider(),
             Block::heading('JSON payload')->small(),
             Block::json([
@@ -151,7 +166,8 @@ class ViewTextStackAction extends Action
                 'meta' => ['duration_ms' => 137, 'source' => 'csv'],
             ]),
         ])
-            ->title('Demo — all v2 blocks')
+            ->title('Demo — block gallery')
+            ->size('2xl')
             ->closeButton('Close');
     }
 }

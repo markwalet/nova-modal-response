@@ -15,11 +15,13 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Lenses\Lens;
 use Laravel\Nova\Panel;
 use Laravel\Nova\ResourceTool;
-use Workbench\App\Nova\Actions\ViewBladeViewAction;
-use Workbench\App\Nova\Actions\ViewMarkdownAction;
-use Workbench\App\Nova\Actions\ViewTabsAction;
-use Workbench\App\Nova\Actions\ViewTextStackAction;
-use Workbench\App\Nova\Actions\ViewWithoutHighlightingAction;
+use Workbench\App\Nova\Actions\AboutAppAction;
+use Workbench\App\Nova\Actions\ApiProbeAction;
+use Workbench\App\Nova\Actions\BlockGalleryAction;
+use Workbench\App\Nova\Actions\DeploymentSummaryAction;
+use Workbench\App\Nova\Actions\PreviewPayloadAction;
+use Workbench\App\Nova\Actions\ReleaseNotesAction;
+use Workbench\App\Nova\Actions\UserAuditAction;
 
 class User extends Resource
 {
@@ -113,11 +115,13 @@ class User extends Resource
     public function actions(NovaRequest $request): array
     {
         return [
-            new ViewTextStackAction,
-            new ViewBladeViewAction,
-            new ViewWithoutHighlightingAction,
-            new ViewMarkdownAction,
-            new ViewTabsAction,
+            new PreviewPayloadAction,
+            new ApiProbeAction,
+            new DeploymentSummaryAction,
+            new AboutAppAction,
+            new ReleaseNotesAction,
+            new UserAuditAction,
+            new BlockGalleryAction,
         ];
     }
 }
