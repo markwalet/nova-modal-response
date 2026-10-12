@@ -1,5 +1,5 @@
 <template>
-    <div class="py-3 px-8">
+    <div :class="inline ? '' : 'py-3 px-8'">
         <Icon :name="block.value" :class="[variantClass, sizeClass]" />
     </div>
 </template>
@@ -26,6 +26,7 @@ export default {
 
     props: {
         block: { type: Object, required: true },
+        inline: { type: Boolean, default: false },
     },
 
     computed: {

@@ -173,14 +173,56 @@ html {
 /* Copy button — self-contained so it doesn't depend on Nova's Tailwind bundle. */
 .nmr-code {
     position: relative;
+    padding: 0.75rem 2rem; /* py-3 px-8 — line the code/json block up with the rest of the stack */
+}
+
+/*
+ * Faint, theme-aware code card. highlight.js paints an opaque background on
+ * `.hljs` (white in light, near-black in dark); neutralise it so the
+ * translucent gray shows through and tracks the theme — the same approach as
+ * the markdown fenced-code block above.
+ */
+.nmr-code pre {
+    margin: 0;
+    border-radius: 0.375rem;
+    background-color: rgba(var(--colors-gray-500), 0.1);
+}
+
+.nmr-code pre code.hljs {
+    padding: 0.75rem 1rem;
+    background: transparent;
 }
 
 .nmr-code__copy {
     position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
+    top: calc(0.75rem + 0.5rem); /* clear the wrapper's py-3 so it sits inside the card corner */
+    right: calc(2rem + 0.5rem); /* clear the wrapper's px-8 */
     opacity: 0.4;
     transition: opacity 150ms ease;
+}
+
+/*
+ * Whole-modal code/json — e.g. ModalResponse::code()/json(), or any modal whose
+ * entire body is a single block — renders edge-to-edge rather than as an inset
+ * card. ::code() is wire-identical to ::stack([Block::code]), so the signal is
+ * "the body is a single block" (flagged by ModalActionResponse).
+ */
+.nmr-body--single .nmr-code {
+    padding: 0;
+}
+
+.nmr-body--single .nmr-code pre {
+    border-radius: 0;
+    background: transparent;
+}
+
+.nmr-body--single .nmr-code pre code.hljs {
+    padding: 1rem 2rem;
+}
+
+.nmr-body--single .nmr-code__copy {
+    top: 0.5rem;
+    right: 0.5rem;
 }
 
 .nmr-code:hover .nmr-code__copy,

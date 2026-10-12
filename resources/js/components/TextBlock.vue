@@ -1,5 +1,5 @@
 <template>
-    <div class="py-3 px-8">
+    <div :class="inline ? '' : 'py-2 px-8'">
         <p v-text="block.value"/>
     </div>
 </template>
@@ -8,6 +8,7 @@
 export default {
     props: {
         block: { type: Object, required: true },
+        inline: { type: Boolean, default: false },
     },
 }
 </script>

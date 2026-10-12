@@ -1,5 +1,5 @@
 <template>
-    <div class="py-3 px-8">
+    <div :class="inline ? '' : 'py-3 px-8'">
         <span :class="[variantClass, sizeClass]"
               class="inline-flex items-center gap-1 rounded font-bold">
             <Icon v-if="block.icon && block.iconPosition === 'leading'" :name="block.icon" type="micro" />
@@ -31,6 +31,7 @@ export default {
 
     props: {
         block: { type: Object, required: true },
+        inline: { type: Boolean, default: false },
     },
 
     computed: {
