@@ -17,7 +17,7 @@ The ordered sequence of blocks that makes up a modal's body content. Set via `Mo
 _Avoid_: body, content list, items
 
 **Block**:
-A single, typed unit of modal body content. Blocks render top-to-bottom in the given order. Built-in types: `text`, `heading`, `code`, `json`, `html`, `badge`, `divider`, `list`, `link`, `icon` (plus the authoring-only **view block** and **markdown block**, which both serialize as `html`). A class *is* a block by implementing the `Renderable` contract (the `toArray()` wire-serialization promise); the `Block` factory — alongside `ModalResponse` in the main namespace — is the static hub that constructs them (`Block::badge()`, `Block::code()`, …) and coerces loose values via `Block::normalize()`. The two are distinct: `Block` builds blocks but is not itself a block. Syntax highlighting is carried only by the `code` and `json` blocks (default on, disabled per-block via `->withoutHighlighting()`, or via the `highlight:` flag on the `ModalResponse::code()`/`json()` sugar).
+A single, typed unit of modal body content. Blocks render top-to-bottom in the given order. Built-in types: `text`, `heading`, `code`, `json`, `html`, `badge`, `divider`, `list`, `link`, `icon`, `inline`, `collapsible`, `tabs` (plus the authoring-only **view block** and **markdown block**, which both serialize as `html`). A class *is* a block by implementing the `Renderable` contract (the `toArray()` wire-serialization promise); the `Block` factory — alongside `ModalResponse` in the main namespace — is the static hub that constructs them (`Block::badge()`, `Block::code()`, …) and coerces loose values via `Block::normalize()`. The two are distinct: `Block` builds blocks but is not itself a block. Syntax highlighting is carried only by the `code` and `json` blocks (default on, disabled per-block via `->withoutHighlighting()`, or via the `highlight:` flag on the `ModalResponse::code()`/`json()` sugar).
 _Avoid_: element, node, section
 
 **View block**:
@@ -25,7 +25,7 @@ An authoring-level block that renders a named Blade view server-side and seriali
 _Avoid_: blade block, partial, template
 
 **Inline group**:
-A block (type `inline`) that lays a set of **atoms** on a single horizontal row, instead of stacking them vertically like the rest of the body. Built in PHP via `Block::inline([...])`. The only block that may contain other blocks.
+A block (type `inline`) that lays a set of **atoms** on a single horizontal row, instead of stacking them vertically like the rest of the body. Built in PHP via `Block::inline([...])`. One of the three container blocks, alongside the **collapsible block** and **tabs block** — and the only one restricted to atoms.
 _Avoid_: row, inline block content, flex container
 
 **Alignment**:
