@@ -23,7 +23,7 @@ you maintain your own build).
 ## If you only use the `ModalResponse` PHP API
 
 **Almost no code changes required.** Every v1 method except
-`withoutSyntaxHighlighting()` keeps the same signature and the same observable
+`->withoutSyntaxHighlighting()` keeps the same signature and the same observable
 behavior:
 
 ```php
@@ -63,8 +63,7 @@ available block.
 
 ### `withoutSyntaxHighlighting()` is removed
 
-`ModalResponse::withoutSyntaxHighlighting()` was deprecated in v1.1.3 and is
-removed in v2. Syntax highlighting is now set per `code`/`json` block.
+`->withoutSyntaxHighlighting()` was deprecated in v1.1.3 and is removed in v2. Syntax highlighting is now set per `code`/`json` block.
 
 For the single-block factories, pass `highlight: false` (available since
 v1.1.3):
@@ -88,6 +87,46 @@ ModalResponse::stack([
     Block::json($data)->withoutHighlighting(),
 ]);
 ```
+
+## If your tests assert on the payload
+
+The modal payload moved from flat keys to a `blocks` array, so assertions that
+read `payload['code']`, `payload['body']` or `payload['html']` need updating.
+Find the block by its `type` rather than by index, so the test keeps passing
+when blocks are added around it:
+
+```php
+$payload = $response['modal']->payload;
+
+// v1
+$data = json_decode($payload['code'], true);
+
+// v2
+$block = collect($payload['blocks'])->firstWhere('type', 'json');
+$data = json_decode($block['value'], true);
+```
+
+What the single-block factories emit:
+
+```php
+ModalResponse::json(['ok' => true])->title('Result');
+// ['title' => 'Result', 'blocks' => [
+//     ['type' => 'json', 'value' => "{\n    \"ok\": true\n}", 'highlight' => true],
+// ]]
+
+ModalResponse::code('echo 1;', highlight: false);
+// ['blocks' => [['type' => 'code', 'value' => 'echo 1;', 'highlight' => false]]]
+
+ModalResponse::text('Done');   // ['blocks' => [['type' => 'text', 'value' => 'Done']]]
+ModalResponse::html('<b>x</b>'); // ['blocks' => [['type' => 'html', 'value' => '<b>x</b>']]]
+```
+
+- `json` blocks carry the pretty-printed JSON string in `value`, as v1's
+  `code` key did.
+- `code` blocks only include `language` when you set one with `->language()`.
+- `markdown` and `view` blocks arrive as `type: html` with the rendered HTML in
+  `value`.
+- Chrome keys (`title`, `size`, `closeButtonText`) are only present when set.
 
 ## If you hand-built the payload with `Action::modal('modal-response', …)`
 
@@ -136,10 +175,18 @@ The component's `data` prop changed shape. v1 exposed `data.body`, `data.code`,
   blocks: [
     { type: 'text', value: '…' },
     { type: 'code', value: '…', highlight: true, language: 'bash' },
+    { type: 'json', value: '{\n    "ok": true\n}', highlight: true },
+    { type: 'badge', value: 'Live', variant: 'success', size: 'medium', icon: null, iconPosition: 'leading' },
+    { type: 'inline', alignment: 'spread', value: [ /* atom blocks */ ] },
+    { type: 'tabs', value: [{ label: 'Log', active: false, value: [ /* blocks */ ] }] },
     // …
   ],
 }
 ```
+
+This is a partial list. The full set of types is the map in
+`resources/js/components/blockComponents.js`, and each block's exact keys are
+in its `toArray()` in `src/Blocks/`.
 
 v2 renders the body through a single path: it iterates `data.blocks` and
 dispatches each block through an explicit `{ type → component }` map — there is
