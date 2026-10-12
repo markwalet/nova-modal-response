@@ -1,6 +1,6 @@
 # Release Notes
 
-## [Unreleased](https://github.com/markwalet/nova-modal-response/compare/v1.2.1...v2)
+## [Unreleased](https://github.com/markwalet/nova-modal-response/compare/v1.3.0...main)
 
 ### Changed
 - **Breaking:** the modal body is now an ordered stack of typed blocks, and the payload sent to the browser changed to `{ title, size, closeButtonText, blocks: [...] }`. Code that builds the payload with `Action::modal('modal-response', [...])` breaks; the `ModalResponse` API keeps working. See [UPGRADE.md](UPGRADE.md) and [ADR-0001](docs/adr/0001-single-render-path-with-stacked-blocks.md) ([#21](https://github.com/markwalet/nova-modal-response/issues/21))
@@ -20,6 +20,18 @@
 
 ### Removed
 - `ModalResponse::withoutSyntaxHighlighting()` (deprecated in v1.1.3). Pass `highlight: false` to `ModalResponse::code()`/`json()`, or call `->withoutHighlighting()` on a code or json block
+- The v1 Boost upgrade skill (`nova-modal-response-upgrade-v2`); it only applies to v1 apps, and `boost:update` removes it after upgrading
+
+## [v1.3.0 (2026-10-12)](https://github.com/markwalet/nova-modal-response/compare/v1.2.2...v1.3.0)
+
+### Added
+- Added a Laravel Boost skill that upgrades apps to v2 ([#53](https://github.com/markwalet/nova-modal-response/issues/53))
+
+## [v1.2.2 (2026-10-12)](https://github.com/markwalet/nova-modal-response/compare/v1.2.1...v1.2.2)
+
+### Fixed
+- JSON modals are always highlighted as JSON. Auto-detection guessed wrong for common payloads (e.g. a simple user record was highlighted as Perl)
+- Code and JSON modals no longer show a white scrollbar track in dark mode when a line overflows
 
 ## [v1.2.1 (2026-05-28)](https://github.com/markwalet/nova-modal-response/compare/v1.2.0...v1.2.1)
 
