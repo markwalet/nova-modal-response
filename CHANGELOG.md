@@ -1,6 +1,8 @@
 # Release Notes
 
-## [Unreleased](https://github.com/markwalet/nova-modal-response/compare/v1.2.1...main)
+## [Unreleased](https://github.com/markwalet/nova-modal-response/compare/v1.2.2...main)
+
+## [v1.2.2 (2026-10-12)](https://github.com/markwalet/nova-modal-response/compare/v1.2.1...v1.2.2)
 
 ### Fixed
 - JSON modals are always highlighted as JSON. Auto-detection guessed wrong for common payloads (e.g. a simple user record was highlighted as Perl)
