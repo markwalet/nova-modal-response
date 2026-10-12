@@ -8,11 +8,12 @@ use Illuminate\Support\Collection;
 use Laravel\Nova\Actions\Action;
 use Laravel\Nova\Actions\ActionResponse;
 use Laravel\Nova\Fields\ActionFields;
+use Laravel\Nova\Nova;
 use Markwalet\NovaModalResponse\ModalResponse;
 
-class ViewJsonSnippetModalAction extends Action
+class AboutAppAction extends Action
 {
-    public $name = 'Show JSON snippet';
+    public $name = 'About this app';
 
     public $withoutConfirmation = true;
 
@@ -20,17 +21,12 @@ class ViewJsonSnippetModalAction extends Action
 
     public function handle(ActionFields $fields, Collection $models): Action|ActionResponse
     {
-        $data = [
-            'lorem' => 'ipsum',
-            'dolor' => [
-                'sit',
-                'amet',
-            ],
-        ];
-
-        return ModalResponse::json($data)
-            ->title('JSON Snippet')
-            ->withoutSyntaxHighlighting()
-            ->closeButton('I\'ve seen enough!');
+        return ModalResponse::view('workbench::about', [
+            'php' => PHP_VERSION,
+            'laravel' => app()->version(),
+            'nova' => Nova::version(),
+        ])
+            ->title('Demo — about this app')
+            ->closeButton('Close');
     }
 }

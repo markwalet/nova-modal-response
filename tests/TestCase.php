@@ -16,4 +16,9 @@ abstract class TestCase extends BaseTestCase
             AssetServiceProvider::class,
         ];
     }
+
+    protected function defineEnvironment($app): void
+    {
+        $app['view']->addLocation(__DIR__.'/fixtures/views');
+    }
 }

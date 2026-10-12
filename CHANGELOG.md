@@ -2,6 +2,26 @@
 
 ## [Unreleased](https://github.com/markwalet/nova-modal-response/compare/v1.3.0...main)
 
+### Changed
+- **Breaking:** the modal body is now an ordered stack of typed blocks, and the payload sent to the browser changed to `{ title, size, closeButtonText, blocks: [...] }`. Code that builds the payload with `Action::modal('modal-response', [...])` breaks; the `ModalResponse` API keeps working. See [UPGRADE.md](UPGRADE.md) and [ADR-0001](docs/adr/0001-single-render-path-with-stacked-blocks.md) ([#21](https://github.com/markwalet/nova-modal-response/issues/21))
+- A `console.warn` is logged when a modal receives v1 payload keys (`body`, `code`, `html`, `highlight`) ([#42](https://github.com/markwalet/nova-modal-response/issues/42))
+- Rewrote the README and the Boost skill (`nova-modal-response-development`) for the v2 API ([#31](https://github.com/markwalet/nova-modal-response/issues/31))
+
+### Added
+- `ModalResponse::stack([...])` to combine multiple blocks in one modal; accepts an array or a closure ([#22](https://github.com/markwalet/nova-modal-response/issues/22))
+- `Block` factory (`Markwalet\NovaModalResponse\Block`) with these blocks: `text`, `heading`, `list`, `divider`, `code`, `json`, `html`, `markdown`, `view`, `badge`, `icon`, `link`, `inline`, `collapsible` and `tabs` (see [#21](https://github.com/markwalet/nova-modal-response/issues/21))
+- `ModalResponse::markdown()`, `ModalResponse::view()` and `ModalResponse::tabs()` shortcuts ([#58](https://github.com/markwalet/nova-modal-response/issues/58), [#59](https://github.com/markwalet/nova-modal-response/issues/59), [#67](https://github.com/markwalet/nova-modal-response/issues/67))
+- Bare strings in a stack, inline group, collapsible or tab become text blocks ([#56](https://github.com/markwalet/nova-modal-response/issues/56))
+- Shared `small`/`medium`/`large` sizes on heading, badge, icon and link blocks, and `default`/`info`/`success`/`warning`/`danger` variants on badge and icon blocks, backed by the `Size` and `Variant` enums ([#26](https://github.com/markwalet/nova-modal-response/issues/26), [#27](https://github.com/markwalet/nova-modal-response/issues/27), [#80](https://github.com/markwalet/nova-modal-response/issues/80))
+- Embedded icons on link and badge blocks via `->icon($name, trailing: false)` ([#55](https://github.com/markwalet/nova-modal-response/issues/55))
+- Inline group alignment: `spread()`, `center()`, `end()` ([#61](https://github.com/markwalet/nova-modal-response/issues/61))
+- Per-block syntax highlighting control with `->withoutHighlighting()` on code and json blocks, and `->language()` on code blocks
+- Copy-to-clipboard button on every code and json block, including those nested in collapsibles and tabs ([#77](https://github.com/markwalet/nova-modal-response/issues/77))
+
+### Removed
+- `ModalResponse::withoutSyntaxHighlighting()` (deprecated in v1.1.3). Pass `highlight: false` to `ModalResponse::code()`/`json()`, or call `->withoutHighlighting()` on a code or json block
+- The v1 Boost upgrade skill (`nova-modal-response-upgrade-v2`); it only applies to v1 apps, and `boost:update` removes it after upgrading
+
 ## [v1.3.0 (2026-10-12)](https://github.com/markwalet/nova-modal-response/compare/v1.2.2...v1.3.0)
 
 ### Added

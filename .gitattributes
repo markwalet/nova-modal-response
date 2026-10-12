@@ -10,3 +10,5 @@ CONTRIBUTING.md export-ignore
 .styleci.yml export-ignore
 workbench export-ignore
 phpunit.xml export-ignore
+/art export-ignore
+/scripts export-ignore

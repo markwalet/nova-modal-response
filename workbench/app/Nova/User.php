@@ -15,9 +15,14 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Lenses\Lens;
 use Laravel\Nova\Panel;
 use Laravel\Nova\ResourceTool;
-use Workbench\App\Nova\Actions\ViewCodeSnippetAction;
-use Workbench\App\Nova\Actions\ViewJsonSnippetModalAction;
-use Workbench\App\Nova\Actions\ViewRawHtmlAction;
+use Workbench\App\Nova\Actions\AboutAppAction;
+use Workbench\App\Nova\Actions\ApiProbeAction;
+use Workbench\App\Nova\Actions\BlockGalleryAction;
+use Workbench\App\Nova\Actions\DeploymentSummaryAction;
+use Workbench\App\Nova\Actions\PreviewPayloadAction;
+use Workbench\App\Nova\Actions\ReleaseNotesAction;
+use Workbench\App\Nova\Actions\ScreenshotAction;
+use Workbench\App\Nova\Actions\UserAuditAction;
 
 class User extends Resource
 {
@@ -111,9 +116,16 @@ class User extends Resource
     public function actions(NovaRequest $request): array
     {
         return [
-            new ViewJsonSnippetModalAction,
-            new ViewCodeSnippetAction,
-            new ViewRawHtmlAction,
+            new PreviewPayloadAction,
+            new ApiProbeAction,
+            new DeploymentSummaryAction,
+            new AboutAppAction,
+            new ReleaseNotesAction,
+            new UserAuditAction,
+            new BlockGalleryAction,
+            ...(env('NMR_SCREENSHOTS')
+                ? array_map(fn (string $scene) => new ScreenshotAction($scene), ScreenshotAction::SCENES)
+                : []),
         ];
     }
 }
