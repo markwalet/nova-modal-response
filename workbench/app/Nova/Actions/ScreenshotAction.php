@@ -23,6 +23,8 @@ class ScreenshotAction extends Action
 
     public $withoutConfirmation = true;
 
+    public $showInline = true;
+
     public function __construct(private readonly string $scene)
     {
         if (! in_array($scene, self::SCENES, true)) {
@@ -68,14 +70,6 @@ class ScreenshotAction extends Action
             ]),
             Block::inline(['Duration', Block::badge('42s')])->spread(),
             Block::inline(['Commit', Block::badge('a1b2c3d')])->spread(),
-            Block::divider(),
-            Block::heading('Steps')->small(),
-            Block::list([
-                'Install dependencies',
-                'Run migrations',
-                'Compile assets',
-                'Restart workers',
-            ])->ordered(),
             Block::collapsible('Build log', Block::code($log)->withoutHighlighting())->expanded(),
             Block::divider(),
             Block::inline([
@@ -104,7 +98,7 @@ class ScreenshotAction extends Action
                 'Correct the rows in the source file',
                 'Re-run the import with "Only failed rows"',
             ])->ordered(),
-        ])->title('Customer import');
+        ])->title('Customer import')->size('xl');
     }
 
     private function code(): ModalResponse
@@ -124,7 +118,7 @@ class ScreenshotAction extends Action
                 'order' => ['number' => 10421, 'total' => 129.95, 'currency' => 'EUR'],
             ]),
             Block::markdown('Delivered on the **second** attempt. See the [retry policy](https://example.com/docs/retries) for the backoff schedule.'),
-        ])->title('Webhook delivery');
+        ])->title('Webhook delivery')->size('xl');
     }
 
     private function inline(): ModalResponse
@@ -141,7 +135,7 @@ class ScreenshotAction extends Action
             Block::divider(),
             Block::inline([
                 Block::badge('B2B'),
-                Block::badge('Returning customer')->info(),
+                Block::badge('Returning')->info(),
                 Block::badge('Verified')->success(),
                 Block::badge('Backorder')->warning(),
                 Block::badge('Chargeback risk')->danger(),
@@ -155,7 +149,7 @@ class ScreenshotAction extends Action
                 Block::link('Download invoice', 'https://example.com')->icon('arrow-down-tray'),
                 Block::link('Customer profile', 'https://example.com'),
             ]),
-        ])->title('Order #10421');
+        ])->title('Order #10421')->size('xl');
     }
 
     private function containers(): ModalResponse
@@ -179,7 +173,7 @@ class ScreenshotAction extends Action
             'Activity' => [
                 Block::text('Last login 3 days ago.'),
             ],
-        ])->title('Customer #5521');
+        ])->title('Customer #5521')->size('xl');
     }
 
     private function oneLiner(): ModalResponse
@@ -193,6 +187,6 @@ class ScreenshotAction extends Action
                 'currency' => 'EUR',
                 'customer' => ['id' => 5521, 'email' => 'ada@example.com'],
             ],
-        ])->title('Webhook payload');
+        ])->title('Webhook payload')->size('xl');
     }
 }
