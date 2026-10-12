@@ -1,6 +1,8 @@
 # Release Notes
 
-## [Unreleased](https://github.com/markwalet/nova-modal-response/compare/v1.2.2...main)
+## [Unreleased](https://github.com/markwalet/nova-modal-response/compare/v1.3.0...main)
+
+## [v1.3.0 (2026-10-12)](https://github.com/markwalet/nova-modal-response/compare/v1.2.2...v1.3.0)
 
 ### Added
 - Added a Laravel Boost skill that upgrades apps to v2 ([#53](https://github.com/markwalet/nova-modal-response/issues/53))
