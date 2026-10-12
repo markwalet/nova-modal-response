@@ -2,6 +2,10 @@
 
 ## [Unreleased](https://github.com/markwalet/nova-modal-response/compare/v1.2.1...main)
 
+### Fixed
+- JSON modals are always highlighted as JSON. Auto-detection guessed wrong for common payloads (e.g. a simple user record was highlighted as Perl)
+- Code and JSON modals no longer show a white scrollbar track in dark mode when a line overflows
+
 ## [v1.2.1 (2026-05-28)](https://github.com/markwalet/nova-modal-response/compare/v1.2.0...v1.2.1)
 
 ### Changed
