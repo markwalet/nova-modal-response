@@ -229,9 +229,9 @@ html .nmr-code pre code.hljs {
 
 /*
  * Whole-modal code/json — e.g. ModalResponse::code()/json(), or any modal whose
- * entire body is a single block — renders edge-to-edge rather than as an inset
- * card. ::code() is wire-identical to ::stack([Block::code]), so the signal is
- * "the body is a single block" (flagged by ModalActionResponse).
+ * entire body is a single code/json block — renders edge-to-edge rather than as
+ * an inset card. ::code() is wire-identical to ::stack([Block::code]), so the
+ * signal is "the body is one code/json block" (flagged by ModalActionResponse).
  */
 .nmr-body--single .nmr-code {
     padding: 0;
