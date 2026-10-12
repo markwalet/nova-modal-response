@@ -7,7 +7,7 @@
 
 Enabling custom modals for action responses in [Laravel Nova](https://nova.laravel.com).
 
-![Example screenshot](readme-heading.png)
+<p align="center"><img src="art/hero.png" alt="A Nova modal with a heading, status badges, a numbered list, a collapsible build log and a button link, shown in light and dark mode" width="640"></p>
 
 More info for this specific feature can be found in the [Nova Documentation](https://nova.laravel.com/docs/v5/actions/defining-actions#custom-modal-responses).
 
@@ -47,6 +47,8 @@ ModalResponse::json(['lorem' => 'ipsum', 'dolor' => ['sit', 'amet']]);
 ModalResponse::markdown("## Done\n\nImported **42** rows.");
 ModalResponse::view('reports.summary', ['report' => $report]);
 ```
+
+<p align="center"><img src="art/one-liner.png" alt="ModalResponse::json() rendering a highlighted JSON payload" width="560"></p>
 
 `code()` and `json()` are syntax highlighted with [highlight.js](https://highlightjs.org/). Pass `highlight: false` to turn that off:
 
@@ -95,6 +97,8 @@ return ModalResponse::stack([
 
 All blocks are built through the `Markwalet\NovaModalResponse\Block` factory.
 
+<p align="center"><img src="art/blocks-text.png" alt="Heading, text, divider and list blocks" width="560"></p>
+
 #### Text
 
 A single paragraph of escaped text. Whitespace and newlines are not preserved; use `code` or `list` for multi-line output.
@@ -127,6 +131,8 @@ A horizontal rule between blocks.
 ```php
 Block::divider();
 ```
+
+<p align="center"><img src="art/blocks-code.png" alt="Code, JSON and markdown blocks" width="560"></p>
 
 #### Code
 
@@ -170,6 +176,8 @@ Renders a Blade view on the server and shows the result as HTML.
 Block::view('reports.summary', ['report' => $report]);
 ```
 
+<p align="center"><img src="art/blocks-inline.png" alt="Inline rows of icons, badges in every variant, and links" width="560"></p>
+
 #### Badge
 
 A small coloured label. Variants: `default()` (default), `info()`, `success()`, `warning()`, `danger()`. Sizes: `small()`, `medium()` (default), `large()`. Add a [Heroicon](https://heroicons.com) inside the badge with `icon($name)`; pass `trailing: true` to put it after the label.
@@ -206,6 +214,8 @@ Block::inline([
     Block::badge('Live')->success(),
 ])->spread();
 ```
+
+<p align="center"><img src="art/blocks-containers.png" alt="Tabs containing key/value rows and collapsible sections" width="560"></p>
 
 #### Collapsible
 
