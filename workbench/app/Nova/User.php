@@ -21,6 +21,7 @@ use Workbench\App\Nova\Actions\BlockGalleryAction;
 use Workbench\App\Nova\Actions\DeploymentSummaryAction;
 use Workbench\App\Nova\Actions\PreviewPayloadAction;
 use Workbench\App\Nova\Actions\ReleaseNotesAction;
+use Workbench\App\Nova\Actions\ScreenshotAction;
 use Workbench\App\Nova\Actions\UserAuditAction;
 
 class User extends Resource
@@ -122,6 +123,9 @@ class User extends Resource
             new ReleaseNotesAction,
             new UserAuditAction,
             new BlockGalleryAction,
+            ...(env('NMR_SCREENSHOTS')
+                ? array_map(fn (string $scene) => new ScreenshotAction($scene), ScreenshotAction::SCENES)
+                : []),
         ];
     }
 }
