@@ -1,5 +1,5 @@
 <template>
-    <div :class="inline ? '' : 'py-3 px-8'">
+    <div :class="inline ? 'flex' : 'py-3 px-8'">
         <a
             :href="block.href"
             :target="block.newTab ? '_blank' : null"
