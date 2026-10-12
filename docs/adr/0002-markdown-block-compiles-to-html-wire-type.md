@@ -62,3 +62,12 @@ apparent inconsistency by adding a client-side renderer.
   with no new field, `HtmlBlock.vue` stays dumb, and raw `html` blocks are left
   unstyled (they remain author-controlled markup). The styling lives entirely in
   the markdown-scoped wrapper + CSS, never in the shared `html` render path.
+
+## Note (2026-10)
+
+The "safe-by-default config" and "compiled, escaped HTML" wording above is
+wrong. `Str::markdown()` runs league/commonmark's GitHub-flavored converter with
+its default options, which pass raw HTML (e.g. `<img onerror=…>`) and
+`javascript:` links straight through; only the handful of tags GFM disallows
+(`<script>`, `<iframe>`, …) are escaped. Markdown block content is therefore
+unsanitized, the same trusted-input model as the `html` block.
