@@ -11,6 +11,11 @@ html {
     position: relative;
 }
 
+/* Dark scrollbar track when a long line overflows (defaults to a light one otherwise). */
+html.dark .nmr-code pre {
+    color-scheme: dark;
+}
+
 .nmr-code__copy {
     position: absolute;
     top: 0.5rem;
