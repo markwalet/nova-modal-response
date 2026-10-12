@@ -208,7 +208,8 @@ ol.nmr-list {
     background-color: rgba(var(--colors-gray-500), 0.1);
 }
 
-.nmr-code pre code.hljs {
+/* `html` prefix: the github-dark theme's `html.dark pre code.hljs` padding would otherwise win in dark mode. */
+html .nmr-code pre code.hljs {
     padding: 0.75rem 1rem;
     background: transparent;
 }
@@ -228,9 +229,9 @@ ol.nmr-list {
 
 /*
  * Whole-modal code/json — e.g. ModalResponse::code()/json(), or any modal whose
- * entire body is a single block — renders edge-to-edge rather than as an inset
- * card. ::code() is wire-identical to ::stack([Block::code]), so the signal is
- * "the body is a single block" (flagged by ModalActionResponse).
+ * entire body is a single code/json block — renders edge-to-edge rather than as
+ * an inset card. ::code() is wire-identical to ::stack([Block::code]), so the
+ * signal is "the body is one code/json block" (flagged by ModalActionResponse).
  */
 .nmr-body--single .nmr-code {
     padding: 0;

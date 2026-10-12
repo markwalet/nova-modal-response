@@ -1,5 +1,5 @@
 <template>
-    <div :class="inline ? '' : 'py-3 px-8'">
+    <div :class="inline ? 'flex' : 'py-3 px-8'">
         <Icon :name="block.value" :class="[variantClass, sizeClass]" />
     </div>
 </template>

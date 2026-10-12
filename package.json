@@ -6,14 +6,17 @@
     "watch": "mix watch",
     "watch-poll": "mix watch -- --watch-options-poll=1000",
     "prod": "npm run production",
-    "production": "mix --production"
+    "production": "mix --production",
+    "screenshots": "node scripts/screenshots.mjs"
   },
   "devDependencies": {
     "@highlightjs/vue-plugin": "^2.1.0",
     "concurrently": "^9.2.1",
     "laravel-nova-devtool": "file:vendor/laravel/nova-devtool",
+    "playwright": "^1.64.0",
     "postcss": "^8.4.49",
     "postcss-loader": "^8.1.1",
-    "postcss-partial-import": "^2.1.0"
+    "postcss-partial-import": "^2.1.0",
+    "sharp": "^0.35.5"
   }
 }

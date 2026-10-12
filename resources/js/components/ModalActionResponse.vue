@@ -4,7 +4,7 @@
            @close-via-escape="handleClose"
            role="alertdialog">
         <div class="mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden"
-             :class="{ 'nmr-body--single': (data.blocks ?? []).length === 1 }">
+             :class="{ 'nmr-body--single': isSingleCodeBlock }">
             <slot>
                 <ModalHeader v-text="data.title" />
 
@@ -62,6 +62,17 @@ export default {
         return {
             blockComponents,
         }
+    },
+
+    computed: {
+        // A modal whose whole body is one code/json block (e.g. ModalResponse::code())
+        // renders it edge-to-edge. Checking the type keeps code nested in tabs or a
+        // collapsible as a normal inset card.
+        isSingleCodeBlock() {
+            const blocks = this.data.blocks ?? []
+
+            return blocks.length === 1 && ['code', 'json'].includes(blocks[0].type)
+        },
     },
 
     mounted() {
