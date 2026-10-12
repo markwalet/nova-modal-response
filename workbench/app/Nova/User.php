@@ -19,6 +19,7 @@ use Workbench\App\Nova\Actions\AboutAppAction;
 use Workbench\App\Nova\Actions\ApiProbeAction;
 use Workbench\App\Nova\Actions\BlockGalleryAction;
 use Workbench\App\Nova\Actions\DeploymentSummaryAction;
+use Workbench\App\Nova\Actions\PreviewPayloadAction;
 use Workbench\App\Nova\Actions\ReleaseNotesAction;
 use Workbench\App\Nova\Actions\UserAuditAction;
 
@@ -114,6 +115,7 @@ class User extends Resource
     public function actions(NovaRequest $request): array
     {
         return [
+            new PreviewPayloadAction,
             new ApiProbeAction,
             new DeploymentSummaryAction,
             new AboutAppAction,

@@ -147,6 +147,16 @@ class BlockGalleryAction extends Action
                 Block::list(['One', 'Two']),
                 Block::badge('New')->success(),
             ])->expanded(),
+            Block::heading('Tabs — second tab active')->small(),
+            Block::tabs([
+                Block::tab('Request', [
+                    Block::code('GET /api/users/1')->withoutHighlighting(),
+                ]),
+                Block::tab('Response', [
+                    Block::badge('200 OK')->success(),
+                    Block::json(['id' => 1, 'name' => 'Ada']),
+                ])->active(),
+            ]),
             Block::divider(),
             Block::heading('JSON payload')->small(),
             Block::json([

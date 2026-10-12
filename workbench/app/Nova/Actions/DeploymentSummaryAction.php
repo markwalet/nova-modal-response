@@ -30,10 +30,10 @@ class DeploymentSummaryAction extends Action
             LOG;
 
         return ModalResponse::stack([
-            Block::heading('Deployment summary'),
+            Block::heading('Deploy #1284'),
             Block::inline([
                 Block::icon('check-circle')->success(),
-                Block::text('Deploy #1284 succeeded'),
+                Block::text('Succeeded'),
                 Block::badge('production')->info(),
             ]),
             Block::inline([

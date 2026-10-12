@@ -9,21 +9,42 @@ use Illuminate\Support\Facades\Http;
 use Laravel\Nova\Actions\Action;
 use Laravel\Nova\Actions\ActionResponse;
 use Laravel\Nova\Fields\ActionFields;
+use Laravel\Nova\Fields\Select;
+use Laravel\Nova\Http\Requests\NovaRequest;
 use Markwalet\NovaModalResponse\Block;
 use Markwalet\NovaModalResponse\ModalResponse;
 use Throwable;
 
 class ApiProbeAction extends Action
 {
-    public $name = 'API probe';
+    private const ENDPOINTS = [
+        'ok' => 'https://jsonplaceholder.typicode.com/todos?_page=1&_limit=3',
+        'not-found' => 'https://jsonplaceholder.typicode.com/todos/0',
+        'unreachable' => 'https://api.example.invalid/todos',
+    ];
 
-    public $withoutConfirmation = true;
+    public $name = 'API probe';
 
     public $showInline = true;
 
+    public $confirmButtonText = 'Probe';
+
+    public function fields(NovaRequest $request): array
+    {
+        return [
+            Select::make('Scenario')
+                ->options([
+                    'ok' => 'Successful request',
+                    'not-found' => '404 response',
+                    'unreachable' => 'Unreachable host',
+                ])
+                ->default('ok'),
+        ];
+    }
+
     public function handle(ActionFields $fields, Collection $models): Action|ActionResponse
     {
-        $endpoint = 'https://jsonplaceholder.typicode.com/todos?_page=1&_limit=3';
+        $endpoint = self::ENDPOINTS[$fields->get('scenario')] ?? self::ENDPOINTS['ok'];
 
         $start = microtime(true);
 
@@ -32,8 +53,8 @@ class ApiProbeAction extends Action
 
             $ok = $response->successful();
             $status = $response->status();
-            $total = $response->header('X-Total-Count');
-            $body = $response->json();
+            $total = $response->header('X-Total-Count') ?: null;
+            $body = $response->json() ?? ['body' => $response->body()];
         } catch (Throwable $e) {
             $ok = false;
             $status = 0;
@@ -54,19 +75,17 @@ class ApiProbeAction extends Action
             $statusRow[] = Block::badge(count($body).' of '.$total);
         }
 
-        $blocks = [
+        return ModalResponse::stack([
             Block::inline($statusRow),
-        ];
-
-        $blocks[] = Block::heading('Response body')->small();
-        $blocks[] = Block::json($body);
-        $blocks[] = Block::inline([
-            Block::link('API docs', 'https://jsonplaceholder.typicode.com/guide/')
-                ->newTab()
-                ->icon('arrow-top-right-on-square', trailing: true),
-        ]);
-
-        return ModalResponse::stack($blocks)
+            Block::text($endpoint),
+            Block::heading($ok ? 'Response body' : 'Error')->small(),
+            Block::json($body),
+            Block::inline([
+                Block::link('API docs', 'https://jsonplaceholder.typicode.com/guide/')
+                    ->newTab()
+                    ->icon('arrow-top-right-on-square', trailing: true),
+            ]),
+        ])
             ->title('Demo — API probe')
             ->size('2xl')
             ->closeButton('Close');

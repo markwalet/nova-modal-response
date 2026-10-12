@@ -25,16 +25,23 @@ class UserAuditAction extends Action
         /** @var User $user */
         $user = $models->first();
 
+        $verified = $user->email_verified_at !== null;
+
         return ModalResponse::tabs([
             'Overview' => [
-                Block::heading('Overview'),
                 Block::inline([
                     Block::text('Name'),
-                    Block::badge($user->name),
+                    Block::text($user->name),
                 ])->spread(),
                 Block::inline([
                     Block::text('Email'),
-                    Block::badge($user->email),
+                    Block::text($user->email),
+                ])->spread(),
+                Block::inline([
+                    Block::text('Status'),
+                    $verified
+                        ? Block::badge('Verified')->success()->icon('check-circle')
+                        : Block::badge('Unverified')->warning()->icon('exclamation-triangle'),
                 ])->spread(),
                 Block::inline([
                     Block::text('ID'),
@@ -42,15 +49,12 @@ class UserAuditAction extends Action
                 ])->spread(),
             ],
             'Roles' => [
-                Block::heading('Roles'),
                 Block::inline([
                     Block::badge('Admin')->success()->icon('shield-check'),
                     Block::badge('Editor')->info()->icon('pencil-square'),
-                    Block::badge('Suspended')->danger()->icon('no-symbol'),
                 ]),
             ],
             'Raw' => [
-                Block::heading('Raw record'),
                 Block::json($user->toArray()),
             ],
         ])
