@@ -4,7 +4,8 @@
         <template v-if="block.highlight === false">
             <pre><code ref="plaintextCode" class="language-plaintext" v-text="block.value" /></pre>
         </template>
-        <highlightjs v-else-if="block.language" :language="block.language" :code="block.value" />
+        <!-- autodetect defaults to true in the plugin and would override `language`. -->
+        <highlightjs v-else-if="block.language" :language="block.language" :autodetect="false" :code="block.value" />
         <highlightjs v-else autodetect :code="block.value" />
     </div>
 </template>
