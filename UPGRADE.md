@@ -1,72 +1,59 @@
-# Upgrading to v2
+# Upgrade Guide
 
-v2 reshapes the modal body into an ordered **stack** of typed **blocks**. The
-PHP API you already use is preserved, but the payload sent to the browser (the
-**wire format**) changed, and one published shortcut is removed.
+- [Upgrading To 2.0 From 1.x](#upgrading-to-20-from-1x)
 
-Read the section that matches how you use the package. Most callers only need
-the first one.
+## High Impact Changes
 
-## Requirements
+- [Updating Dependencies](#updating-dependencies)
 
-Unchanged from v1: PHP `^8.2`, `laravel/framework ^12.0|^13.0`,
-`laravel/nova ^5.0`. Upgrading is a version bump:
+## Medium Impact Changes
+
+- [`withoutSyntaxHighlighting()` Removed](#withoutsyntaxhighlighting-removed)
+- [Payload Assertions In Tests](#payload-assertions-in-tests)
+
+## Low Impact Changes
+
+- [Hand-Built `modal-response` Payloads](#hand-built-modal-response-payloads)
+- [Custom Vue Component](#custom-vue-component)
+
+## Upgrading To 2.0 From 1.x
+
+#### Estimated Upgrade Time: 5 Minutes
+
+> [!NOTE]
+> We attempt to document every possible breaking change. Since some of these breaking changes are in obscure parts of the package, only a portion of them may actually affect your application. If you only build modals through the `ModalResponse` PHP API, updating the dependency is usually all it takes.
+
+> [!TIP]
+> Using [Laravel Boost](https://github.com/laravel/boost)? Update to the latest 1.x release first: it ships an upgrade skill. Ask your coding agent to upgrade nova-modal-response to v2 and it scans your app, migrates what this guide describes, and verifies the result.
+
+v2 reshapes the modal body into an ordered stack of typed blocks. The PHP API you already use is preserved, but the payload sent to the browser changed. For what's new, see the [README](README.md#blocks).
+
+### Updating Dependencies
+
+**Likelihood Of Impact: High**
+
+Update the package constraint in your application's `composer.json`:
 
 ```bash
 composer require markwalet/nova-modal-response:^2.0
 ```
 
-If you publish or override this package's frontend assets, rebuild them after
-upgrading (the compiled `dist/` ships with the package, so this only applies if
-you maintain your own build).
+The platform requirements are unchanged: PHP `^8.2`, `laravel/framework ^12.0|^13.0` and `laravel/nova ^5.0`.
 
-## If you only use the `ModalResponse` PHP API
+If you use Laravel Boost, run `php artisan boost:update` afterwards so your agents get the v2 version of the package's development skill.
 
-**Almost no code changes required.** Every v1 method except
-`->withoutSyntaxHighlighting()` keeps the same signature and the same observable
-behavior:
+The compiled frontend assets ship with the package. You only need to rebuild anything if you maintain your own build of this package's frontend.
 
-```php
-ModalResponse::text('…')->title('…');
-ModalResponse::html('…');
-ModalResponse::code(file_get_contents(__FILE__))->title('…');
-ModalResponse::json(['key' => 'value']);
+### Syntax Highlighting
 
-// chrome setters, all unchanged
-->title('…')
-->size('7xl')
-->closeButton('…')
-```
+<a name="withoutsyntaxhighlighting-removed"></a>
+#### `withoutSyntaxHighlighting()` Removed
 
-Under the hood each of these now builds a single-block stack instead of a
-flat payload, but you don't have to change anything.
+**Likelihood Of Impact: Medium**
 
-New in v2 — you can now combine content in one modal instead of being limited
-to a single shape:
+The `->withoutSyntaxHighlighting()` method was deprecated in v1.1.3 and has been removed. Syntax highlighting is now set per `code` or `json` block.
 
-```php
-use Markwalet\NovaModalResponse\Block;
-use Markwalet\NovaModalResponse\ModalResponse;
-
-ModalResponse::stack([
-    Block::heading('Import finished')->large(),
-    Block::text('Processed 1,204 rows.'),
-    Block::badge('3 warnings')->warning(),
-    Block::divider(),
-    Block::code($logExcerpt)->language('bash'),
-])->title('Result');
-```
-
-`stack()` also accepts a closure returning the block array, and bare strings
-in the array become text blocks. See the [README](README.md#blocks) for every
-available block.
-
-### `withoutSyntaxHighlighting()` is removed
-
-`->withoutSyntaxHighlighting()` was deprecated in v1.1.3 and is removed in v2. Syntax highlighting is now set per `code`/`json` block.
-
-For the single-block factories, pass `highlight: false` (available since
-v1.1.3):
+For the single-block factories, pass `highlight: false` instead. This argument is available since v1.1.3, so you can migrate before updating:
 
 ```php
 // v1
@@ -78,8 +65,7 @@ ModalResponse::code($snippet, highlight: false);
 ModalResponse::json($data, highlight: false);
 ```
 
-Inside a stack, call `withoutHighlighting()` on each block that should render
-as plain text:
+Inside a stack, call `withoutHighlighting()` on each block that should render as plain text:
 
 ```php
 ModalResponse::stack([
@@ -88,25 +74,30 @@ ModalResponse::stack([
 ]);
 ```
 
-## If your tests assert on the payload
+### Testing
 
-The modal payload moved from flat keys to a `blocks` array, so assertions that
-read `payload['code']`, `payload['body']` or `payload['html']` need updating.
-Find the block by its `type` rather than by index, so the test keeps passing
-when blocks are added around it:
+<a name="payload-assertions-in-tests"></a>
+#### Payload Assertions In Tests
+
+**Likelihood Of Impact: Medium**
+
+The modal payload moved from flat keys to a `blocks` array. Tests that read `payload['code']`, `payload['body']` or `payload['html']` need updating. Find the block by its `type` rather than by index, so the test keeps passing when blocks are added around it:
 
 ```php
-$payload = $response['modal']->payload;
-
 // v1
-$data = json_decode($payload['code'], true);
+$data = json_decode($response['modal']->payload['code'], true);
 
 // v2
-$block = collect($payload['blocks'])->firstWhere('type', 'json');
+$blocks = $response['modal']->payload['blocks'];
+$this->assertIsArray($blocks);
+
+$block = collect($blocks)->firstWhere('type', 'json');
 $data = json_decode($block['value'], true);
 ```
 
-What the single-block factories emit:
+The `assertIsArray()` call narrows the payload's type, so this snippet passes PHPStan up to level 8 as written.
+
+This is what the single-block factories emit:
 
 ```php
 ModalResponse::json(['ok' => true])->title('Result');
@@ -117,38 +108,37 @@ ModalResponse::json(['ok' => true])->title('Result');
 ModalResponse::code('echo 1;', highlight: false);
 // ['blocks' => [['type' => 'code', 'value' => 'echo 1;', 'highlight' => false]]]
 
-ModalResponse::text('Done');   // ['blocks' => [['type' => 'text', 'value' => 'Done']]]
+ModalResponse::text('Done');     // ['blocks' => [['type' => 'text', 'value' => 'Done']]]
 ModalResponse::html('<b>x</b>'); // ['blocks' => [['type' => 'html', 'value' => '<b>x</b>']]]
 ```
 
-- `json` blocks carry the pretty-printed JSON string in `value`, as v1's
-  `code` key did.
+- `json` blocks carry the pretty-printed JSON string in `value`, as v1's `code` key did.
 - `code` blocks only include `language` when you set one with `->language()`.
-- `markdown` and `view` blocks arrive as `type: html` with the rendered HTML in
-  `value`.
-- Chrome keys (`title`, `size`, `closeButtonText`) are only present when set.
+- `markdown` and `view` blocks arrive as `type: html`, with the rendered HTML in `value`.
+- The `title`, `size` and `closeButtonText` keys are only present when set.
 
-## If you hand-built the payload with `Action::modal('modal-response', …)`
+### Payload Format
 
-**This pattern is removed in v2.** v1 documented building the payload directly:
+<a name="hand-built-modal-response-payloads"></a>
+#### Hand-Built `modal-response` Payloads
+
+**Likelihood Of Impact: Low**
+
+v1 documented building the payload directly with `Action::modal('modal-response', [...])`. This pattern no longer works:
 
 ```php
-// v1 — no longer works
+// v1: no longer works
 return Action::modal('modal-response', [
     'title' => 'Result',
-    'body'  => 'Done!',
+    'body' => 'Done!',
 ]);
 ```
 
-The keys `body`, `code`, `html`, and the top-level `highlight` flag no longer
-exist on the wire — the body is now a `blocks` array. There is no
-compatibility shim; a legacy payload renders an empty modal body (and logs a
-console warning — see the next section).
+The `body`, `code` and `html` keys and the top-level `highlight` flag no longer exist; the body is now a `blocks` array. There is no compatibility layer: a v1 payload renders an empty modal body and logs a console warning (see [Custom Vue Component](#custom-vue-component)).
 
-Move to the `ModalResponse` PHP API, which produces the correct v2 payload for
-you:
+Use the `ModalResponse` PHP API instead, which builds the correct payload for you:
 
-| v1 raw payload key            | v2 replacement                                    |
+| v1 payload key                | v2 replacement                                    |
 | ----------------------------- | ------------------------------------------------- |
 | `['body' => $text]`           | `ModalResponse::text($text)`                      |
 | `['html' => $html]`           | `ModalResponse::html($html)`                      |
@@ -159,13 +149,16 @@ you:
 | `['size' => $s]`              | `->size($s)`                                      |
 | `['closeButtonText' => $l]`   | `->closeButton($l)`                               |
 
-For anything more than a single shape, reach for `ModalResponse::stack([...])`
-with explicit `Block` instances.
+For anything more than a single piece of content, use `ModalResponse::stack([...])` with `Block` instances.
 
-## If you overrode the `modal-response` Vue component
+### Frontend
 
-The component's `data` prop changed shape. v1 exposed `data.body`, `data.code`,
-`data.html`, and `data.highlight`; v2 exposes a single `data.blocks` array:
+<a name="custom-vue-component"></a>
+#### Custom Vue Component
+
+**Likelihood Of Impact: Low**
+
+If you override the `modal-response` Vue component, its `data` prop changed shape. v1 exposed `data.body`, `data.code`, `data.html` and `data.highlight`; v2 exposes a single `data.blocks` array:
 
 ```js
 {
@@ -184,20 +177,8 @@ The component's `data` prop changed shape. v1 exposed `data.body`, `data.code`,
 }
 ```
 
-This is a partial list. The full set of types is the map in
-`resources/js/components/blockComponents.js`, and each block's exact keys are
-in its `toArray()` in `src/Blocks/`.
+This is a partial list. The full set of types is the map in `resources/js/components/blockComponents.js`, and each block's exact keys are in its `toArray()` in `src/Blocks/`.
 
-v2 renders the body through a single path: it iterates `data.blocks` and
-dispatches each block through an explicit `{ type → component }` map — there is
-no `v-if` precedence between content shapes anymore. If you maintain a custom
-component, mirror that: iterate the stack and render each block by its `type`.
-The bundled `resources/js/components/ModalActionResponse.vue` is the reference
-implementation, the map lives in `resources/js/components/blockComponents.js`,
-and each wire `type` has a matching `resources/js/components/{Type}Block.vue`.
-The `markdown` and `view` blocks have no wire type of their own: they are
-rendered to HTML on the server and arrive as `html` blocks.
+v2 renders the body through a single path: it iterates `data.blocks` and renders each block through an explicit `{ type → component }` map, with no `v-if` precedence between content shapes. If you maintain a custom component, do the same. The bundled `resources/js/components/ModalActionResponse.vue` is the reference implementation, and each wire `type` has a matching `resources/js/components/{Type}Block.vue`. The `markdown` and `view` blocks have no wire type of their own: they are rendered to HTML on the server and arrive as `html` blocks.
 
-A `console.warn` fires once per modal open if the package detects v1 payload
-keys (`body` / `code` / `html` / top-level `highlight`) on the `data` prop.
-Migrating to the block stack silences it.
+A `console.warn` fires once per modal open when the component receives v1 payload keys (`body`, `code`, `html` or a top-level `highlight`). Migrating to the block stack silences it.
